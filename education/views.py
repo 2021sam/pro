@@ -64,4 +64,4 @@ def edit_education(request, id):
             return redirect('education-view')
         else:
             messages.error(request, 'Please correct the following errors:')
-            return render(request,'blog/post_form.html', {'form':form})
+            return render(request,'education/form.html', {'form':form})

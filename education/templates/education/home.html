@@ -3,13 +3,13 @@
 {% block content %}
 <h1>My Education</h1>
 	{% for e in education %}
-		<h2>{{ e.school_name }}</h2>
-		<small>Published on {{ e.published_at | date:"M d, Y" }} by {{ e.author | title}}</small>
-		<p>{{ e.degree_type }}</p>
-        <p>{{ e.major }}</p>
-        <p>{{ e.year_graduated}}</p>
-        <p>{{ e.currently_enrolled }}</p>>
-        <p>{{ e.gpa }}</p>
+		<h2>School Name: {{ e.school_name }}</h2>
+		<p>Degree: {{ e.degree_type }}</p>
+        <p>Major: {{ e.major }}</p>
+        <p>Year Graduated: {{ e.year_graduated}}</p>
+        <p>Currently Enrolled: {{ e.currently_enrolled }}</p>
+        <p>GPA: {{ e.gpa }}</p>
+        <small>Published on {{ e.published_at | date:"M d, Y" }} by {{ e.author | title}}</small>
 		{% if request.user.is_authenticated and request.user == e.author %}
 		<p>
 			<a href="{% url 'education-edit' e.id %}">Edit</a> 
