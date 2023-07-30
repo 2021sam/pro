@@ -1,0 +1,4 @@
+env
+db.sqlite3
+__pycache__
+00??_*.py
