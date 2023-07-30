@@ -1,28 +1,29 @@
-{%load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <script src="{% static 'js/app.js' %}" defer></script>
-    <title>My Site</title>
+
+    <title>Professional</title>
   </head>
   <body>
+	body
   	<header>
   		{%if request.user.is_authenticated %}
-		  <a href="{% url 'streetcred:edit' %}">Profile</a>
+		  <!-- <a href="{% url 'streetcred:edit' %}">Profile</a> -->
 
-
-  			<a href="{% url 'posts' %}">My Posts</a>
-  			<a href="{% url 'post-create' %}">New Post</a>
+  			<!-- <a href="{% url 'posts' %}">My Posts</a> -->
+  			<a href="{% url 'education-add' %}">Add Education</a>
   			<span>Hi {{ request.user.username | title }}</span>
-  			<a href="{% url 'logout' %}">Logout</a>
+  			<!-- <a href="{% url 'logout' %}">Logout</a> -->
   		{%else%}
   			<a href="{% url 'login' %}">Login</a>
   			<a href="{% url 'register' %}">Register</a>
   		{%endif%}
   	</header>
+
   	<main>
 	  	{% if messages %}
 			<div class="messages">

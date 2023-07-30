@@ -14,8 +14,8 @@ CHOICES_DEGREE_TYPE = (
 
 
 class Education_Model(models.Model):
-    degree_type = models.CharField(max_length=20, blank=True, choices = CHOICES_DEGREE_TYPE, default='select degree type')
     school_name = models.CharField(max_length=30, blank=True)
+    degree_type = models.CharField(max_length=20, blank=True, choices = CHOICES_DEGREE_TYPE, default='select degree type')
     major = models.CharField(max_length=30, blank=True)
     year_graduated = models.SmallIntegerField(blank=True, null=True, validators=[MinValueValidator(2000), MaxValueValidator(2030)])
     currently_enrolled = models.BooleanField()
