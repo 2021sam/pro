@@ -14,11 +14,19 @@ def home(request):
     context = {'education':  education }
     return render(request,'education/home.html', context)   
 
+
+@login_required
+def view(request):
+    education = Education_Model.objects.filter(author=request.user)
+    context = {'education':  education }
+    return render(request,'education/view.html', context)
+
+
 @login_required
 def add(request):
     if request.method == 'GET':
         context = {'form': EducationForm()}
-        return render(request,'education/form.html',context)
+        return render(request,'education/add_edit.html',context)
     elif request.method == 'POST':
         form = EducationForm(request.POST)
         if form.is_valid():
@@ -31,12 +39,31 @@ def add(request):
             return redirect('education-view')
         else:
             messages.error(request, 'Please correct the following errors:')
-            return render(request,'education/form.html', {'form':form})  
+            return render(request,'education/add_edit.html', {'form':form})  
 
+
+@login_required    
+def edit(request, id):
+    queryset = Education_Model.objects.filter(author=request.user)
+    education = get_object_or_404(queryset, pk=id)
+
+    if request.method == 'GET':
+        context = {'form': EducationForm(instance=education), 'id': id}
+        return render(request,'education/add_edit.html', context)
+    
+    elif request.method == 'POST':
+        form = EducationForm(request.POST, instance=education)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'The post has been updated successfully.')
+            return redirect('education-view')
+        else:
+            messages.error(request, 'Please correct the following errors:')
+            return render(request,'education/add_edit.html', {'form':form})
 
 
 @login_required
-def delete_education(request, id):
+def delete(request, id):
     queryset = Education_Model.objects.filter(author=request.user)
     education = get_object_or_404(queryset, pk=id)
     context = {'education': education}
@@ -47,22 +74,3 @@ def delete_education(request, id):
         education.delete()
         messages.success(request,  'The post has been deleted successfully.')
         return redirect('education-view')
-
-@login_required    
-def edit_education(request, id):
-    queryset = Education_Model.objects.filter(author=request.user)
-    education = get_object_or_404(queryset, pk=id)
-
-    if request.method == 'GET':
-        context = {'form': EducationForm(instance=education), 'id': id}
-        return render(request,'education/form.html', context)
-    
-    elif request.method == 'POST':
-        form = EducationForm(request.POST, instance=education)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'The post has been updated successfully.')
-            return redirect('education-view')
-        else:
-            messages.error(request, 'Please correct the following errors:')
-            return render(request,'education/form.html', {'form':form})

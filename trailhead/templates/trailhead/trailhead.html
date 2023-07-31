@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+	
+{% block content %}
+<h1>My Career Hub </h1>
+	
+		<h2>Welcome {{ user | title }}</h2>
+
+		<p>
+			<a href="{% url 'education' %}">Education</a>
+			<a href="{% url 'experience' %}">Experience</a>
+		</p>
+
+{% endblock content %}

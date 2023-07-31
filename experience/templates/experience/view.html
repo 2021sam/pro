@@ -2,6 +2,8 @@
 	
 {% block content %}
 <h1>My Experience</h1>
+	<a href="{% url 'experience-add' %}">Add</a>
+
 	{% for e in experience %}
 		<h2>Title: {{ e.title }}</h2>
 		<p>Company: {{e.company}}

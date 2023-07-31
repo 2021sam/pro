@@ -37,8 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'trailhead.apps.TrailheadConfig',
     'users.apps.UsersConfig',
-    'education.apps.EducationConfig'
+    'education.apps.EducationConfig',
+    'experience.apps.ExperienceConfig'
 ]
 
 MIDDLEWARE = [

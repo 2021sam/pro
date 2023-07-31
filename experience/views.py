@@ -5,19 +5,26 @@ from django.contrib import messages
 from django.http import HttpResponse
 from .models import Experience
 from .forms import ExperienceForm
-
+from django.urls import path
 
 @login_required
 def home(request):
+    content = {}
+    return render(request, 'experience/home.html', content)
+
+
+@login_required
+def view(request):
     experience = Experience.objects.filter(author=request.user)
     context = {'experience':  experience }
-    return render(request,'experience/home.html', context)
+    return render(request,'experience/view.html', context)
+
 
 @login_required
 def add(request):
     if request.method == 'GET':
         context = {'form': ExperienceForm()}
-        return render(request,'experience/form.html',context)
+        return render(request,'experience/add_edit.html',context)
     elif request.method == 'POST':
         form = ExperienceForm(request.POST)
         if form.is_valid():
@@ -28,12 +35,31 @@ def add(request):
             return redirect('experience-view')
         else:
             messages.error(request, 'Please correct the following errors:')
-            return render(request,'experience/form.html', {'form':form})  
+            return render(request,'experience/add_edit.html', {'form':form})  
 
+
+@login_required    
+def edit(request, id):
+    queryset = Experience.objects.filter(author=request.user)
+    experience = get_object_or_404(queryset, pk=id)
+
+    if request.method == 'GET':
+        context = {'form': ExperienceForm(instance=experience), 'id': id}
+        return render(request,'experience/add_edit.html', context)
+    
+    elif request.method == 'POST':
+        form = ExperienceForm(request.POST, instance=experience)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'The post has been updated successfully.')
+            return redirect('experience-view')
+        else:
+            messages.error(request, 'Please correct the following errors:')
+            return render(request,'experience/add_edit.html', {'form':form})
 
 
 @login_required
-def delete_experience(request, id):
+def delete(request, id):
     queryset = Experience.objects.filter(author=request.user)
     experience = get_object_or_404(queryset, pk=id)
     context = {'experience': experience}
@@ -44,22 +70,3 @@ def delete_experience(request, id):
         experience.delete()
         messages.success(request,  'The post has been deleted successfully.')
         return redirect('experience-view')
-
-@login_required    
-def edit_experience(request, id):
-    queryset = Experience.objects.filter(author=request.user)
-    experience = get_object_or_404(queryset, pk=id)
-
-    if request.method == 'GET':
-        context = {'form': ExperienceForm(instance=experience), 'id': id}
-        return render(request,'experience/form.html', context)
-    
-    elif request.method == 'POST':
-        form = ExperienceForm(request.POST, instance=experience)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'The post has been updated successfully.')
-            return redirect('experience-view')
-        else:
-            messages.error(request, 'Please correct the following errors:')
-            return render(request,'experience/form.html', {'form':form})
