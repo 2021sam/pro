@@ -7,13 +7,14 @@ from .models import Education_Model
 from .forms import EducationForm
 
 
-
+@login_required
 def home(request):
     # return HttpResponse('Education')
     education = Education_Model.objects.all()
     context = {'education':  education }
     return render(request,'education/home.html', context)   
 
+@login_required
 def add(request):
     if request.method == 'GET':
         context = {'form': EducationForm()}

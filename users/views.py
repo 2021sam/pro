@@ -21,7 +21,7 @@ def sign_up(request):
             login(request, user)
 
 
-            return redirect('posts')
+            return redirect('education-view')
         else:
             messages.error(request, 'Form is not yet valid.')
             return render(request, 'users/register.html', {'form': form})
@@ -49,7 +49,7 @@ def sign_in(request):
         
         # form is not valid or user is not authenticated
         messages.error(request,f'Invalid username or password')
-        return render(request,'users/login.html',{'form': form})
+        return render(request,'users/login.html', {'form': form})
 
 
 def sign_out(request):
