@@ -22,6 +22,7 @@ class Education_Model(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     published_at = models.DateTimeField(default=timezone.now)
     school_name = models.CharField(max_length=30, blank=True)
+    school_web_site = models.URLField(max_length=50, blank=True)
     degree_type = models.CharField(max_length=20, choices = CHOICES_DEGREE_TYPE, default='select degree type')
     major = models.CharField(max_length=30, blank=True)
     year_graduated = models.SmallIntegerField(blank=True, null=True, validators=[MinValueValidator(2000), MaxValueValidator(2030)])

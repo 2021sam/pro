@@ -4,6 +4,7 @@
 <h1>My Education</h1>
 	{% for e in education %}
 		<h2>School Name: {{ e.school_name }}</h2>
+		<p>Web: <a href="{{ e.school_web_site }}">{{ e.school_web_site }}</a></p>
 		<p>Degree: {{ e.degree_type }}</p>
         <p>Major: {{ e.major }}</p>
         <p>Year Graduated: {{ e.year_graduated}}</p>
