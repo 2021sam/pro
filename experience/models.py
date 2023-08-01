@@ -29,16 +29,6 @@ class Experience(models.Model):
     hourly_pay_rate = models.FloatField(default=0)
     payment_form = models.CharField(max_length=50, blank=True)
     description = models.TextField(blank=True)
-    skill1 = models.CharField(max_length=30, blank=True, help_text = 'Note: Skills are mutually exclusive in terms of adding time to subset skills.  Furthermore, only experience time with matching terms are added.')
-    skill1_years = models.SmallIntegerField(default=0)
-    skill1_months = models.SmallIntegerField(default=0)
-    skill2 = models.CharField(max_length=30, blank=True)
-    skill2_years = models.SmallIntegerField(default=0)
-    skill2_months = models.SmallIntegerField(default=0)
-    skill3 = models.CharField(max_length=30, blank=True)
-    skill3_years = models.SmallIntegerField(default=0)
-    skill3_months = models.SmallIntegerField(default=0)
-    # content = models.TextField()
     
 
     def __str__(self):
