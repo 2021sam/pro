@@ -18,13 +18,13 @@ CHOICES_DEGREE_TYPE = (
 )
 
 
-class Education_Model(models.Model):
+class Education(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     published_at = models.DateTimeField(default=timezone.now)
     school_name = models.CharField(max_length=30, blank=True)
     school_web_site = models.URLField(max_length=50, blank=True)
     degree_type = models.CharField(max_length=20, choices = CHOICES_DEGREE_TYPE, default='select degree type')
     major = models.CharField(max_length=30, blank=True)
-    year_graduated = models.SmallIntegerField(blank=True, null=True, validators=[MinValueValidator(2000), MaxValueValidator(2030)])
+    year_graduated = models.SmallIntegerField(blank=True, null=True, validators=[MinValueValidator(1980), MaxValueValidator(2030)])
     currently_enrolled = models.BooleanField(default=False)
     gpa = models.FloatField(default=0)

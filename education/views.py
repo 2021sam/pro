@@ -3,13 +3,13 @@ from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_datetime
 from django.contrib import messages
 from django.http import HttpResponse
-from .models import Education_Model
+from .models import Education
 from .forms import EducationForm
 
 
 @login_required
 def home(request):
-    education = Education_Model.objects.filter(author=request.user)
+    education = Education.objects.filter(author=request.user)
     # education = Education_Model.objects.all()
     context = {'education':  education }
     return render(request,'education/home.html', context)   
@@ -17,7 +17,7 @@ def home(request):
 
 @login_required
 def view(request):
-    education = Education_Model.objects.filter(author=request.user)
+    education = Education.objects.filter(author=request.user)
     context = {'education':  education }
     return render(request,'education/view.html', context)
 
@@ -44,7 +44,7 @@ def add(request):
 
 @login_required    
 def edit(request, id):
-    queryset = Education_Model.objects.filter(author=request.user)
+    queryset = Education.objects.filter(author=request.user)
     education = get_object_or_404(queryset, pk=id)
 
     if request.method == 'GET':
@@ -64,7 +64,7 @@ def edit(request, id):
 
 @login_required
 def delete(request, id):
-    queryset = Education_Model.objects.filter(author=request.user)
+    queryset = Education.objects.filter(author=request.user)
     education = get_object_or_404(queryset, pk=id)
     context = {'education': education}
     

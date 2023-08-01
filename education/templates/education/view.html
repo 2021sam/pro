@@ -2,6 +2,8 @@
 	
 {% block content %}
 <h1>My Education</h1>
+<p><a href="{% url 'education-add' %}">Add</a></p>
+
 	{% for e in education %}
 		<h2>School Name: {{ e.school_name }}</h2>
 		<p>Web: <a href="{{ e.school_web_site }}">{{ e.school_web_site }}</a></p>
