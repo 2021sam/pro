@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+	
+{% block content %}
+<h1>My Mad Skills</h1>
+	<p>Create motivation for people to take the time to manually insert their entire resume in this format.</p>
+
+	<a href="{% url 'skills-add' %}">Add</a>
+	<a href="{% url 'skills-view' %}">View</a> 
+
+{% endblock content %}

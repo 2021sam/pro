@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+	
+{% block content %}
+<h1>My Skills</h1>
+	<a href="{% url 'skills-add' %}">Add</a>
+
+	{% for e in skills %}
+		<h2>Experience: {{ e.experience }}</h2>
+        <p>Skill: {{ e.skill }}</p>
+        <p>Skill Years: {{ e.skill_years }}</p>
+		<p>Skill Months: {{ e.skill_months }}</p>
+        <small>Published on {{ e.published_at | date:"M d, Y" }} by {{ e.author | title}}</small>
+		{% if request.user.is_authenticated and request.user == e.author %}
+		<p>
+			<a href="{% url 'skills-edit' e.id %}">Edit</a> 
+			<a href="{% url 'skills-delete' e.id%}">Delete</a>
+		</p>
+		{% endif %}
+		
+	{% endfor %}
+{% endblock content %}

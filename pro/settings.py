@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'trailhead.apps.TrailheadConfig',
     'users.apps.UsersConfig',
     'education.apps.EducationConfig',
-    'experience.apps.ExperienceConfig'
+    'experience.apps.ExperienceConfig',
+    'skills.apps.SkillsConfig'
 ]
 
 MIDDLEWARE = [
