@@ -3,6 +3,7 @@
 {% block content %}
 <h1>My Skills</h1>
 	<a href="{% url 'skills-add' %}">Add</a>
+	<a href="{% url 'skills-summarize' %}">Sort</a>
 
 	{% for e in skills %}
 		<h2>Experience: {{ e.experience }}</h2>

@@ -17,7 +17,7 @@ def home(request):
 
 
 @login_required
-def view_stats(request):
+def view_summarize(request):
     skills = Skills.objects.filter(author=request.user)
     context = {'skills':  skills }
     # return render(request,'skills/view.html', context)
