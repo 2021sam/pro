@@ -17,7 +17,7 @@ def home(request):
 
 
 @login_required
-def view(request):
+def view_stats(request):
     skills = Skills.objects.filter(author=request.user)
     context = {'skills':  skills }
     # return render(request,'skills/view.html', context)
@@ -34,6 +34,14 @@ def stats(queryset):
         print(f'{r.skill}: {r.skill_years} years, {r.skill_months} months')
         d = add_skills(d, r.skill, r.skill_years, r.skill_months)
     return d
+
+
+@login_required
+def view(request):
+    skills = Skills.objects.filter(author=request.user)
+    context = {'skills':  skills }
+    return render(request,'skills/view.html', context)
+
 
 
 def add_skills(d, skill, years, months):
@@ -81,13 +89,24 @@ def edit(request, id):
     skills = get_object_or_404(queryset, pk=id)
 
     if request.method == 'GET':
-        context = {'form': SkillsForm(instance=skills), 'id': id}
+        context = {'form': SkillsForm(instance=skills, user=request.user), 'id': id}
         return render(request,'skills/add_edit.html', context)
     
     elif request.method == 'POST':
-        form = SkillsForm(request.POST, instance=skills)
+        form = SkillsForm(request.POST, user=request.user, instance=skills)
         if form.is_valid():
-            form.save()
+            experience_id = request.POST.get('experience')
+            skill = request.POST.get('skill')
+            skill_years = request.POST.get('skill_years')
+            skill_months = request.POST.get('skill_months')
+            e = Experience.objects.get(id=experience_id)
+            i = Skills.objects.get(id=id)
+            i.experience = e
+            i.skill = skill
+            i.skill_years = skill_years
+            i.skill_months = skill_months
+            print(i)
+            i.save()
             messages.success(request, 'The post has been updated successfully.')
             return redirect('skills-view')
         else:
