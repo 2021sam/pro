@@ -7,6 +7,7 @@ from .models import Skills
 from .forms import SkillsForm
 from django.urls import path
 from .models import Experience
+from django.http import JsonResponse
 
 
 @login_required
@@ -19,7 +20,30 @@ def home(request):
 def view(request):
     skills = Skills.objects.filter(author=request.user)
     context = {'skills':  skills }
-    return render(request,'skills/view.html', context)
+    # return render(request,'skills/view.html', context)
+    d = stats(skills)
+    return JsonResponse(d, safe=False)
+
+
+def stats(queryset):
+    count = queryset.count()
+    print(count)
+    d = {}
+    d['count'] = count 
+    for r in queryset:
+        print(f'{r.skill}: {r.skill_years} years, {r.skill_months} months')
+        d = add_skills(d, r.skill, r.skill_years, r.skill_months)
+    return d
+
+
+def add_skills(d, skill, years, months):
+    if skill:
+        skill = skill.lower()
+        if skill not in d:
+            d[skill] = 0
+        d[skill] += years * 12 + months
+    return d
+
 
 
 @login_required
