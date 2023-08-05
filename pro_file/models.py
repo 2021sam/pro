@@ -46,7 +46,7 @@ class Profile(models.Model):
     open_to_public = models.BooleanField(default=False)
     # https://stackoverflow.com/questions/51623747/django-best-way-to-create-a-multiple-choice-field
     def __str__(self):
-        return f'{self.user}, {self.address}'
+        return f'{self.id} {self.user}, {self.address}'
 
 #this method to generate profile when user is created
 @receiver(post_save, sender=User)

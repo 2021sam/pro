@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from .models import Profile
 from .forms import ProfileForm
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -26,7 +27,7 @@ def profile_edit(request):
 
     if request.method == 'GET':
         context = {'form': ProfileForm(instance=form), 'id': id}
-        return render(request,'streetcred/profile_form.html',context)
+        return render(request,'pro_file/profile_form.html',context)
 
     elif request.method == 'POST':
         form = ProfileForm(request.POST, instance=form)
@@ -36,4 +37,32 @@ def profile_edit(request):
             return redirect('posts')
         else:
             messages.error(request, 'Please correct the following errors:')
-            return render(request,'streetcred/profile_form.html',{'form':form})
+            return render(request,'pro_file/profile_form.html',{'form':form})
+        
+
+def tool_profile_create_all(request):
+
+    new_profiles = 0
+    users = User.objects.all()
+    for user in users:
+        print(user)
+        profile = Profile.objects.filter(user=user)
+        print(profile)
+
+        if not profile:
+            new_profiles += 1
+            print(f'Create new profile for user: {user}')
+            print(f'Create new profile: {profile}')
+            profile = Profile(user=user).save()
+
+    return HttpResponse(f'New Profiles = {new_profiles}')
+
+
+def tool_profile_delete_all(request):
+    profiles = Profile.objects.all()
+    n = profiles.count()
+    for pro in profiles:
+        print(pro)
+        pro.delete()
+
+    return HttpResponse(f'Deleted {n} profiles')
