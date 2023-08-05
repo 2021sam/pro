@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'trailhead.apps.TrailheadConfig',
     'users.apps.UsersConfig',
+    'profile.apps.ProFileConfig',
     'education.apps.EducationConfig',
     'experience.apps.ExperienceConfig',
     'skills.apps.SkillsConfig'

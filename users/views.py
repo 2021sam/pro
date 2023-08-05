@@ -19,9 +19,7 @@ def sign_up(request):
             user.save()
             messages.success(request, 'You have successfully signed up.')
             login(request, user)
-
-
-            return redirect('education-view')
+            return redirect('trailhead')
         else:
             messages.error(request, 'Form is not yet valid.')
             return render(request, 'users/register.html', {'form': form})
@@ -30,7 +28,7 @@ def sign_up(request):
 def sign_in(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
-            return redirect('education-view')
+            return redirect('trailhead')
 
         form = LoginForm()
         return render(request,'users/login.html', {'form': form})
@@ -45,7 +43,7 @@ def sign_in(request):
             if user:
                 login(request, user)
                 messages.success(request,f'Hi {username.title()}, welcome back!')
-                return redirect('education-view')
+                return redirect('trailhead')
         
         # form is not valid or user is not authenticated
         messages.error(request,f'Invalid username or password')
