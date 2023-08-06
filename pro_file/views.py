@@ -34,14 +34,13 @@ def profile_edit(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'The post has been updated successfully.')
-            return redirect('posts')
+            return redirect('trailhead')
         else:
             messages.error(request, 'Please correct the following errors:')
             return render(request,'pro_file/profile_form.html',{'form':form})
         
 
 def tool_profile_create_all(request):
-
     new_profiles = 0
     users = User.objects.all()
     for user in users:
