@@ -9,5 +9,5 @@ urlpatterns = [
     path('', include('pro_file.urls')),
     path('', include('education.urls')),
     path('', include('experience.urls')),
-    path('', include('skills.urls'))
+    path('', include('skill.urls'))
 ]

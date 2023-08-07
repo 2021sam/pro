@@ -3,25 +3,26 @@ from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_datetime
 from django.contrib import messages
 from django.http import HttpResponse
-from .models import Skills
-from .forms import SkillsForm
+from django.http import JsonResponse
+from .forms import SkillForm
+from .models import Skill
 from django.urls import path
 from .models import Experience
-from django.http import JsonResponse
+
 
 
 @login_required
 def home(request):
     content = {}
-    return render(request, 'skills/home.html', content)
+    return render(request, 'skill/home.html', content)
 
 
 @login_required
 def view_summarize(request):
-    skills = Skills.objects.filter(user=request.user)
-    context = {'skills':  skills }
+    skill = Skill.objects.filter(user=request.user)
+    context = {'skill':  skill }
     # return render(request,'skills/view.html', context)
-    d = stats(skills)
+    d = stats(skill)
     return JsonResponse(d, safe=False)
 
 
@@ -38,9 +39,9 @@ def stats(queryset):
 
 @login_required
 def view(request):
-    skills = Skills.objects.filter(user=request.user)
+    skills = Skill.objects.filter(user=request.user)
     context = {'skills':  skills }
-    return render(request,'skills/view.html', context)
+    return render(request,'skill/view.html', context)
 
 
 
@@ -61,46 +62,46 @@ def add(request):
         # context = {'form': SkillsForm(user=request.user),
         #            'experience': experience}
         # experience = Experience.objects.filter(author=request.user)
-        context = {'form': SkillsForm(user=request.user)}
-        return render(request,'skills/add_edit.html', context)
+        context = {'form': SkillForm(user=request.user)}
+        return render(request,'skill/add_edit.html', context)
 
     elif request.method == 'POST':
-        form = SkillsForm(request.POST, user=request.user)
+        form = SkillForm(request.POST, user=request.user)
         if form.is_valid():
             experience_id = request.POST.get('experience')
             skill = request.POST.get('skill')
             skill_years = request.POST.get('skill_years')
             skill_months = request.POST.get('skill_months')
             e = Experience.objects.get(id=experience_id)
-            i = Skills.objects.create(user=request.user, experience=e, skill=skill, skill_years=skill_years, skill_months=skill_months)
+            i = Skill.objects.create(user=request.user, experience=e, skill=skill, skill_years=skill_years, skill_months=skill_months)
             print(i)
             i.save()    # For some reason it saves with out this line
             messages.success(request, 'The post has been successfully created.')
-            return redirect('skills-view')
+            return redirect('skill-view')
         
         else:
             messages.error(request, 'Please correct the following errors:')
-            return render(request,'skills/add_edit.html', {'form':form})
+            return render(request,'skill/add_edit.html', {'form':form})
 
 
 @login_required
 def edit(request, id):
-    queryset = Skills.objects.filter(user=request.user)
+    queryset = Skill.objects.filter(user=request.user)
     skills = get_object_or_404(queryset, pk=id)
 
     if request.method == 'GET':
-        context = {'form': SkillsForm(instance=skills, user=request.user), 'id': id}
-        return render(request,'skills/add_edit.html', context)
+        context = {'form': SkillForm(instance=skills, user=request.user), 'id': id}
+        return render(request,'skill/add_edit.html', context)
     
     elif request.method == 'POST':
-        form = SkillsForm(request.POST, user=request.user, instance=skills)
+        form = SkillForm(request.POST, user=request.user, instance=skills)
         if form.is_valid():
             experience_id = request.POST.get('experience')
             skill = request.POST.get('skill')
             skill_years = request.POST.get('skill_years')
             skill_months = request.POST.get('skill_months')
             e = Experience.objects.get(id=experience_id)
-            i = Skills.objects.get(id=id)
+            i = Skill.objects.get(id=id)
             i.experience = e
             i.skill = skill
             i.skill_years = skill_years
@@ -108,21 +109,21 @@ def edit(request, id):
             print(i)
             i.save()
             messages.success(request, 'The post has been updated successfully.')
-            return redirect('skills-view')
+            return redirect('skill-view')
         else:
             messages.error(request, 'Please correct the following errors:')
-            return render(request,'skills/add_edit.html', {'form':form})
+            return render(request,'skill/add_edit.html', {'form':form})
 
 
 @login_required
 def delete(request, id):
-    queryset = Skills.objects.filter(user=request.user)
+    queryset = Skill.objects.filter(user=request.user)
     skills = get_object_or_404(queryset, pk=id)
     context = {'skills': skills}
 
     if request.method == 'GET':
-        return render(request, 'skills/delete.html', context)
+        return render(request, 'skill/delete.html', context)
     elif request.method == 'POST':
         skills.delete()
         messages.success(request,  'The post has been deleted successfully.')
-        return redirect('skills-view')
+        return redirect('skill-view')

@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'pro_file.apps.ProFileConfig',
     'education.apps.EducationConfig',
     'experience.apps.ExperienceConfig',
-    'skills.apps.SkillsConfig'
+    'skill.apps.SkillConfig'
 ]
 
 MIDDLEWARE = [

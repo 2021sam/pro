@@ -4,7 +4,7 @@ from django.utils import timezone
 from experience.models import Experience
 
 
-class Skills(models.Model):
+class Skill(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
     experience = models.ForeignKey(Experience, on_delete=models.CASCADE)

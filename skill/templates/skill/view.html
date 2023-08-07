@@ -2,8 +2,8 @@
 	
 {% block content %}
 <h1>My Skills</h1>
-	<a href="{% url 'skills-add' %}">Add</a>
-	<a href="{% url 'skills-summarize' %}">Sort</a>
+	<a href="{% url 'skill-add' %}">Add</a>
+	<a href="{% url 'skill-summarize' %}">Sort</a>
 
 	{% for e in skills %}
 		<h2>Experience: {{ e.experience }}</h2>
@@ -13,8 +13,8 @@
         <small>Timestamp {{ e.published_at | date:"M d, Y" }} by {{ e.user | title}}</small>
 		{% if request.user.is_authenticated and request.user == e.user %}
 		<p>
-			<a href="{% url 'skills-edit' e.id %}">Edit</a> 
-			<a href="{% url 'skills-delete' e.id%}">Delete</a>
+			<a href="{% url 'skill-edit' e.id %}">Edit</a> 
+			<a href="{% url 'skill-delete' e.id%}">Delete</a>
 		</p>
 		{% endif %}
 		
