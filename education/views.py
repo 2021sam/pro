@@ -9,7 +9,7 @@ from .forms import EducationForm
 
 @login_required
 def home(request):
-    education = Education.objects.filter(author=request.user)
+    education = Education.objects.filter(user=request.user)
     # education = Education_Model.objects.all()
     context = {'education':  education }
     return render(request,'education/home.html', context)   
@@ -17,7 +17,7 @@ def home(request):
 
 @login_required
 def view(request):
-    education = Education.objects.filter(author=request.user)
+    education = Education.objects.filter(user=request.user)
     context = {'education':  education }
     return render(request,'education/view.html', context)
 
@@ -31,7 +31,7 @@ def add(request):
         form = EducationForm(request.POST)
         if form.is_valid():
             i = form.save(commit=False)
-            i.author = request.user
+            i.user = request.user
             # year_graduated_str = form['year_graduated'].value()
             # i.year_graduated = parse_datetime(year_graduated_str)
             i.save()
@@ -44,7 +44,7 @@ def add(request):
 
 @login_required    
 def edit(request, id):
-    queryset = Education.objects.filter(author=request.user)
+    queryset = Education.objects.filter(user=request.user)
     education = get_object_or_404(queryset, pk=id)
 
     if request.method == 'GET':
@@ -64,7 +64,7 @@ def edit(request, id):
 
 @login_required
 def delete(request, id):
-    queryset = Education.objects.filter(author=request.user)
+    queryset = Education.objects.filter(user=request.user)
     education = get_object_or_404(queryset, pk=id)
     context = {'education': education}
     

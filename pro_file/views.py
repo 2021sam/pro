@@ -38,7 +38,20 @@ def profile_edit(request):
         else:
             messages.error(request, 'Please correct the following errors:')
             return render(request,'pro_file/profile_form.html',{'form':form})
-        
+
+
+def tool_profile_mia(request):
+    new_profiles = 0
+    users = User.objects.all()
+    for user in users:
+        print(user)
+        profile = Profile.objects.filter(user=user)
+        print(profile)
+        if not profile:
+            new_profiles += 1
+            print(f'Profile MIA for user: {user}')
+    return HttpResponse(f'Profiles MIA = {new_profiles}')
+
 
 def tool_profile_create_all(request):
     new_profiles = 0

@@ -13,4 +13,4 @@ class SkillsForm(forms.ModelForm):
             if self.user:
                 print(self.user.id)
             super(SkillsForm, self).__init__(*args, **kwargs)
-            self.fields['experience'] = forms.ModelMultipleChoiceField(queryset=Experience.objects.filter(author=self.user.id))
+            self.fields['experience'] = forms.ModelMultipleChoiceField(queryset=Experience.objects.filter(user=self.user.id))

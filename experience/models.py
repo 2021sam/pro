@@ -6,8 +6,8 @@ import datetime
 
 class Experience(models.Model):
     # default: blank = name  --> company_name
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    published_at = models.DateTimeField(default=timezone.now)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(default=timezone.now)
     title = models.CharField(max_length=120)
     company = models.CharField(max_length=50, blank=True)
     company_web = models.URLField(max_length=30, blank=True)

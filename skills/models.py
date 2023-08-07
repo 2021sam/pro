@@ -5,8 +5,8 @@ from experience.models import Experience
 
 
 class Skills(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    published_at = models.DateTimeField(default=timezone.now)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(default=timezone.now)
     experience = models.ForeignKey(Experience, on_delete=models.CASCADE)
     skill = models.CharField(max_length=30, blank=True, help_text = 'Note: Skills are mutually exclusive in terms of adding time to subset skills.  Furthermore, only experience time with matching terms are added.')
     skill_years = models.SmallIntegerField(default=0)

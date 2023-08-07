@@ -12,8 +12,8 @@
         <p>Year Graduated: {{ e.year_graduated}}</p>
         <p>Currently Enrolled: {{ e.currently_enrolled }}</p>
         <p>GPA: {{ e.gpa }}</p>
-        <small>Published on {{ e.published_at | date:"M d, Y" }} by {{ e.author | title}}</small>
-		{% if request.user.is_authenticated and request.user == e.author %}
+        <small>Timestamp on {{ e.timestamp | date:"M d, Y" }} by {{ e.user | title}}</small>
+		{% if request.user.is_authenticated and request.user == e.user %}
 		<p>
 			<a href="{% url 'education-edit' e.id %}">Edit</a> 
 			<a href="{% url 'education-delete' e.id%}">Delete</a>

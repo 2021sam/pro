@@ -15,7 +15,7 @@ def home(request):
 
 @login_required
 def view(request):
-    experience = Experience.objects.filter(author=request.user)
+    experience = Experience.objects.filter(user=request.user)
     context = {'experience':  experience }
     return render(request,'experience/view.html', context)
 
@@ -29,7 +29,7 @@ def add(request):
         form = ExperienceForm(request.POST)
         if form.is_valid():
             i = form.save(commit=False)
-            i.author = request.user
+            i.user = request.user
             i.save()
             messages.success(request, 'The post has been successfully created.')
             return redirect('experience-view')
@@ -40,7 +40,7 @@ def add(request):
 
 @login_required    
 def edit(request, id):
-    queryset = Experience.objects.filter(author=request.user)
+    queryset = Experience.objects.filter(user=request.user)
     experience = get_object_or_404(queryset, pk=id)
 
     if request.method == 'GET':
@@ -60,7 +60,7 @@ def edit(request, id):
 
 @login_required
 def delete(request, id):
-    queryset = Experience.objects.filter(author=request.user)
+    queryset = Experience.objects.filter(user=request.user)
     experience = get_object_or_404(queryset, pk=id)
     context = {'experience': experience}
     

@@ -18,7 +18,7 @@ def home(request):
 
 @login_required
 def view_summarize(request):
-    skills = Skills.objects.filter(author=request.user)
+    skills = Skills.objects.filter(user=request.user)
     context = {'skills':  skills }
     # return render(request,'skills/view.html', context)
     d = stats(skills)
@@ -38,7 +38,7 @@ def stats(queryset):
 
 @login_required
 def view(request):
-    skills = Skills.objects.filter(author=request.user)
+    skills = Skills.objects.filter(user=request.user)
     context = {'skills':  skills }
     return render(request,'skills/view.html', context)
 
@@ -72,7 +72,7 @@ def add(request):
             skill_years = request.POST.get('skill_years')
             skill_months = request.POST.get('skill_months')
             e = Experience.objects.get(id=experience_id)
-            i = Skills.objects.create(author=request.user, experience=e, skill=skill, skill_years=skill_years, skill_months=skill_months)
+            i = Skills.objects.create(user=request.user, experience=e, skill=skill, skill_years=skill_years, skill_months=skill_months)
             print(i)
             i.save()    # For some reason it saves with out this line
             messages.success(request, 'The post has been successfully created.')
@@ -85,7 +85,7 @@ def add(request):
 
 @login_required
 def edit(request, id):
-    queryset = Skills.objects.filter(author=request.user)
+    queryset = Skills.objects.filter(user=request.user)
     skills = get_object_or_404(queryset, pk=id)
 
     if request.method == 'GET':
@@ -116,7 +116,7 @@ def edit(request, id):
 
 @login_required
 def delete(request, id):
-    queryset = Skills.objects.filter(author=request.user)
+    queryset = Skills.objects.filter(user=request.user)
     skills = get_object_or_404(queryset, pk=id)
     context = {'skills': skills}
 

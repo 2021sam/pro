@@ -2,8 +2,6 @@ from django.db import models
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
-import datetime
-
 
 
 CHOICES_DEGREE_TYPE = (
@@ -19,8 +17,8 @@ CHOICES_DEGREE_TYPE = (
 
 
 class Education(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    published_at = models.DateTimeField(default=timezone.now)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(default=timezone.now)
     school_name = models.CharField(max_length=30, blank=True)
     school_web_site = models.URLField(max_length=50, blank=True)
     degree_type = models.CharField(max_length=20, choices = CHOICES_DEGREE_TYPE, default='select degree type')

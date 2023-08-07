@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -19,6 +20,7 @@ CHOICES_WORK_AUTHORIZATION = (
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(default=timezone.now)
     address = models.TextField(max_length=500, blank=True)
     birth_date = models.DateField(null=True, blank=True, help_text='Please use the following format: <em>YYYY-MM-DD</em>.')
     # birth_month = models.IntegerField(blank=True, min_value=1, max_value=12)
