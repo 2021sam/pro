@@ -9,6 +9,12 @@
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ formset.management_form }}
+
+      {% for hidden in form.hidden_fields %}
+          {{ hidden }}
+      {% endfor %}
+        {{ form }}
+
         <table>
             {% for form in formset %}
             <tr><td>{{ form.experience }}</td><td>{{ form.skill }}</td><td>{{ form.skill_years }}</td><td>{{ form.skill_months }}</td></tr>

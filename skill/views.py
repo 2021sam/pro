@@ -10,25 +10,31 @@ from django.urls import path
 from .models import Experience
 from django.forms import modelformset_factory
 from django.forms import formset_factory
-
+# https://docs.djangoproject.com/en/4.2/topics/forms/modelforms/#model-formsets
 
 
 
 def edit(request):
-    SkillModelFormSet = modelformset_factory(Skill, fields=['user', 'experience', 'skill', 'skill_years', 'skill_months'])
+    SkillModelFormSet = modelformset_factory(Skill, fields=['user', 'experience', 'skill', 'skill_years', 'skill_months'], extra=5)
     if request.method == 'GET':
         skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
         context = {'formset': skillformset}
-        return render(request, 'skill/edit_set_row.html', context)
+        return render(request, 'skill/edit_set.html', context)
+        # return render(request, 'skill/edit_set_row.html', context)
 
     elif request.method == 'POST':
-        form = SkillModelFormSet(request.POST)
-        form.save()
-
-        skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
-        context = {'formset': skillformset}
-        return render(request, 'skill/edit_set_row.html', context)
-
+        form = SkillModelFormSet(request.POST, request.FILES)
+        if form.is_valid:
+            form.save()
+            return HttpResponse('Saved')
+        else:
+            return HttpResponse('form is not valid')
+    
+        # skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
+        # context = {'formset': skillformset}
+        # return render(request, 'skill/edit_set_row.html', context)
+        # content = {}
+        # return render(request, 'skill/home.html', content)
 
 
 @login_required
@@ -59,14 +65,15 @@ def stats(queryset):
 
 @login_required
 def view(request):
+    skills = Skill.objects.filter(user=request.user)
+    context = {'skills':  skills }
+    return render(request,'skill/view.html', context)
+
     # skills = Skill.objects.filter(user=request.user)
-    # context = {'skills':  skills }
-    # return render(request,'skill/view.html', context)
-    # skills = Skill.objects.filter(user=request.user)
-    SkillModelFormSet = modelformset_factory(Skill, fields=['skill', 'skill_years', 'skill_months'])
-    skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
-    context = {'formset': skillformset}
-    return render(request, 'skill/viewset.html', context)
+    # SkillModelFormSet = modelformset_factory(Skill, fields=['skill', 'skill_years', 'skill_months'])
+    # skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
+    # context = {'formset': skillformset}
+    # return render(request, 'skill/viewset.html', context)
 
 
 def add_skills(d, skill, years, months):
