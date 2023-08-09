@@ -4,7 +4,7 @@
 <h1>My Mad Skills</h1>
 	<p>Create motivation for people to take the time to manually insert their entire resume in this format.</p>
 
-	<a href="{% url 'skill-add' %}">Add</a>
-	<a href="{% url 'skill-view' %}">View</a> 
-
+	<a href="{% url 'skill:skill-add' %}">Add</a>
+	<a href="{% url 'skill:skill-view' %}">View</a> 
+<p>Note: Skills are mutually exclusive in terms of adding time to subset skills. Furthermore, only experience time with matching terms are added.</p>
 {% endblock content %}

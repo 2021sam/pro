@@ -8,6 +8,26 @@ from .forms import SkillForm
 from .models import Skill
 from django.urls import path
 from .models import Experience
+from django.forms import modelformset_factory
+from django.forms import formset_factory
+
+
+
+
+def edit(request):
+    SkillModelFormSet = modelformset_factory(Skill, fields=['user', 'experience', 'skill', 'skill_years', 'skill_months'])
+    if request.method == 'GET':
+        skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
+        context = {'formset': skillformset}
+        return render(request, 'skill/edit_set.html', context)
+
+    elif request.method == 'POST':
+        form = SkillModelFormSet(request.POST)
+        form.save()
+
+        skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
+        context = {'formset': skillformset}
+        return render(request, 'skill/edit_set.html', context)
 
 
 
@@ -39,10 +59,14 @@ def stats(queryset):
 
 @login_required
 def view(request):
-    skills = Skill.objects.filter(user=request.user)
-    context = {'skills':  skills }
-    return render(request,'skill/view.html', context)
-
+    # skills = Skill.objects.filter(user=request.user)
+    # context = {'skills':  skills }
+    # return render(request,'skill/view.html', context)
+    # skills = Skill.objects.filter(user=request.user)
+    SkillModelFormSet = modelformset_factory(Skill, fields=['skill', 'skill_years', 'skill_months'])
+    skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
+    context = {'formset': skillformset}
+    return render(request, 'skill/viewset.html', context)
 
 
 def add_skills(d, skill, years, months):
@@ -77,7 +101,7 @@ def add(request):
             print(i)
             i.save()    # For some reason it saves with out this line
             messages.success(request, 'The post has been successfully created.')
-            return redirect('skill-view')
+            return redirect('skill:skill-view')
         
         else:
             messages.error(request, 'Please correct the following errors:')
@@ -85,7 +109,7 @@ def add(request):
 
 
 @login_required
-def edit(request, id):
+def edit0(request, id):
     queryset = Skill.objects.filter(user=request.user)
     skills = get_object_or_404(queryset, pk=id)
 
@@ -109,7 +133,15 @@ def edit(request, id):
             print(i)
             i.save()
             messages.success(request, 'The post has been updated successfully.')
-            return redirect('skill-view')
+            return redirect('skill:skill-view')
+
+            SkillModelFormSet = modelformset_factory(Skill, fields=['skill', 'skill_years', 'skill_months'])
+            skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
+            context = {'formset': skillformset}
+            return render(request, 'skill/viewset.html', context)
+
+
+
         else:
             messages.error(request, 'Please correct the following errors:')
             return render(request,'skill/add_edit.html', {'form':form})
@@ -126,4 +158,4 @@ def delete(request, id):
     elif request.method == 'POST':
         skills.delete()
         messages.success(request,  'The post has been deleted successfully.')
-        return redirect('skill-view')
+        return redirect('skill:skill-view')

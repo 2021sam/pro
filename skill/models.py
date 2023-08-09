@@ -8,7 +8,7 @@ class Skill(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
     experience = models.ForeignKey(Experience, on_delete=models.CASCADE)
-    skill = models.CharField(max_length=30, blank=True, help_text = 'Note: Skills are mutually exclusive in terms of adding time to subset skills.  Furthermore, only experience time with matching terms are added.')
+    skill = models.CharField(max_length=30, blank=True)
     skill_years = models.SmallIntegerField(default=0)
     skill_months = models.SmallIntegerField(default=0)
 
