@@ -19,7 +19,7 @@ def edit(request):
     if request.method == 'GET':
         skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
         context = {'formset': skillformset}
-        return render(request, 'skill/edit_set.html', context)
+        return render(request, 'skill/edit_set_row.html', context)
 
     elif request.method == 'POST':
         form = SkillModelFormSet(request.POST)
@@ -27,7 +27,7 @@ def edit(request):
 
         skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
         context = {'formset': skillformset}
-        return render(request, 'skill/edit_set.html', context)
+        return render(request, 'skill/edit_set_row.html', context)
 
 
 
