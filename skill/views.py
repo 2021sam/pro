@@ -18,7 +18,7 @@ from .models import Experience
 
 
 def edit(request):
-    SkillModelFormSet = modelformset_factory(Skill, fields=['experience', 'skill', 'skill_years', 'skill_months'], extra=1)
+    SkillModelFormSet = modelformset_factory(Skill, fields=['id', 'experience', 'skill', 'skill_years', 'skill_months'], extra=1, can_delete=True)
     if request.method == 'GET':
         skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
         context = {'formset': skillformset}
