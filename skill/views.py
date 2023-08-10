@@ -1,34 +1,75 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.utils.dateparse import parse_datetime
 from django.contrib import messages
+from django.utils.dateparse import parse_datetime
 from django.http import HttpResponse
 from django.http import JsonResponse
+from django.forms import modelformset_factory
+# from django.forms import formset_factory
+# from django.urls import path
 from .forms import SkillForm
 from .models import Skill
-from django.urls import path
 from .models import Experience
-from django.forms import modelformset_factory
-from django.forms import formset_factory
+
+
+# Reference:
 # https://docs.djangoproject.com/en/4.2/topics/forms/modelforms/#model-formsets
 
 
 
 def edit(request):
-    SkillModelFormSet = modelformset_factory(Skill, fields=['user', 'experience', 'skill', 'skill_years', 'skill_months'], extra=5)
+    # SkillModelFormSet = modelformset_factory(Skill, fields=['user', 'experience', 'skill', 'skill_years', 'skill_months'], extra=1)
+    # SkillModelFormSet = modelformset_factory(Skill, fields=['user', 'timestamp', 'experience', 'skill', 'skill_years', 'skill_months'], extra=1)
+    SkillModelFormSet = modelformset_factory(Skill, fields="__all__", extra=3)
     if request.method == 'GET':
         skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
         context = {'formset': skillformset}
-        return render(request, 'skill/edit_set.html', context)
-        # return render(request, 'skill/edit_set_row.html', context)
+        # return render(request, 'skill/edit_set.html', context)
+        return render(request, 'skill/edit_set_row.html', context)
 
     elif request.method == 'POST':
+        # print(request.POST)
+        # print(request.FILES)
         form = SkillModelFormSet(request.POST, request.FILES)
-        if form.is_valid:
-            form.save()
-            return HttpResponse('Saved')
+        # print('****************************************')
+        # print(form)
+        # print('****************************************')
+        # myModelFormset = modelformset_factory(Author, form=AuthorForm)
+
+
+        print(f'form.is_bound1 = {form.is_bound}')
+        print(f'form.has_changed() = {form.has_changed()}')
+        print(f'form.is_valid() = {form.is_valid()}')
+        if form.is_valid():
+            instances = form.save(commit=False)
+            i = 0
+            for instance in instances:
+                i += 1
+                instance.save()
+            # return HttpResponse(f'Saved instances = {i}')
+
+            if form.has_changed():
+                messages.success(request, f'The {i} post(s) have been successfully saved.')
+                return redirect('skill:skill')
+            else:
+                messages.success(request, f'No changes made.')
+                return redirect('skill:skill')
+
         else:
-            return HttpResponse('form is not valid')
+            for error in form.errors:
+                # messages.error(request, sign_in_form.errors[error])
+                print(error)
+            # return redirect(request.path)
+            # return HttpResponse(form.errors)
+        
+            messages.error(request, 'Please correct the following errors:')
+            # return render(request,'skill/edit_set_row.html', {'form': form})
+            # return render(request,'skill/edit_set_row.html', {'form': form})
+            context = {'formset': form}
+            # return render(request, 'skill/edit_set.html', context)
+            return render(request, 'skill/edit_set_row.html', context)
+
+
     
         # skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
         # context = {'formset': skillformset}

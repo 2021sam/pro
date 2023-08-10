@@ -1,23 +1,21 @@
 {% extends 'base.html' %}
 	
 {% block content %}
-<h1>My Skills</h1>
+<h1>My Skills errors 3</h1>
 	<a href="{% url 'skill:skill-add' %}">Add</a>
 	<a href="{% url 'skill:skill-summarize' %}">Sort</a>
 
 
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST">
         {% csrf_token %}
         {{ formset.management_form }}
 
-      {% for hidden in form.hidden_fields %}
+      {% for hidden in formset.hidden_fields %}
           {{ hidden }}
       {% endfor %}
-        {{ form }}
 
         <table>
-            {% for form in formset %}
-            <tr><td>{{ form.experience }}</td><td>{{ form.skill }}</td><td>{{ form.skill_years }}</td><td>{{ form.skill_months }}</td></tr>
+            <tr><td>{{ form.id }} {{form.id.errors}}</td><td>{{ form.user }} {{ form.user.errors }}</td><td>{{ form.timestamp }} {{ form.timestamp.errors }}</td><td>{{ form.experience }} {{ form.experience.errors }}</td><td>{{ form.skill }} {{ form.skill.errors }}</td><td>{{ form.skill_years }} {{ form.skill_years.errors }}</td><td>{{ form.skill_months }} {{ form.skill_months.errors }}</td></tr>
             {% endfor %}
         </table>
         <input type="submit">

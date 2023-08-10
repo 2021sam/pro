@@ -5,10 +5,11 @@ from experience.models import Experience
 
 
 class Skill(models.Model):
+    # id = models.AutoField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
     experience = models.ForeignKey(Experience, on_delete=models.CASCADE)
-    skill = models.CharField(max_length=30, blank=True)
+    skill = models.CharField(max_length=30)
     skill_years = models.SmallIntegerField(default=0)
     skill_months = models.SmallIntegerField(default=0)
 
