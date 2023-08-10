@@ -18,9 +18,7 @@ from .models import Experience
 
 
 def edit(request):
-    # SkillModelFormSet = modelformset_factory(Skill, fields=['user', 'experience', 'skill', 'skill_years', 'skill_months'], extra=1)
-    # SkillModelFormSet = modelformset_factory(Skill, fields=['user', 'timestamp', 'experience', 'skill', 'skill_years', 'skill_months'], extra=1)
-    SkillModelFormSet = modelformset_factory(Skill, fields="__all__", extra=3)
+    SkillModelFormSet = modelformset_factory(Skill, fields=['experience', 'skill', 'skill_years', 'skill_months'], extra=1)
     if request.method == 'GET':
         skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
         context = {'formset': skillformset}
@@ -28,15 +26,7 @@ def edit(request):
         return render(request, 'skill/edit_set_row.html', context)
 
     elif request.method == 'POST':
-        # print(request.POST)
-        # print(request.FILES)
         form = SkillModelFormSet(request.POST, request.FILES)
-        # print('****************************************')
-        # print(form)
-        # print('****************************************')
-        # myModelFormset = modelformset_factory(Author, form=AuthorForm)
-
-
         print(f'form.is_bound1 = {form.is_bound}')
         print(f'form.has_changed() = {form.has_changed()}')
         print(f'form.is_valid() = {form.is_valid()}')
@@ -45,8 +35,8 @@ def edit(request):
             i = 0
             for instance in instances:
                 i += 1
+                instance.user = request.user
                 instance.save()
-            # return HttpResponse(f'Saved instances = {i}')
 
             if form.has_changed():
                 messages.success(request, f'The {i} post(s) have been successfully saved.')
@@ -57,25 +47,11 @@ def edit(request):
 
         else:
             for error in form.errors:
-                # messages.error(request, sign_in_form.errors[error])
                 print(error)
-            # return redirect(request.path)
-            # return HttpResponse(form.errors)
         
             messages.error(request, 'Please correct the following errors:')
-            # return render(request,'skill/edit_set_row.html', {'form': form})
-            # return render(request,'skill/edit_set_row.html', {'form': form})
             context = {'formset': form}
-            # return render(request, 'skill/edit_set.html', context)
             return render(request, 'skill/edit_set_row.html', context)
-
-
-    
-        # skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
-        # context = {'formset': skillformset}
-        # return render(request, 'skill/edit_set_row.html', context)
-        # content = {}
-        # return render(request, 'skill/home.html', content)
 
 
 @login_required

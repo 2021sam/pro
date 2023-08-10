@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 	
 {% block content %}
-<h1>My Skills errors 3</h1>
+<h1>My Skills</h1>
 	<a href="{% url 'skill:skill-add' %}">Add</a>
 	<a href="{% url 'skill:skill-summarize' %}">Sort</a>
 
@@ -15,7 +15,8 @@
       {% endfor %}
 
         <table>
-            <tr><td>{{ form.id }} {{form.id.errors}}</td><td>{{ form.user }} {{ form.user.errors }}</td><td>{{ form.timestamp }} {{ form.timestamp.errors }}</td><td>{{ form.experience }} {{ form.experience.errors }}</td><td>{{ form.skill }} {{ form.skill.errors }}</td><td>{{ form.skill_years }} {{ form.skill_years.errors }}</td><td>{{ form.skill_months }} {{ form.skill_months.errors }}</td></tr>
+            {% for form in formset %}
+                <tr><td>{{ form.id.errors }} {{ form.id }}</td><td>{{ form.experience.errors }} {{ form.experience }}</td><td>{{ form.skill.errors }} {{ form.skill }}</td><td>{{ form.skill_years.errors }} {{ form.skill_years }}</td><td>{{ form.skill_months.errors }} {{ form.skill_months }}</td></tr>
             {% endfor %}
         </table>
         <input type="submit">
