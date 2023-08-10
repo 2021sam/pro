@@ -8,6 +8,5 @@ urlpatterns = [
     path('skill/view/summarize/', views.view_summarize, name='skill-summarize'),
     path('skill/add/', views.add, name='skill-add'),
     path('skill/edit/', views.edit, name='skill-edit'),
-
     path('skill/delete/<int:id>/', views.delete, name='skill-delete')
 ]

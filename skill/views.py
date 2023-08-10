@@ -183,3 +183,11 @@ def delete(request, id):
         skills.delete()
         messages.success(request,  'The post has been deleted successfully.')
         return redirect('skill:skill-view')
+
+
+def delete_hx(request, id):
+    queryset = Skill.objects.filter(user=request.user)
+    skills = get_object_or_404(queryset, pk=id)
+    # skills.delete()
+    messages.success(request,  f'Skill id={id} has been deleted successfully.')
+    return HttpResponse('Deleted')

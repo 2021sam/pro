@@ -14,5 +14,5 @@ class Skill(models.Model):
     skill_months = models.SmallIntegerField(default=0)
 
     def __str__(self):
-        return f'{self.experience} {self.skill} {self.skill_years} {self.skill_months}'
+        return f'{self.id} {self.experience} {self.skill} {self.skill_years} {self.skill_months}'
     
