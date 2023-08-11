@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_hx.html' %}
 <!-- https://stackoverflow.com/questions/25345392/how-to-add-url-parameters-to-django-template-url-tag -->
 
 {% block content %}
@@ -20,7 +20,10 @@
             <th>Delete</th><th>Experience</th><th>Skill</th><th>Years</th><th>Months</th>
             {% for form in formset %}
                 <tr><td>{% if form.id.value %}
-                    <a href="{% url 'skill:skill-delete' form.id.value %}">Delete</a>
+                    <button class="btn btn-danger" hx-delete="{% url 'skill:hx-skill-delete' form.id.value %}"
+                        hx-target="closest tr" hx-swap="outerHTML swap:1s">
+                            Delete
+                    </button>
                     {% endif %}
                 {{ form.id.errors }} {{ form.id }}</td><td>{{ form.experience.errors }} {{ form.experience }}</td><td>{{ form.skill.errors }} {{ form.skill }}</td><td>{{ form.skill_years.errors }} {{ form.skill_years }}</td><td>{{ form.skill_months.errors }} {{ form.skill_months }}</td></tr>
             {% endfor %}

@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'pro_file.apps.ProFileConfig',
     'education.apps.EducationConfig',
     'experience.apps.ExperienceConfig',
-    'skill.apps.SkillConfig'
+    'skill.apps.SkillConfig',
+    'django_htmx'
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+     "django_htmx.middleware.HtmxMiddleware",
+    
 ]
 
 ROOT_URLCONF = 'pro.urls'

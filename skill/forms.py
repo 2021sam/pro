@@ -9,14 +9,19 @@ class SkillForm(forms.ModelForm):
         model = Skill
         fields = ['skill', 'skill_years', 'skill_months']
 
+
     def __init__(self, *args, **kwargs):
             self.user = kwargs.pop('user', None)
             if self.user:
                 print(self.user.id)
             super(SkillForm, self).__init__(*args, **kwargs)
-            self.fields['experience'] = forms.ModelMultipleChoiceField(queryset=Experience.objects.filter(user=self.user.id))
-
-
+            self.fields['experience'] = forms.ModelMultipleChoiceField(queryset=Experience.objects.filter(user=self.user.id), attrs={'cols': 150, 'rows': 10} )
+            # widgets={
+            #             'experience': forms.Select(attrs={'size': '120px'})
+            #             }
+            widgets={
+                        'experience': forms.Select(attrs={'style': 'width:120px'})
+                        }
 
 # class BaseSkillFormSet(BaseModelFormSet):
 #      def __init__(self, *args, **kwargs):

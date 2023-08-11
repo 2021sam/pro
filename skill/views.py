@@ -12,13 +12,16 @@ from .models import Skill
 from .models import Experience
 
 
+from django.views.decorators.http import require_http_methods
+
+
 # Reference:
 # https://docs.djangoproject.com/en/4.2/topics/forms/modelforms/#model-formsets
 
 
 
 def edit(request):
-    SkillModelFormSet = modelformset_factory(Skill, fields=['id', 'experience', 'skill', 'skill_years', 'skill_months'], extra=1, can_delete=True)
+    SkillModelFormSet = modelformset_factory(Skill, fields=['id', 'experience', 'skill', 'skill_years', 'skill_months'], extra=3, can_delete=True)
     if request.method == 'GET':
         skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
         context = {'formset': skillformset}
@@ -159,10 +162,10 @@ def edit0(request, id):
             messages.success(request, 'The post has been updated successfully.')
             return redirect('skill:skill-view')
 
-            SkillModelFormSet = modelformset_factory(Skill, fields=['skill', 'skill_years', 'skill_months'])
-            skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
-            context = {'formset': skillformset}
-            return render(request, 'skill/viewset.html', context)
+            # SkillModelFormSet = modelformset_factory(Skill, fields=['skill', 'skill_years', 'skill_months'])
+            # skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
+            # context = {'formset': skillformset}
+            # return render(request, 'skill/viewset.html', context)
 
 
 
@@ -185,9 +188,22 @@ def delete(request, id):
         return redirect('skill:skill-view')
 
 
-def delete_hx(request, id):
+def hx_delete(request, id):
+    print(request.method)
     queryset = Skill.objects.filter(user=request.user)
-    skills = get_object_or_404(queryset, pk=id)
-    # skills.delete()
+    skill = get_object_or_404(queryset, pk=id)
+    skill.delete()
     messages.success(request,  f'Skill id={id} has been deleted successfully.')
-    return HttpResponse('Deleted')
+    return HttpResponse('')
+
+
+# @require_http_methods(['DELETE'])
+def hx(request):
+    # Task.objects.filter(id=id).delete()
+    # tasks = Task.objects.all()
+    print(request.htmx)
+    return render(request, 'skill/hx.html', {'tasks': ''})
+
+# @csrf_protect
+def hx2(request):
+    return HttpResponse('hx2')

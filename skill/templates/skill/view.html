@@ -13,8 +13,16 @@
         <small>Timestamp {{ e.published_at | date:"M d, Y" }} by {{ e.user | title}}</small>
 		{% if request.user.is_authenticated and request.user == e.user %}
 		<p>
-			<a href="{% url 'skill:skill-edit' %}">Edit</a> 
+			<a href="{% url 'skill:skill-edit' %}">Edit</a>
 			<a href="{% url 'skill:skill-delete' e.id %}">Delete</a>
+			<form>
+				{% csrf_token %}
+				<button class="btn btn-danger" hx-delete="{% url 'skill:skill-delete' e.id %}">
+					Delete
+				</button>
+	
+			</form>
+
 		</p>
 		{% endif %}
 		

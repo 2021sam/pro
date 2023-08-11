@@ -1,0 +1,30 @@
+{% extends "base_hx.html" %}
+
+{% block content %}
+
+
+<table border="3">
+<tr>
+<td>Column 1</td><td>Column 2</td>
+</tr>
+
+<tr>
+  <td><button class="btn btn-danger" hx-delete="{% url 'skill:hx-skill-delete' 1 %}"
+    hx-confirm="Are you sure?" hx-target="closest tr" hx-swap="outerHTML swap:1s">
+    Delete
+  </button></td>
+  <td>Data 1</td>
+</tr>
+
+  <tr>
+    <td><button class="btn btn-danger" hx-delete="{% url 'skill:hx-skill-delete' 9 %}"
+      hx-target="closest tr" hx-swap="outerHTML swap:1s">
+      Delete
+    </button></td>
+    <td>Data 2</td>
+  </tr>
+
+</table>
+  
+
+{% endblock %}
