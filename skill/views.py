@@ -5,25 +5,26 @@ from django.utils.dateparse import parse_datetime
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.forms import modelformset_factory
-# from django.forms import formset_factory
-# from django.urls import path
 from .forms import SkillForm
 from .models import Skill
 from .models import Experience
-
-
 from django.views.decorators.http import require_http_methods
-
-
 # Reference:
 # https://docs.djangoproject.com/en/4.2/topics/forms/modelforms/#model-formsets
 
 
 
 def edit(request):
-    SkillModelFormSet = modelformset_factory(Skill, fields=['id', 'experience', 'skill', 'skill_years', 'skill_months'], extra=3, can_delete=True)
+    # SkillModelFormSet = modelformset_factory(Skill, fields=['id', 'experience', 'skill', 'skill_years', 'skill_months'], extra=3, can_delete=True)
+    SkillModelFormSet = modelformset_factory(Skill, form=SkillForm, extra=0, can_delete=True)
     if request.method == 'GET':
-        skillformset = SkillModelFormSet(queryset = Skill.objects.filter(user=request.user))
+        queryset = Skill.objects.filter(user=request.user)
+        print(queryset.count)
+        print(len(queryset))
+        print(queryset[0].experience)
+
+        # https://stackoverflow.com/questions/622982/django-passing-custom-form-parameters-to-formset
+        skillformset = SkillModelFormSet(form_kwargs={'user': request.user}, queryset = Skill.objects.filter(user=request.user))
         context = {'formset': skillformset}
         # return render(request, 'skill/edit_set.html', context)
         return render(request, 'skill/edit_set_row.html', context)
