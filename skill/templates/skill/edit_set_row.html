@@ -17,7 +17,15 @@
 
 
         <table>
-            <th>Delete</th><th>Experience</th><th>Skill</th><th>Years</th><th>Months</th>
+
+    <colgroup>
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 40%;">
+        <col span="1" style="width: 30%;">
+        <col span="1" style="width: 10%;">
+        <col span="1" style="width: 10%;">
+     </colgroup>
+            <th>Action</th><th>Experience</th><th>Skill</th><th>Years</th><th>Months</th>
             {% for form in formset %}
                 <tr><td>{% if form.id.value %}
                     <button class="btn btn-danger" hx-delete="{% url 'skill:hx-skill-delete' form.id.value %}"
