@@ -15,7 +15,7 @@ from django.views.decorators.http import require_http_methods
 
 
 def edit(request):
-    SkillModelFormSet = modelformset_factory(Skill, form=SkillForm, extra=3, can_delete=True)
+    SkillModelFormSet = modelformset_factory(Skill, form=SkillForm, extra=0, can_delete=True)
     if request.method == 'GET':
         queryset = Skill.objects.filter(user=request.user)
         print(queryset.count)
@@ -103,6 +103,13 @@ def add_skills(d, skill, years, months):
         d[skill] += years * 12 + months
     return d
 
+
+
+def add(request):
+    if request.method == 'POST':
+        pass
+    context = {'form': SkillForm(user=request.user)}
+    return render(request, 'partials/form.html', context)
 
 
 # @login_required
@@ -205,3 +212,9 @@ def hx(request):
 # @csrf_protect
 def hx2(request):
     return HttpResponse('hx2')
+
+
+
+@login_required
+def delete(request, id):
+    pass

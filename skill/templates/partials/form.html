@@ -1,0 +1,27 @@
+<form>
+    <div class="row">
+        <div class="col-4 col-md-3">
+                <label for="{{ form.skill.id_for_skill }}">{{ form.skill.label }}</label>
+            {{ form.id }}  {{ form.experience }}
+        </div>
+
+        <div class="col-4 col-md-3">
+                <label for="{{ form.skill.id_for_skill }}">{{ form.skill.label }}</label>
+                {{ form.skill }}
+        </div>
+
+
+        <div class="col-4 col-md-3">
+            <label for="{{ form.skill_years.id_for_skill_years }}">{{ form.skill_years.label }}</label>
+            {{ form.skill_years }}
+    </div>
+
+
+        <div class="col-3 align-self-end">
+            <button
+            class="btn btn-primary"
+            type="submit">HX Add</button>
+        </div>
+
+    </div>
+</form>
