@@ -35,3 +35,11 @@ input[type="submit"]{
 	background-color:#ba2121;
 	color:#fff;
 }
+
+
+
+
+tr.htmx-swapping td {
+	opacity: 0;
+	transition: opacity 1s ease-out;
+  }

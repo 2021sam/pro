@@ -1,0 +1,60 @@
+{% extends 'base_hx.html' %}
+<!-- https://stackoverflow.com/questions/25345392/how-to-add-url-parameters-to-django-template-url-tag -->
+
+{% block content %}
+<h1>My Skills</h1>
+	<a href="{% url 'skill:skill-add' %}">Add</a>
+	<a href="{% url 'skill:skill-summarize' %}">Sort</a>
+
+      <div class="main-container">
+        <div class="table-container">
+          <div class="table-row heading">
+            <div class="row-item-1">Action</div>
+            <div class="row-item-2">Experience</div>
+            <div class="row-item-3">Skill</div>
+            <div class="row-item-4">Years</div>
+          </div>
+          <div class="table-row">
+            <div class="row-item-1">Item 1</div>
+            <div class="row-item-2">Item 2</div>
+            <div class="row-item-3">Item 3</div>
+            <div class="row-item-4">Item 4</div>
+          </div>
+          {% for form in formset %}
+          <form>
+            <div class="table-row" id="delete-row">
+              <div class="row-item-1">
+                  {% if form.id.value %}
+                  <button class="btn btn-danger" hx-delete="{% url 'skill:hx-skill-delete' form.id.value %}"
+                  hx-target="closest #delete-row" hx-swap="outerHTML swap:1s">
+                      Delete {{ form.id.value }}
+                  </button>
+                  {{ form.id.errors }} {{ form.id }}
+                  {% endif %}
+              </div>
+              <div class="row-item-2">{{ form.experience.errors }} {{ form.experience }}</div>
+              <div class="row-item-3">{{ form.skill.errors }} {{ form.skill }}</div>
+              <div class="row-item-4" hx-trigger="change" hx-swap="afterend" hx-put="{% url 'skill:hx-skill-put' form.id.value %}">{{ form.skill_years.errors }} {{ form.skill_years }}</div>
+
+            </div>
+          </form>
+
+          {% endfor %}
+          </div>
+        </div>
+
+    <div id="contact-forms">
+        {% include 'partials/hx-skill.html' %}
+    </div>
+
+
+
+<div class="my-4">
+    <button type="button" class="btn btn-success me-2"
+    hx-get="{% url 'skill:skill-add' %}"
+    hx-target="#contact-forms"
+    hx-swap="beforeend"
+    >+ Add Cool Skill</button>
+</div>
+
+{% endblock content %}

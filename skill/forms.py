@@ -15,10 +15,10 @@ class SkillForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         if self.user:
-            print('SkillForm __init__:')
-            print(self.user.id)
+            # print('SkillForm __init__:')
+            # print(self.user.id)
             super(SkillForm, self).__init__(*args, **kwargs)
-            mystyle = {"style": "width:300px;", "size": 1, "rows": 10} # rows does not seem to have an affect
+            mystyle = {"style": "width:100px;", "size": 1, "rows": 10} # rows does not seem to have an affect
             self.fields['experience'] = forms.ModelChoiceField(queryset=Experience.objects.filter(user=self.user.id), widget=forms.Select(), required=False)
             self.fields["experience"].widget.attrs = mystyle
-            self.fields["skill"].widget.attrs = {"style": "width:300px;"}
+            self.fields["skill"].widget.attrs = {"style": "width:100px;"}
