@@ -80,15 +80,22 @@
     if ( id_experience == 0 || skill.length == 0 || skill_years == 0 )
     {
       form[6].disabled = true;
+      return false;
     }
     else
     {
       form[6].disabled = false;
+      form.submit();
+      return true;
     }
 
-    return false;
   }
 </script>
+
+
+<iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+
+
 
 <h1>My Skills</h1>
 	<a href="{% url 'skill:skill-add' %}">Add</a>
@@ -112,7 +119,7 @@
             <!-- Remove this if because we will always set modelformset extra=0 -->
             <!-- extra will be done manually here -->
             {% if form.id.value %}
-              <form id='sam' method="POST" onsubmit="return validate('{{ form.id.value }}', this)" onfocusin="dosave(this)" onfocusout="doit(this)" >
+              <form id='sam' method="POST" onsubmit="return validate('{{ form.id.value }}', this)" onfocusin="dosave(this)" onfocusout="doit(this)" action="{% url 'skill:skill-edit-hx' %}" target="dummyframe" enctype="multipart/form-data">
                 {% csrf_token %}
               
                 <div class="table-row" id="delete-row">
@@ -121,11 +128,11 @@
                       hx-target="closest #delete-row" hx-swap="outerHTML swap:1s">
                           Delete {{ form.id.value }}
                       </button>
-                      {{ form.id.errors }} {{ form.id }}
+                      {{ form.id }}
                   </div>
                   <div class="row-item-2">{{ form.experience.errors }} {{ form.experience }}</div>
                   <div class="row-item-3">{{ form.skill.errors }} {{ form.skill }}</div>
-                  <div class="row-item-4" hx-trigger="change" hx-swap="afterend" hx-put="{% url 'skill:hx-skill-put' form.id.value %}">{{ form.skill_years.errors }} {{ form.skill_years }}</div>
+                  <div class="row-item-4" hx-trigger="change" hx-swap="afterend" hx-put="{% url 'skill:hx-skill-put' form.id.value %}">{{ form.skill_years }}</div>
                   <button onclick="doit()">Do It</button>
                 </div>
                 <button id='submit-skill' type="submit">submit</button>

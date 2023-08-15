@@ -14,27 +14,60 @@ from django.views.decorators.http import require_http_methods
 
 
 def edit_hx(request):
-    SkillModelFormSet = modelformset_factory(Skill, form=SkillForm, extra=0, can_delete=True)
-    if request.method == 'GET':
-        queryset = Skill.objects.filter(user=request.user)
-        print(queryset.count)
-        print(len(queryset))
-        # print(queryset[0].experience)
+    print('edit_hx')
 
+    if request.method == 'GET':
+        SkillModelFormSet = modelformset_factory(Skill, form=SkillForm, extra=0, can_delete=True)
+        queryset = Skill.objects.filter(user=request.user)
+        # print(queryset.count)
+        # print(len(queryset))
+        # print(queryset[0].experience)
         # https://stackoverflow.com/questions/622982/django-passing-custom-form-parameters-to-formset
         skillformset = SkillModelFormSet(form_kwargs={'user': request.user}, queryset = Skill.objects.filter(user=request.user))
         context = {'formset': skillformset}
         return render(request, 'skill/hx_skills.html', context)
 
     elif request.method == 'POST':
-        form = SkillForm(request.POST, user=request.user)
+        print("POST")
+        print(f'POST: {request.POST}')
+        print(f'FILES: {request.FILES}')
+        form = SkillForm(request.POST, request.FILES, user=request.user)
         print(form)
         print(f'form.is_bound1 = {form.is_bound}')
         print(f'form.has_changed() = {form.has_changed()}')
-        print(f'form.is_valid() = {form.is_valid()}')
-        if form.is_valid():
-            instance = form.save()
-            print(f'instance: {instance}')
+        print(f'form.is_valid() = {form.is_valid()}')       # Need required=True but gives form not valid
+
+
+        d = {}
+        for key, value in request.POST.lists():
+            print(key, value)
+            field = key.split('-')
+            print(field)
+            print( len(field))
+            if len(field) == 3:
+                d[field[2]] = value[0]
+        
+
+        # d = {}
+        # for key in request.POST.lists():
+        #     d[key] = request.POST.lists(key)
+        print('************************************')
+        print(d)
+        print('************************************')
+        id = int(d['id'])
+        experience_id = int(d['experience'])
+        skill = d['skill']
+        skill_years = int(d['skill_years'])
+        skill_months = 5 # int(d['skill_months'])
+        e = Experience.objects.get(id=experience_id)
+        
+        i = Skill.objects.get(id=id)
+        i.experience = e
+        i.skill = skill
+        i.skill_years = skill_years
+        i.skill_months = skill_months
+        print(i)
+        i.save()
         
         return HttpResponse('')
     

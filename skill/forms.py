@@ -8,10 +8,10 @@ class SkillForm(forms.ModelForm):
     class Meta:
         model = Skill
         fields = ['experience', 'skill', 'skill_years', 'skill_months']
-        widgets = {
-            'skill': forms.TextInput(attrs={'class': 'form-control'}),
-            'skill_years': forms.TextInput(attrs = {'onchange' : "validate(this);"})
-        }
+        # widgets = {
+        #     'skill': forms.TextInput(attrs={'class': 'form-control'}),
+        #     'skill_years': forms.TextInput(attrs = {'onchange' : "validate(this);"})
+        # }
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
@@ -20,6 +20,8 @@ class SkillForm(forms.ModelForm):
             # print(self.user.id)
             super(SkillForm, self).__init__(*args, **kwargs)
             mystyle = {"style": "width:100px;", "size": 1, "rows": 10} # rows does not seem to have an affect
+            # self.fields['experience'] = forms.ModelChoiceField(queryset=Experience.objects.filter(user=self.user.id), widget=forms.Select(), required=False)
             self.fields['experience'] = forms.ModelChoiceField(queryset=Experience.objects.filter(user=self.user.id), widget=forms.Select(), required=True)
-            self.fields["experience"].widget.attrs = mystyle
-            self.fields["skill"].widget.attrs = {"style": "width:100px;"}
+            # self.fields['experience'] = forms.ModelChoiceField(queryset=Experience.objects.filter(user=self.user.id))
+            # self.fields["experience"].widget.attrs = mystyle
+            # self.fields["skill"].widget.attrs = {"style": "width:100px;"}
