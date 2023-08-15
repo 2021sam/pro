@@ -2,9 +2,105 @@
 <!-- https://stackoverflow.com/questions/25345392/how-to-add-url-parameters-to-django-template-url-tag -->
 
 {% block content %}
+
+<script>
+
+function doit(form)
+{
+  var id = form[2].value;
+  var id_experience = form[3].value;
+  var skill = form[4].value;
+  var skill_years = form[5].value;
+  console.log('id: ' + id );
+  console.log('id_experience: ' + id_experience );
+  console.log('skill: ' + skill );
+  console.log('skill_years: ' + skill_years );
+
+  if ( id_experience == 0 || skill.length == 0 || skill_years == 0 )
+  {
+    form[6].disabled = true;
+    console.log('Disable button');
+  }
+  else
+  {
+    form[6].disabled = false;
+    console.log('Enable button');
+  }
+
+  var change = false;
+  if (id_experience != document.getElementById('save_id_experience').value)
+    change = true;
+
+  if (skill != document.getElementById('save_skill').value)
+  {change = true;}
+
+  if (skill_years != document.getElementById('save_skill_years').value)
+  {change = true;}
+
+  if (change)
+  {
+    console.log('You made a change !');
+    document.getElementById('console').value = 'You made a change !';
+  }    
+  else
+  {
+    console.log('No change');
+    document.getElementById('console').value = 'No change !';
+  }
+    
+}
+
+
+
+  function dosave(form)
+  {
+    var id = form[2].value;
+    var id_experience = form[3].value;
+    var skill = form[4].value;
+    var skill_years = form[5].value;
+    console.log('id: ' + id );
+    console.log('id_experience: ' + id_experience );
+    console.log('skill: ' + skill );
+    console.log('skill_years: ' + skill_years );
+    document.getElementById('save_id').value = id;
+    document.getElementById('save_id_experience').value = id_experience;
+    document.getElementById('save_skill').value = skill;
+    document.getElementById('save_skill_years').value = skill_years;
+  }
+
+  function validate(row, form)
+  {
+    var id = form[2].value;
+    var id_experience = form[3].value;
+    var skill = form[4].value;
+    var skill_years = form[5].value;
+    console.log('id: ' + id );
+    console.log('id_experience: ' + id_experience );
+    console.log('skill: ' + skill );
+    console.log('skill_years: ' + skill_years );
+
+    if ( id_experience == 0 || skill.length == 0 || skill_years == 0 )
+    {
+      form[6].disabled = true;
+    }
+    else
+    {
+      form[6].disabled = false;
+    }
+
+    return false;
+  }
+</script>
+
 <h1>My Skills</h1>
 	<a href="{% url 'skill:skill-add' %}">Add</a>
 	<a href="{% url 'skill:skill-summarize' %}">Sort</a>
+
+  {% for field in form %}
+    {{ field.errors }}
+    {% endfor %}
+
+
 
       <div class="main-container">
         <div class="table-container">
@@ -21,40 +117,56 @@
             <div class="row-item-4">Item 4</div>
           </div>
           {% for form in formset %}
-          <form>
-            <div class="table-row" id="delete-row">
-              <div class="row-item-1">
-                  {% if form.id.value %}
-                  <button class="btn btn-danger" hx-delete="{% url 'skill:hx-skill-delete' form.id.value %}"
-                  hx-target="closest #delete-row" hx-swap="outerHTML swap:1s">
-                      Delete {{ form.id.value }}
-                  </button>
-                  {{ form.id.errors }} {{ form.id }}
-                  {% endif %}
-              </div>
-              <div class="row-item-2">{{ form.experience.errors }} {{ form.experience }}</div>
-              <div class="row-item-3">{{ form.skill.errors }} {{ form.skill }}</div>
-              <div class="row-item-4" hx-trigger="change" hx-swap="afterend" hx-put="{% url 'skill:hx-skill-put' form.id.value %}">{{ form.skill_years.errors }} {{ form.skill_years }}</div>
+            <!-- Remove this if because we will always set modelformset extra=0 -->
+            <!-- extra will be done manually here -->
+            {% if form.id.value %}
+              <form id='sam' method="POST" onsubmit="return validate('{{ form.id.value }}', this)" onfocusin="dosave(this)" onfocusout="doit(this)" >
+                {% csrf_token %}
+              
+                <div class="table-row" id="delete-row">
+                  <div class="row-item-1">
+                      <button class="btn btn-danger" hx-delete="{% url 'skill:hx-skill-delete' form.id.value %}"
+                      hx-target="closest #delete-row" hx-swap="outerHTML swap:1s">
+                          Delete {{ form.id.value }}
+                      </button>
+                      {{ form.id.errors }} {{ form.id }}
+                  </div>
+                  <div class="row-item-2">{{ form.experience.errors }} {{ form.experience }}</div>
+                  <div class="row-item-3">{{ form.skill.errors }} {{ form.skill }}</div>
+                  <div class="row-item-4" hx-trigger="change" hx-swap="afterend" hx-put="{% url 'skill:hx-skill-put' form.id.value %}">{{ form.skill_years.errors }} {{ form.skill_years }}</div>
+                  <button onclick="doit()">Do It</button>
+                </div>
+                <button id='submit-skill' type="submit">submit</button>
 
-            </div>
-          </form>
-
+              </form>
+            {% endif %}
           {% endfor %}
           </div>
         </div>
 
-    <div id="contact-forms">
-        {% include 'partials/hx-skill.html' %}
-    </div>
+    <!-- <div id="extra" >
+      {% include 'partials/form.html' %}
+    </div> -->
+
+  <div id="extra">
+    
+  </div>
 
 
 
 <div class="my-4">
     <button type="button" class="btn btn-success me-2"
     hx-get="{% url 'skill:skill-add' %}"
-    hx-target="#contact-forms"
+    hx-target="#extra"
     hx-swap="beforeend"
     >+ Add Cool Skill</button>
 </div>
+
+
+<input id="save_id" type="text">
+<input id="save_id_experience" type="text">
+<input id="save_skill" type="text">
+<input id="save_skill_years" type="text">
+<input id="console" type="text">
 
 {% endblock content %}
