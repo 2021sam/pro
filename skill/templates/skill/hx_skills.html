@@ -4,52 +4,50 @@
 {% block content %}
 
 <script>
-
-function doit(form)
-{
-  var id = form[2].value;
-  var id_experience = form[3].value;
-  var skill = form[4].value;
-  var skill_years = form[5].value;
-  console.log('id: ' + id );
-  console.log('id_experience: ' + id_experience );
-  console.log('skill: ' + skill );
-  console.log('skill_years: ' + skill_years );
-
-  if ( id_experience == 0 || skill.length == 0 || skill_years == 0 )
+  function doit(form)
   {
-    form[6].disabled = true;
-    console.log('Disable button');
+    var id = form[2].value;
+    var id_experience = form[3].value;
+    var skill = form[4].value;
+    var skill_years = form[5].value;
+    console.log('id: ' + id );
+    console.log('id_experience: ' + id_experience );
+    console.log('skill: ' + skill );
+    console.log('skill_years: ' + skill_years );
+
+    if ( id_experience == 0 || skill.length == 0 || skill_years == 0 )
+    {
+      form[6].disabled = true;
+      console.log('Disable button');
+    }
+    else
+    {
+      form[6].disabled = false;
+      console.log('Enable button');
+    }
+
+    var change = false;
+    if (id_experience != document.getElementById('save_id_experience').value)
+      change = true;
+
+    if (skill != document.getElementById('save_skill').value)
+    {change = true;}
+
+    if (skill_years != document.getElementById('save_skill_years').value)
+    {change = true;}
+
+    if (change)
+    {
+      console.log('You made a change !');
+      document.getElementById('console').value = 'You made a change !';
+      form.submit();
+    }    
+    else
+    {
+      console.log('No change');
+      document.getElementById('console').value = 'No change !';
+    }
   }
-  else
-  {
-    form[6].disabled = false;
-    console.log('Enable button');
-  }
-
-  var change = false;
-  if (id_experience != document.getElementById('save_id_experience').value)
-    change = true;
-
-  if (skill != document.getElementById('save_skill').value)
-  {change = true;}
-
-  if (skill_years != document.getElementById('save_skill_years').value)
-  {change = true;}
-
-  if (change)
-  {
-    console.log('You made a change !');
-    document.getElementById('console').value = 'You made a change !';
-  }    
-  else
-  {
-    console.log('No change');
-    document.getElementById('console').value = 'No change !';
-  }
-    
-}
-
 
 
   function dosave(form)
@@ -96,12 +94,6 @@ function doit(form)
 	<a href="{% url 'skill:skill-add' %}">Add</a>
 	<a href="{% url 'skill:skill-summarize' %}">Sort</a>
 
-  {% for field in form %}
-    {{ field.errors }}
-    {% endfor %}
-
-
-
       <div class="main-container">
         <div class="table-container">
           <div class="table-row heading">
@@ -144,15 +136,7 @@ function doit(form)
           </div>
         </div>
 
-    <!-- <div id="extra" >
-      {% include 'partials/form.html' %}
-    </div> -->
-
-  <div id="extra">
-    
-  </div>
-
-
+  <div id="extra"></div>
 
 <div class="my-4">
     <button type="button" class="btn btn-success me-2"

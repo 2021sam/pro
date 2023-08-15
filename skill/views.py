@@ -27,33 +27,32 @@ def edit_hx(request):
         return render(request, 'skill/hx_skills.html', context)
 
     elif request.method == 'POST':
-        form = SkillModelFormSet(request.POST, request.FILES, form_kwargs={'user': request.user})
+        form = SkillForm(request.POST, user=request.user)
+        print(form)
         print(f'form.is_bound1 = {form.is_bound}')
         print(f'form.has_changed() = {form.has_changed()}')
         print(f'form.is_valid() = {form.is_valid()}')
         if form.is_valid():
-            instances = form.save(commit=False)
-            i = 0
-            for instance in instances:
-                i += 1
-                instance.user = request.user
-                instance.save()
-
-            if form.has_changed():
-                messages.success(request, f'The {i} post(s) have been successfully saved.')
-                return redirect('skill:skill')
-            else:
-                messages.success(request, f'No changes made.')
-                return redirect('skill:skill')
-
-        else:
-            for error in form.errors:
-                print(error)
+            instance = form.save()
+            print(f'instance: {instance}')
         
-            messages.error(request, 'Please correct the following errors:')
-            context = {'formset': form}
-            return render(request, 'skill/edit_set_row.html', context)
+        return HttpResponse('')
+    
 
+        #     if form.has_changed():
+        #         messages.success(request, f'The post has been successfully saved.')
+        #         return redirect('')
+        #     else:
+        #         messages.success(request, f'No changes made.')
+        #         return redirect('')
+
+        # else:
+        #     for error in form.errors:
+        #         print(error)
+        
+        #     messages.error(request, 'Please correct the following errors:')
+        #     context = {'formset': form}
+        #     return render(request, 'skill/edit_set_row.html', context)
 
 
 
