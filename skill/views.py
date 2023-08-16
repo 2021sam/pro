@@ -24,7 +24,8 @@ def edit_hx(request):
         # print(queryset[0].experience)
         # https://stackoverflow.com/questions/622982/django-passing-custom-form-parameters-to-formset
         skillformset = SkillModelFormSet(form_kwargs={'user': request.user}, queryset = Skill.objects.filter(user=request.user))
-        context = {'formset': skillformset}
+        skillform = {'skillform': SkillForm(user=request.user)}
+        context = {'formset': skillformset, 'skillform': skillform}
         return render(request, 'skill/hx_skills.html', context)
 
     elif request.method == 'POST':

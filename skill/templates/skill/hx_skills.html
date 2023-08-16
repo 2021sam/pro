@@ -121,7 +121,7 @@
             <!-- Remove this if because we will always set modelformset extra=0 -->
             <!-- extra will be done manually here -->
             {% if form.id.value %}
-              <form id='sam' method="POST" onsubmit="return validate('{{ form.id.value }}', this)" onfocusin="dosave(this)" onfocusout="doit(this)" action="{% url 'skill:skill-edit-hx' %}" target="dummyframe" enctype="multipart/form-data">
+              <form id='sam' method="POST" onsubmit="return validate('{{ form.id.value }}', this)" onfocusin="dosave(this)" onfocusout="doit(this)" action="{% url 'skill:skill-edit-hx' %}" target="dummyframe" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
               
                 <div class="table-row" id="delete-row">
@@ -152,6 +152,29 @@
 
       <div class="main-container">
         <div class="table-container" id="extra">
+          <!-- {% include 'partials/form.html' %} -->
+
+          <form id='sam2' method="POST" onsubmit="return validate('{{ skillform.id.value }}', this)" onfocusin="dosave(this)" onfocusout="doit(this)" enctype="multipart/form-data">
+            {% csrf_token %}
+          
+            <div class="table-row" id="delete-row">
+                <div class="row-item-1">
+                    <button class="btn btn-danger" >
+                        Delete
+                    </button>
+                    <input id="id" name="id" type="text" value="0">
+                </div>
+              <div class="row-item-2">{{ skillform.experience }}</div>
+              <div class="row-item-3">{{ form.skill }}</div>
+              <div class="row-item-4">{{ skillform.skill_years }}</div>
+              
+            </div>
+        
+        </form>
+
+
+
+
 
         </div>
       </div>

@@ -1,4 +1,4 @@
-<form id='sam' method="POST" onsubmit="return validate('{{ form.id.value }}', this)" onfocusin="dosave(this)" onfocusout="doit(this)" enctype="multipart/form-data">
+<form id='sam' method="POST" onsubmit="return validate('{{ skillform.id.value }}', this)" onfocusin="dosave(this)" onfocusout="doit(this)" enctype="multipart/form-data">
     {% csrf_token %}
   
     <div class="table-row" id="delete-row">
@@ -8,9 +8,9 @@
             </button>
             <input id="id" name="id" type="text" value="0">
         </div>
-      <div class="row-item-2">{{ form.experience.errors }} {{ form.experience }}</div>
-      <div class="row-item-3">{{ form.skill.errors }} {{ form.skill }}</div>
-      <div class="row-item-4">{{ form.skill_years }}</div>
+      <div class="row-item-2">{{ skillform.experience }}</div>
+      <div class="row-item-3">{{ skillform.skill }}</div>
+      <div class="row-item-4">{{ skillform.skill_years }}</div>
       
     </div>
 
