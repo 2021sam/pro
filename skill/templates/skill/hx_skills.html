@@ -4,21 +4,25 @@
 {% block content %}
 
 <script>
-    var experience = document.getElementById("id_experience");
-    console.log(experience)
-    window.onload=function()
-    {
-      experience.focus();
-      alert("experience");
-    }
+    // var experience = document.getElementById("id_experience");
+    // console.log(experience)
+    // window.onload=function()
+    // {
+    //   experience.focus();
+    //   alert("experience");
+    // }
 
 
   function doit(form)
   {
-    var id = form[2].value;
-    var id_experience = form[3].value;
-    var skill = form[4].value;
-    var skill_years = form[5].value;
+    var i = 1;
+    if (form.length == 6)
+      i++;
+
+    var id = form[i].value;
+    var id_experience = form[++i].value;
+    var skill = form[++i].value;
+    var skill_years = form[++i].value;
     console.log('id: ' + id );
     console.log('id_experience: ' + id_experience );
     console.log('skill: ' + skill );
@@ -63,10 +67,18 @@
 
   function dosave(form)
   {
-    var id = form[2].value;
-    var id_experience = form[3].value;
-    var skill = form[4].value;
-    var skill_years = form[5].value;
+    console.log(form.length);
+    // document.getElementById('console').value = 'form.length = ' + form.length;
+    //  form[0].value = msZX1lvMryqD2spz4ncfzgnG2Zo6FushPuaK48ogWu3IA7x6fVGd0pCA3RCo1jvv
+    //  form.length = 6 for formset
+    //  form.length = 5 for additional dynamically added empty forms
+    var i = 1;
+    if (form.length == 6)
+      i++;
+    var id = form[i].value;
+    var id_experience = form[++i].value;
+    var skill = form[++i].value;
+    var skill_years = form[++i].value;
     console.log('id: ' + id );
     console.log('id_experience: ' + id_experience );
     console.log('skill: ' + skill );
@@ -79,7 +91,12 @@
 
   function validate(row, form)
   {
-    var id = form[2].value;
+    document.getElementById('console').value = form.length;
+    var i = 0;
+    if (form.length == 6)
+      i += 2;
+
+    var id = form[i].value;
     var id_experience = form[3].value;
     var skill = form[4].value;
     var skill_years = form[5].value;
@@ -95,7 +112,7 @@
     }
     else
     {
-      form[6].disabled = false;
+      // form[6].disabled = false;
       form.submit();
       return true;
     }
@@ -165,11 +182,9 @@
             {% csrf_token %}
           
             <div class="table-row" id="delete-row">
+
                 <div class="row-item-1">
-                    <button class="btn btn-danger" >
-                        Delete
-                    </button>
-                    <input id="id" name="id" type="text" value="0" size="1">
+                    <input id="id" name="id" type="hidden" value="0" size="1">
                 </div>
               <div class="row-item-2">{{ skillform.experience }}</div>
               <div class="row-item-3">{{ skillform.skill }}</div>
@@ -182,15 +197,6 @@
 
         </div>
       </div>
-
-
-<div class="my-4">
-    <button type="button" class="btn btn-success me-2"
-    hx-get="{% url 'skill:skill-add' %}"
-    hx-target="#extra"
-    hx-swap="beforeend"
-    >+ Add Cool Skill</button>
-</div>
 
 
 <input id="save_id" type="text">
