@@ -4,6 +4,15 @@
 {% block content %}
 
 <script>
+    var experience = document.getElementById("id_experience");
+    console.log(experience)
+    window.onload=function()
+    {
+      experience.focus();
+      alert("experience");
+    }
+
+
   function doit(form)
   {
     var id = form[2].value;
