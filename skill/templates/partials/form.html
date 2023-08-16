@@ -1,15 +1,17 @@
-
-    <div class="main-container">
-        <div class="table-container">
-            
-            <div class="table-row">
-                    <div class="row-item-1" >
-                            Button
-                    </div>
-                    <div class="row-item-2">{{ form.id }}  {{ form.experience }}</div>
-                    <div class="row-item-3">{{ form.skill }}</div>
-                    <div class="row-item-4">{{ form.skill_years }}</div>
-            </div>
-
+<form id='sam' method="POST" onsubmit="return validate('{{ form.id.value }}', this)" onfocusin="dosave(this)" onfocusout="doit(this)" enctype="multipart/form-data">
+    {% csrf_token %}
+  
+    <div class="table-row" id="delete-row">
+        <div class="row-item-1">
+            <button class="btn btn-danger" >
+                Delete
+            </button>
+            <input id="id" name="id" type="text" value="0">
         </div>
+      <div class="row-item-2">{{ form.experience.errors }} {{ form.experience }}</div>
+      <div class="row-item-3">{{ form.skill.errors }} {{ form.skill }}</div>
+      <div class="row-item-4">{{ form.skill_years }}</div>
+      
     </div>
+
+</form>

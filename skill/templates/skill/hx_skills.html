@@ -17,12 +17,14 @@
 
     if ( id_experience == 0 || skill.length == 0 || skill_years == 0 )
     {
-      form[6].disabled = true;
+      // form[6].disabled = true;
       console.log('Disable button');
+      document.getElementById('console').value = 'Missing elements';
+      return;
     }
     else
     {
-      form[6].disabled = false;
+      // form[6].disabled = false;
       console.log('Enable button');
     }
 
@@ -79,7 +81,7 @@
 
     if ( id_experience == 0 || skill.length == 0 || skill_years == 0 )
     {
-      form[6].disabled = true;
+      // form[6].disabled = true;
       return false;
     }
     else
@@ -132,18 +134,28 @@
                   </div>
                   <div class="row-item-2">{{ form.experience.errors }} {{ form.experience }}</div>
                   <div class="row-item-3">{{ form.skill.errors }} {{ form.skill }}</div>
-                  <div class="row-item-4" hx-trigger="change" hx-swap="afterend" hx-put="{% url 'skill:hx-skill-put' form.id.value %}">{{ form.skill_years }}</div>
-                  <button onclick="doit()">Do It</button>
+                  <div class="row-item-4">{{ form.skill_years }}</div>
+                  
                 </div>
-                <button id='submit-skill' type="submit">submit</button>
+
 
               </form>
             {% endif %}
           {% endfor %}
+
+
           </div>
         </div>
 
-  <div id="extra"></div>
+
+
+
+      <div class="main-container">
+        <div class="table-container" id="extra">
+
+        </div>
+      </div>
+
 
 <div class="my-4">
     <button type="button" class="btn btn-success me-2"

@@ -37,16 +37,18 @@ def edit_hx(request):
         print(f'form.has_changed() = {form.has_changed()}')
         print(f'form.is_valid() = {form.is_valid()}')       # Need required=True but gives form not valid
 
-
         d = {}
         for key, value in request.POST.lists():
             print(key, value)
             field = key.split('-')
             print(field)
             print( len(field))
+            if len(field) == 1:
+                d[field[0]] = value[0]
+
             if len(field) == 3:
                 d[field[2]] = value[0]
-        
+
 
         # d = {}
         # for key in request.POST.lists():
@@ -54,22 +56,38 @@ def edit_hx(request):
         print('************************************')
         print(d)
         print('************************************')
+        if len(d) < 5:
+            print(f'Not enough elements to save {len(d)}')
+            return HttpResponse('')
+        
         id = int(d['id'])
         experience_id = int(d['experience'])
         skill = d['skill']
         skill_years = int(d['skill_years'])
         skill_months = 5 # int(d['skill_months'])
         e = Experience.objects.get(id=experience_id)
+
         
-        i = Skill.objects.get(id=id)
-        i.experience = e
-        i.skill = skill
-        i.skill_years = skill_years
-        i.skill_months = skill_months
-        print(i)
-        i.save()
-        
-        return HttpResponse('')
+        if id == 0:
+            id = 0
+            i = Skill(user=request.user, experience_id = experience_id, skill = skill, skill_years = skill_years, skill_months=skill_months)
+            i.save()
+            SkillModelFormSet = modelformset_factory(Skill, form=SkillForm, extra=0, can_delete=True)
+            queryset = Skill.objects.filter(user=request.user)
+            skillformset = SkillModelFormSet(form_kwargs={'user': request.user}, queryset = Skill.objects.filter(user=request.user))
+            context = {'formset': skillformset}
+            return render(request, 'skill/hx_skills.html', context)
+
+        if id:
+            i = Skill.objects.get(id=id)
+            i.experience = e
+            i.skill = skill
+            i.skill_years = skill_years
+            i.skill_months = skill_months
+            print(i)
+            i.save()
+            print('saved')
+            return HttpResponse('')
     
 
         #     if form.has_changed():
@@ -179,7 +197,8 @@ def add_skills(d, skill, years, months):
 
 def add(request):
     if request.method == 'POST':
-        pass
+        print('182')
+
     context = {'form': SkillForm(user=request.user)}
     return render(request, 'partials/form.html', context)
 
