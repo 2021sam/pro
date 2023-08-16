@@ -24,7 +24,7 @@ def edit_hx(request):
         # print(queryset[0].experience)
         # https://stackoverflow.com/questions/622982/django-passing-custom-form-parameters-to-formset
         skillformset = SkillModelFormSet(form_kwargs={'user': request.user}, queryset = Skill.objects.filter(user=request.user))
-        skillform = {'skillform': SkillForm(user=request.user)}
+        skillform = SkillForm(user=request.user)
         context = {'formset': skillformset, 'skillform': skillform}
         return render(request, 'skill/hx_skills.html', context)
 
@@ -76,8 +76,22 @@ def edit_hx(request):
             SkillModelFormSet = modelformset_factory(Skill, form=SkillForm, extra=0, can_delete=True)
             queryset = Skill.objects.filter(user=request.user)
             skillformset = SkillModelFormSet(form_kwargs={'user': request.user}, queryset = Skill.objects.filter(user=request.user))
-            context = {'formset': skillformset}
+            skillform = SkillForm(user=request.user)
+            context = {'formset': skillformset, 'skillform': skillform}
+
+            # context = {'formset': skillformset}
             return render(request, 'skill/hx_skills.html', context)
+
+
+            # SkillModelFormSet = modelformset_factory(Skill, form=SkillForm, extra=0, can_delete=True)
+            # queryset = Skill.objects.filter(user=request.user)
+
+            # skillformset = SkillModelFormSet(form_kwargs={'user': request.user}, queryset = Skill.objects.filter(user=request.user))
+            skillform = SkillForm(user=request.user)
+            context = {'formset': skillformset, 'skillform': skillform}
+            # return render(request, 'skill/hx_skills.html', context)
+
+
 
         if id:
             i = Skill.objects.get(id=id)
