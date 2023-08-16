@@ -30,7 +30,6 @@
 
     if ( id_experience == 0 || skill.length == 0 || skill_years == 0 )
     {
-      // form[6].disabled = true;
       console.log('Disable button');
       document.getElementById('console').value = 'Missing elements';
       return;
@@ -69,7 +68,7 @@
   {
     console.log(form.length);
     // document.getElementById('console').value = 'form.length = ' + form.length;
-    //  form[0].value = msZX1lvMryqD2spz4ncfzgnG2Zo6FushPuaK48ogWu3IA7x6fVGd0pCA3RCo1jvv
+    //  form[0].value = csrf token = msZX1lvMryqD2spz4ncfzgnG2Zo6FushPuaK48ogWu3IA7x6fVGd0pCA3RCo1jvv
     //  form.length = 6 for formset
     //  form.length = 5 for additional dynamically added empty forms
     var i = 1;
@@ -107,19 +106,12 @@
             <div class="row-item-3">Skill</div>
             <div class="row-item-4">Years</div>
           </div>
-          <div class="table-row">
-            <div class="row-item-1">Item 1</div>
-            <div class="row-item-2">Item 2</div>
-            <div class="row-item-3">Item 3</div>
-            <div class="row-item-4">Item 4</div>
-          </div>
           {% for form in formset %}
             <!-- Remove this if because we will always set modelformset extra=0 -->
             <!-- extra will be done manually here -->
             {% if form.id.value %}
               <form id='sam' method="POST" onfocusin="dosave(this)" onfocusout="doit(this)" action="{% url 'skill:skill-edit-hx' %}" target="dummyframe" enctype="multipart/form-data">
                 {% csrf_token %}
-              
                 <div class="table-row" id="delete-row">
                   <div class="row-item-1">
                       <button class="btn btn-danger" hx-delete="{% url 'skill:hx-skill-delete' form.id.value %}"
@@ -131,40 +123,27 @@
                   <div class="row-item-2">{{ form.experience.errors }} {{ form.experience }}</div>
                   <div class="row-item-3">{{ form.skill.errors }} {{ form.skill }}</div>
                   <div class="row-item-4">{{ form.skill_years }}</div>
-                  
                 </div>
-
               </form>
             {% endif %}
           {% endfor %}
-
           </div>
         </div>
 
 
-
-
       <div class="main-container">
         <div class="table-container" id="extra">
-          <!-- {% include 'partials/form.html' %} -->
-
           <form id='sam2' method="POST" onfocusin="dosave(this)" onfocusout="doit(this)" enctype="multipart/form-data">
             {% csrf_token %}
-          
             <div class="table-row" id="delete-row">
-
                 <div class="row-item-1">
                     <input id="id" name="id" type="hidden" value="0" size="1">
                 </div>
               <div class="row-item-2">{{ skillform.experience }}</div>
               <div class="row-item-3">{{ skillform.skill }}</div>
               <div class="row-item-4">{{ skillform.skill_years }}</div>
-              
             </div>
-        
         </form>
-
-
         </div>
       </div>
 
