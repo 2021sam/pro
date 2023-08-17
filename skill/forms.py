@@ -22,6 +22,7 @@ class SkillForm(forms.ModelForm):
             super(SkillForm, self).__init__(*args, **kwargs)
             mystyle = {"style": "width:150px;", "size": 1, "rows": 10} # rows does not seem to have an affect
             # self.fields['experience'] = forms.ModelChoiceField(queryset=Experience.objects.filter(user=self.user.id), widget=forms.Select(), required=False)
+            # self.fields['experience'] = forms.ModelChoiceField(queryset=Experience.objects.filter(user=self.user.id), widget=forms.Select(), required=True, empty_label=None)         # empty_label=None removes ----------- on form
             self.fields['experience'] = forms.ModelChoiceField(queryset=Experience.objects.filter(user=self.user.id), widget=forms.Select(), required=True)
             # self.fields['experience'] = forms.ModelChoiceField(queryset=Experience.objects.filter(user=self.user.id))
             # self.fields["experience"].widget.attrs = mystyle
