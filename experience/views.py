@@ -7,7 +7,7 @@ from .models import Experience
 from .forms import ExperienceForm
 from django.urls import path
 
-import datetime
+
 
 @login_required
 def home(request):
@@ -32,11 +32,8 @@ def add(request):
         if form.is_valid():
             i = form.save(commit=False)
             i.user = request.user
-
             i.duration = i.date_end - i.date_start
-            print(i.date_start)
-            print(i.duration)
-
+            i.duration_days = int(str( i.duration ).split(' ')[0])
             i.save()
             messages.success(request, 'The post has been successfully created.')
             return redirect('experience-view')
@@ -59,10 +56,7 @@ def edit(request, id):
         if form.is_valid():
             i = form.save(commit=False)
             i.duration = i.date_end - i.date_start
-            print(i.date_start)
-            print(i.duration)
-            # tomorrowFormatted = datetime.datetime.strftime(datetime.datetime.now() + datetime.timedelta(days=i.duration), "%d-%b-%Y")
-            # print(tomorrowFormatted)
+            i.duration_days = int(str( i.duration ).split(' ')[0])
             form.save()
             messages.success(request, 'The post has been updated successfully.')
             return redirect('experience-view')
