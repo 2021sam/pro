@@ -1,0 +1,21 @@
+nginx:
+nginx is decoupled from the app because
+it will run what ever gunicorn points to.
+
+/etc/nginx/sites-available/default
+sudo systemctl status nginx
+
+
+SystemD:
+https://www.freedesktop.org/software/systemd/man/systemd.service.html
+https://unix.stackexchange.com/questions/686827/how-does-gunicorn-knows-how-to-connect-to-systemd-socket
+
+gunicorn:
+/etc/systemd/system/gunicorn.service
+sudo systemctl status gunicorn
+sudo systemctl reload gunicorn
+
+crontab:
+crontab -h      help
+
+sudo reboot now
