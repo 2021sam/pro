@@ -5,8 +5,6 @@
 {% block content %}
 <h1>My Skills - Summary</h1>
 	<a href="{% url 'skill:skill-add' %}">Add</a>
-	<a href="{% url 'skill:skill-summarize' %}">Sort</a>
-
 
     <form method="POST">
         {% csrf_token %}
