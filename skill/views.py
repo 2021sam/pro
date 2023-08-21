@@ -55,13 +55,6 @@ def edit_hx(request):
         skills.sort()
         print(f'skills_sorted: {skills}')
         d_sorted = { i: d[i] for i in skills }
-        print(d_sorted)
-        # d = {}
-        # for key in request.POST.lists():
-        #     d[key] = request.POST.lists(key)
-        print('************************************')
-        print(d)
-        print('************************************')
         if len(d) < 5:
             print(f'Not enough elements to save {len(d)}')
             return HttpResponse('')
@@ -82,20 +75,7 @@ def edit_hx(request):
             skillformset = SkillModelFormSet(form_kwargs={'user': request.user}, queryset = Skill.objects.filter(user=request.user))
             skillform = SkillForm(user=request.user)
             context = {'formset': skillformset, 'skillform': skillform}
-
-            # context = {'formset': skillformset}
             return render(request, 'skill/hx_skills.html', context)
-
-
-            # SkillModelFormSet = modelformset_factory(Skill, form=SkillForm, extra=0, can_delete=True)
-            # queryset = Skill.objects.filter(user=request.user)
-
-            # skillformset = SkillModelFormSet(form_kwargs={'user': request.user}, queryset = Skill.objects.filter(user=request.user))
-            # skillform = SkillForm(user=request.user)
-            # context = {'formset': skillformset, 'skillform': skillform}
-            # return render(request, 'skill/hx_skills.html', context)
-
-
 
         if id:
             i = Skill.objects.get(id=id)
@@ -105,33 +85,8 @@ def edit_hx(request):
             i.skill_months = skill_months
             print(i)
             i.save()
-            print('****************************************     saved')
             return HttpResponse('')
     
-
-        #     if form.has_changed():
-        #         messages.success(request, f'The post has been successfully saved.')
-        #         return redirect('')
-        #     else:
-        #         messages.success(request, f'No changes made.')
-        #         return redirect('')
-
-        # else:
-        #     for error in form.errors:
-        #         print(error)
-        
-        #     messages.error(request, 'Please correct the following errors:')
-        #     context = {'formset': form}
-        #     return render(request, 'skill/edit_set_row.html', context)
-
-
-
-
-
-
-
-
-
 
 def edit(request):
     SkillModelFormSet = modelformset_factory(Skill, form=SkillForm, extra=3)
@@ -319,30 +274,6 @@ def hx_put(request, id):
         i.save()
         messages.success(request, 'The post has been updated successfully.')
         return HttpResponse('')
-
-
-
-        #     if form.has_changed():
-        #         messages.success(request, f'The post has been successfully upated.')
-        #         return redirect('skill:skill')
-        #     else:
-        #         messages.success(request, f'No changes made.')
-        #         return redirect('skill:skill')
-
-        # context = {'form': SkillForm(user=request.user)}
-        # return render(request, 'partials/form.html', context)
-
-        # queryset = Skill.objects.filter(user=request.user)
-        # skill = get_object_or_404(queryset, pk=id)
-
-        # skill.delete()
-        # messages.success(request,  f'Skill id={id} has been deleted successfully.')
-        # return HttpResponse('')
-
-
-
-
-
 
 
 @login_required
