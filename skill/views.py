@@ -50,9 +50,11 @@ def edit_hx(request):
             if len(field) == 3:
                 d[field[2]] = value[0]
 
-        skills = [d.keys()]
-        skills_sorted = skills.sort()
-        d_sorted = { i: d[i] for i in skills_sorted }
+        skills = list(d.keys())
+        print(f'skills: {skills}')
+        skills.sort()
+        print(f'skills_sorted: {skills}')
+        d_sorted = { i: d[i] for i in skills }
         print(d_sorted)
         # d = {}
         # for key in request.POST.lists():
@@ -68,10 +70,9 @@ def edit_hx(request):
         experience_id = int(d['experience'])
         skill = d['skill']
         skill_years = int(d['skill_years'])
-        skill_months = 5 # int(d['skill_months'])
+        skill_months = int(d['skill_months'])
         e = Experience.objects.get(id=experience_id)
 
-        
         if id == 0:
             id = 0
             i = Skill(user=request.user, experience_id = experience_id, skill = skill, skill_years = skill_years, skill_months=skill_months)
@@ -90,8 +91,8 @@ def edit_hx(request):
             # queryset = Skill.objects.filter(user=request.user)
 
             # skillformset = SkillModelFormSet(form_kwargs={'user': request.user}, queryset = Skill.objects.filter(user=request.user))
-            skillform = SkillForm(user=request.user)
-            context = {'formset': skillformset, 'skillform': skillform}
+            # skillform = SkillForm(user=request.user)
+            # context = {'formset': skillformset, 'skillform': skillform}
             # return render(request, 'skill/hx_skills.html', context)
 
 
@@ -104,7 +105,7 @@ def edit_hx(request):
             i.skill_months = skill_months
             print(i)
             i.save()
-            print('saved')
+            print('****************************************     saved')
             return HttpResponse('')
     
 
@@ -125,24 +126,28 @@ def edit_hx(request):
 
 
 
+
+
+
+
+
+
+
 def edit(request):
     SkillModelFormSet = modelformset_factory(Skill, form=SkillForm, extra=3)
     if request.method == 'GET':
         # https://stackoverflow.com/questions/622982/django-passing-custom-form-parameters-to-formset
         # skillformset = SkillModelFormSet(form_kwargs={'user': request.user}, queryset = (Skill.objects.filter(user=request.user)))
         skillformset = SkillModelFormSet(form_kwargs={'user': request.user}, queryset = Skill.objects.filter(user=request.user).order_by('skill') )
-        # context = {'formset': skillformset}
-
-
         queryset = Skill.objects.filter(user=request.user)
+
         d = {}
         for skill in queryset:
             print(skill.id, skill.skill, skill.skill_years )
             if skill.skill not in d:
                 d[skill.skill] = 0
-            d[skill.skill] += skill.skill_years
-        
-
+            d[skill.skill] += skill.skill_years * 12
+            d[skill.skill] += skill.skill_months
 
 #         student_tuples = [
 # ...     ('john', 'A', 15),
@@ -164,8 +169,22 @@ def edit(request):
         d_sorted = {i: d[i] for i in skill_list}
         print('.')
         print(d_sorted)
+
+        print('calculate months')
+        ym = {}
+        for e in d_sorted.keys():
+            print(e)
+            years = months = 0
+            if d_sorted[e]:
+                years = int( d_sorted[e] / 12 )
+                months = d_sorted[e] - ( years * 12)
+            ym[e] = [years, months]
+
+        print(ym)
+
         context = {'formset': skillformset,
-                   'skill_set': d_sorted
+                   'skill_set': d_sorted,
+                   'ym': ym
                    }
         return render(request, 'skill/edit_set_row.html', context)
 
@@ -289,7 +308,7 @@ def hx_put(request, id):
         experience_id = skill_put['form-1-experience']
         skill = skill_put['form-1-skill']
         skill_years = skill_put['form-1-skill_years']
-        skill_months = 5 # skill_put['form-1-skill_months']
+        skill_months = skill_put['form-1-skill_months']
         e = Experience.objects.get(id=experience_id)
         i = Skill.objects.get(id=id)
         i.experience = e
@@ -343,7 +362,7 @@ def hx_post(request, id):
             experience_id = request.POST.get('experience')
             skill = request.POST.get('skill')
             skill_years = request.POST.get('skill_years')
-            skill_months = 5    #request.POST.get('skill_months')
+            skill_months = request.POST.get('skill_months')
             e = Experience.objects.get(id=experience_id)
             i = Skill.objects.get(id=id)
             i.experience = e

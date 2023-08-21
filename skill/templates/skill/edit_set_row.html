@@ -43,20 +43,15 @@
                 <div class="row-item-n">Years</div>
                 <div class="row-item-n">Months</div>
             </div>
-            {% for k, v in skill_set.items %}
+            {% for k, v in ym.items %}
             <div class="table-row">
                 <div class="row-item-flex">{{ k }}</div>
-                <div class="row-item-n">{{ v }}</div>
-                <div class="row-item-n">{{ v }}</div>
+                <div class="row-item-n">{{ v.0 }}</div>
+                <div class="row-item-n">{{ v.1 }}</div>
             </div>
             {% endfor %}
         </div>
       </div>
-
-
-    {% for k, v in skill_set.items %}
-        {{ k }} {{ v }}<br>
-    {% endfor %}
 
     Show results of changes.  Sort alhabetically, years, experience.
     Total experience for each skill.  Each skill has an id.

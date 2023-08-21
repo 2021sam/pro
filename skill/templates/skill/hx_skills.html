@@ -16,19 +16,21 @@
   function doit(form)
   {
     var i = 1;
-    if (form.length == 6)
+    if (form.length == 7)
       i++;
 
     var id = form[i].value;
     var id_experience = form[++i].value;
     var skill = form[++i].value;
     var skill_years = form[++i].value;
+    var skill_months = form[++i].value;
     console.log('id: ' + id );
     console.log('id_experience: ' + id_experience );
     console.log('skill: ' + skill );
     console.log('skill_years: ' + skill_years );
+    console.log('skill_months: ' + skill_months );
 
-    if ( id_experience == 0 || skill.length == 0 || skill_years == 0 )
+    if ( id_experience == 0 || skill.length == 0 || ( skill_years == 0 && skill_months == 0 ))
     {
       console.log('Disable button');
       document.getElementById('console').value = 'Missing elements';
@@ -48,6 +50,9 @@
     {change = true;}
 
     if (skill_years != document.getElementById('save_skill_years').value)
+    {change = true;}
+
+    if (skill_months != document.getElementById('save_skill_months').value)
     {change = true;}
 
     if (change)
@@ -72,26 +77,28 @@
     //  form.length = 6 for formset
     //  form.length = 5 for additional dynamically added empty forms
     var i = 1;
-    if (form.length == 6)
+    if (form.length == 7)
       i++;
     var id = form[i].value;
     var id_experience = form[++i].value;
     var skill = form[++i].value;
     var skill_years = form[++i].value;
+    var skill_months = form[++i].value;
     console.log('id: ' + id );
     console.log('id_experience: ' + id_experience );
     console.log('skill: ' + skill );
     console.log('skill_years: ' + skill_years );
+    console.log('skill_months: ' + skill_months );
     document.getElementById('save_id').value = id;
     document.getElementById('save_id_experience').value = id_experience;
     document.getElementById('save_skill').value = skill;
     document.getElementById('save_skill_years').value = skill_years;
+    document.getElementById('save_skill_months').value = skill_months;
   }
 </script>
 
 
 <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
-
 
 
 <h1>My Skills</h1>
@@ -105,6 +112,7 @@
             <div class="row-item-2">Experience</div>
             <div class="row-item-3">Skill</div>
             <div class="row-item-4">Years</div>
+            <div class="row-item-4">Months</div>
           </div>
           {% for form in formset %}
             <!-- Remove this if because we will always set modelformset extra=0 -->
@@ -123,6 +131,7 @@
                   <div class="row-item-2">{{ form.experience.errors }} {{ form.experience }}</div>
                   <div class="row-item-3">{{ form.skill.errors }} {{ form.skill }}</div>
                   <div class="row-item-4">{{ form.skill_years }}</div>
+                  <div class="row-item-4">{{ form.skill_months }}</div>
                 </div>
               </form>
             {% endif %}
@@ -142,6 +151,7 @@
               <div class="row-item-2">{{ skillform.experience }}</div>
               <div class="row-item-3">{{ skillform.skill }}</div>
               <div class="row-item-4">{{ skillform.skill_years }}</div>
+              <div class="row-item-4">{{ skillform.skill_months }}</div>
             </div>
         </form>
         </div>
@@ -152,5 +162,6 @@
 <input id="save_id_experience" type="text">
 <input id="save_skill" type="text">
 <input id="save_skill_years" type="text">
+<input id="save_skill_months" type="text">
 <input id="console" type="text">
 {% endblock content %}
