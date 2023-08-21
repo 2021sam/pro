@@ -179,13 +179,13 @@ def home(request):
     return render(request, 'skill/home.html', content)
 
 
-@login_required
-def view_summarize(request):
-    skill = Skill.objects.filter(user=request.user)
-    context = {'skill':  skill }
-    # return render(request,'skills/view.html', context)
-    d = stats(skill)
-    return JsonResponse(d, safe=False)
+# @login_required
+# def view_summarize(request):
+#     skill = Skill.objects.filter(user=request.user)
+#     context = {'skill':  skill }
+#     # return render(request,'skills/view.html', context)
+#     d = stats(skill)
+#     return JsonResponse(d, safe=False)
 
 
 def stats(queryset):
@@ -213,7 +213,6 @@ def add_skills(d, skill, years, months):
             d[skill] = 0
         d[skill] += years * 12 + months
     return d
-
 
 
 def add(request):
