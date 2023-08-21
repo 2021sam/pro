@@ -1,5 +1,5 @@
   /* just a reset of the css */
-body {
+  body {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -20,7 +20,7 @@ body {
   .table-container {
     display: flex;
     flex-flow: column nowrap;
-    background-color: white;
+    /* background-color: orange; */
     width: 80%;
     margin: 0 auto;
     border-radius: 4px;
@@ -90,6 +90,45 @@ body {
     align-items: center;
     transition: all 0.15s ease-in-out;
   }
+
+
+
+
+  .row-item-flex {
+    display: flex;
+    flex: 10;
+    flex-grow: 10;
+    font-size: 14px;
+    padding: 8px 0;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.15s ease-in-out;
+    /* background: yellow; */
+  }
+
+  .row-item-n {
+    display: flex;
+    flex: 1;
+    font-size: 14px;
+    padding: 8px 0;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.15s ease-in-out;
+    /* background: lightblue; */
+  }
+
+
+  .row-item-n2 {
+    display: flex;
+    flex: 1;
+    font-size: 14px;
+    padding: 8px 0;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.15s ease-in-out;
+    background: white;
+  }
+
 
 
   .row-item:hover {

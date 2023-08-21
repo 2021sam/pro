@@ -1,8 +1,9 @@
 {% extends 'base_hx.html' %}
+
 <!-- https://stackoverflow.com/questions/25345392/how-to-add-url-parameters-to-django-template-url-tag -->
 
 {% block content %}
-<h1>My Skills</h1>
+<h1>My Skills - Summary</h1>
 	<a href="{% url 'skill:skill-add' %}">Add</a>
 	<a href="{% url 'skill:skill-summarize' %}">Sort</a>
 
@@ -30,10 +31,37 @@
         </table>
         <input type="submit">
     </form>
-    <h2>Saved</h2>
+    <p>
+        <br>
+    </p>
+    <h2>Skill Set Summary</h2>
+
+    <div class="main-container">
+        <div class="table-container">
+            <div class="table-row heading">
+                <div class="row-item-flex">Skill</div>
+                <div class="row-item-n">Years</div>
+                <div class="row-item-n">Months</div>
+            </div>
+            {% for k, v in skill_set.items %}
+            <div class="table-row">
+                <div class="row-item-flex">{{ k }}</div>
+                <div class="row-item-n">{{ v }}</div>
+                <div class="row-item-n">{{ v }}</div>
+            </div>
+            {% endfor %}
+        </div>
+      </div>
+
+
+    {% for k, v in skill_set.items %}
+        {{ k }} {{ v }}<br>
+    {% endfor %}
+
     Show results of changes.  Sort alhabetically, years, experience.
     Total experience for each skill.  Each skill has an id.
     By keeping the all the skills on one form, you can sort all your
      experiences together & total your skills which is required.
 
 {% endblock content %}
+

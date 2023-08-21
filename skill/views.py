@@ -50,7 +50,10 @@ def edit_hx(request):
             if len(field) == 3:
                 d[field[2]] = value[0]
 
-
+        skills = [d.keys()]
+        skills_sorted = skills.sort()
+        d_sorted = { i: d[i] for i in skills_sorted }
+        print(d_sorted)
         # d = {}
         # for key in request.POST.lists():
         #     d[key] = request.POST.lists(key)
@@ -123,18 +126,47 @@ def edit_hx(request):
 
 
 def edit(request):
-    # SkillModelFormSet = modelformset_factory(Skill, fields=['id', 'experience', 'skill', 'skill_years', 'skill_months'], extra=3, can_delete=True)
-    SkillModelFormSet = modelformset_factory(Skill, form=SkillForm, extra=3, can_delete=True)
+    SkillModelFormSet = modelformset_factory(Skill, form=SkillForm, extra=3)
     if request.method == 'GET':
-        queryset = Skill.objects.filter(user=request.user)
-        print(queryset.count)
-        print(len(queryset))
-        # print(queryset[0].experience)
-
         # https://stackoverflow.com/questions/622982/django-passing-custom-form-parameters-to-formset
-        skillformset = SkillModelFormSet(form_kwargs={'user': request.user}, queryset = Skill.objects.filter(user=request.user))
-        context = {'formset': skillformset}
-        # return render(request, 'skill/edit_set.html', context)
+        # skillformset = SkillModelFormSet(form_kwargs={'user': request.user}, queryset = (Skill.objects.filter(user=request.user)))
+        skillformset = SkillModelFormSet(form_kwargs={'user': request.user}, queryset = Skill.objects.filter(user=request.user).order_by('skill') )
+        # context = {'formset': skillformset}
+
+
+        queryset = Skill.objects.filter(user=request.user)
+        d = {}
+        for skill in queryset:
+            print(skill.id, skill.skill, skill.skill_years )
+            if skill.skill not in d:
+                d[skill.skill] = 0
+            d[skill.skill] += skill.skill_years
+        
+
+
+#         student_tuples = [
+# ...     ('john', 'A', 15),
+# ...     ('jane', 'B', 12),
+# ...     ('dave', 'B', 10),
+# ... ]
+# >>> sorted(student_tuples, key=lambda student: student[2])   # sort by age
+# [('dave', 'B', 10), ('jane', 'B', 12), ('john', 'A', 15)]
+
+        print('********************')
+        print(d)
+        skill_list = list(d.keys())
+        print(skill_list)
+        print('.')
+        skill_list.sort()
+        print(skill_list)
+
+        print('.')
+        d_sorted = {i: d[i] for i in skill_list}
+        print('.')
+        print(d_sorted)
+        context = {'formset': skillformset,
+                   'skill_set': d_sorted
+                   }
         return render(request, 'skill/edit_set_row.html', context)
 
     elif request.method == 'POST':

@@ -4,6 +4,18 @@ from .models import Skill
 from experience.models import Experience
 # from django.forms import BaseModelFormSet
 
+
+# class BaseFormset(BaseModelFormSet):
+#     def __iter__(self):
+#         queryset = Skill.objects.all()
+#         return queryset
+    
+#     def __getitem__(self, index):
+#         queryset = Skill.objects.all().order_by(index).values()
+#         return queryset
+
+
+
 class SkillForm(forms.ModelForm):
     class Meta:
         model = Skill
@@ -11,7 +23,8 @@ class SkillForm(forms.ModelForm):
         widgets = {
             'skill': forms.TextInput(attrs={'class': 'form-control'}),
             # 'skill_years': forms.TextInput(attrs = {'onchange' : "validate(this);"})
-            'skill_years': forms.TextInput(attrs = {'size': 3 })
+            'skill_years': forms.TextInput(attrs = {'size': 5}),
+            'skill_months': forms.TextInput(attrs = {'size': 5})
         }
 
     def __init__(self, *args, **kwargs):

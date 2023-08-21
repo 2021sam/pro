@@ -13,6 +13,9 @@ class Skill(models.Model):
     skill_years = models.SmallIntegerField(default=0)
     skill_months = models.SmallIntegerField(default=0)
 
+    # class Meta:
+    #     ordering = ("skill", )
+
     def __str__(self):
         return f'{self.id} {self.experience} {self.skill} {self.skill_years} {self.skill_months}'
     
