@@ -10,6 +10,16 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
+SECRET_KEY = os.getenv('SECRET_KEY')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+
+
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -18,9 +28,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-jjo&ckm)0*7m^=!sdcig@_g007v*dskw$ub$%3i8ghy%4e+&!q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'authenticate'
 ]
 
 MIDDLEWARE = [
@@ -47,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'authenticate.middleware.EmailVerificationMiddleware'
 ]
 
 ROOT_URLCONF = 'pro.urls'
@@ -121,3 +130,49 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+###############################################################################
+#                               custom settings
+STATICFILES_DIRS = [BASE_DIR / 'static']  # This points to the global static folder
+AUTH_USER_MODEL = 'authenticate.CustomUser'
+
+AUTHENTICATION_BACKENDS = [
+    'authenticate.backends.EmailBackend',  # Custom email backend
+    'django.contrib.auth.backends.ModelBackend',  # Default model backend
+]
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465  # Use 465 for SSL, 587 for TLS
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+# EMAIL_HOST_USER = ''
+# EMAIL_HOST_PASSWORD = ''    
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in the database
+SESSION_COOKIE_AGE = 1209600  # 2 weeks (default)
+SESSION_SAVE_EVERY_REQUEST = True  # Save the session to the database on every request
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#         },
+#         'user': {  # Enable logging for the 'user' app
+#             'handlers': ['console'],
+#             'level': 'DEBUG',
+#         },
+#     },
+# }
