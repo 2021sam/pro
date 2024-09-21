@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Zyxe Profile{% endblock %}
+{% block content %}
+<h2>User Profile</h2>
+<p>Welcome, {{ user.email }}! This is your profile page.</p>
+
+<p>Email: {{ user.email }}</p>
+<p>2FA Status: {% if user.mobile_authenticated %}Enabled{% else %}Not Enabled{% endif %}</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Profile</button>
+</form>
+
+{% if user.mobile_number and user.mobile_carrier %}
+    {% if not user.mobile_authenticated %}
+        <a href="{% url 'request_2fa_approval' %}" class="btn btn-primary">Request 2FA Approval</a>
+    {% else %}
+        <p>2FA is currently enabled.</p>
+    {% endif %}
+{% else %}
+    <p>Please provide a mobile number and carrier to enable 2FA.</p>
+{% endif %}
+
+<p><a href="{% url 'password_change' %}">Change Password</a></p>
+<p><a href="{% url 'delete_account' %}">Delete Account</a></p>
+<p><a href="{% url 'logout' %}">Logout</a></p>
+{% endblock %}

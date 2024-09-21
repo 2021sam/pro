@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verify 2FA</title>
+</head>
+<body>
+    <h2>Two-Factor Authentication</h2>
+
+    <p>Please enter the 2FA code sent to your phone:</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <label for="two_factor_code">Enter 2FA Code:</label>
+        <input type="text" name="two_factor_code" id="two_factor_code" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

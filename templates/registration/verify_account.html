@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Account</title>
+</head>
+<body>
+    <h1>Verify Your Account</h1>
+
+    <p>Your account is currently inactive. Please click the button below to resend the verification email.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Resend Verification Email</button>
+    </form>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+</body>
+</html>

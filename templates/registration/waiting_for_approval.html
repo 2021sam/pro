@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="10">  <!-- Refresh every 10 seconds -->
+    <title>Waiting for Approval</title>
+    <script>
+        // JavaScript to check if the user is active
+
+    async function checkVerification() {
+    try {
+        const response = await fetch("http://localhost:8000/user/check-verification-status/");
+        const data = await response.json();
+        console.log('Verification status:', data);
+        if (data.is_active) {
+            window.location.href = "/";
+        }
+    } catch (error) {
+        console.error('Error fetching verification status:', error);  // Log any errors
+    }
+}
+
+
+        // Poll the server every 10 seconds
+        setInterval(checkVerification, 10000);  // Logs will be generated every 10 seconds
+    </script>
+</head>
+<body>
+    <h1>Thank you for registering, {{ user.first_name }}!</h1>
+    <p>Your account is awaiting approval. Please check your email for further instructions.</p>
+    <p>This page will refresh automatically, and you will be redirected once your account is verified.</p>
+</body>
+</html>
