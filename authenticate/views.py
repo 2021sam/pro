@@ -1,4 +1,4 @@
-# /Users/2021sam/apps/authuser/user_auth/views.py
+# /Users/2021sam/apps/zyxe/pro/authenticate/views.py
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -185,6 +185,12 @@ def sign_up(request):
             user = form.save()
             send_verification_email(request, user)
             messages.success(request, 'A verification email has been sent to your email address.')
+
+            request.session['user_email'] = user.email
+
+            logger.info('********************************************')
+            logger.info(f'user.email: {user.email}')
+
             return redirect('waiting_for_approval')
         else:
             messages.error(request, 'Please correct the errors below.')
@@ -290,7 +296,7 @@ def delete_account(request):
 
 
 # Add this to your views.py (or ensure you are using a context processor that provides it)
-from django.conf import settings
+# from django.conf import settings
 
 def custom_password_reset_view(request):
     context = {
