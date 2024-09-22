@@ -27,12 +27,21 @@ def waiting_for_approval(request):
     logger.info(user)
     return render(request, 'registration/waiting_for_approval.html', {'user': user})
 
+
 # Home view
 def home(request):
+    logger.info('Started')
+    logger.debug('***************************************** home')
+    # from pro.settings import SECRET_KEY, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
+    # logger.debug(SECRET_KEY)
+    # logger.info(EMAIL_HOST_USER)
+    # logger.info(f'EMAIL_HOST_PASSWORD: {EMAIL_HOST_PASSWORD}')
+
     return render(request, 'home.html')
 
 @login_required
 def profile(request):
+    logger.debug('***************************************** profile')
     return render(request, 'authenticate/profile.html')
 
 
@@ -118,6 +127,7 @@ def send_verification_email(request, user):
 def resend_verification_email(request):
     # Get the user's email from the session
     user_email = request.session.get('user_email', None)
+    logger.info(f'resend_verification_email: user_email: {user_email}')
 
     if user_email:
         try:
@@ -139,15 +149,20 @@ def resend_verification_email(request):
 
 
 def verify_account(request):
+    logger.debug('***************************************** verify_account')
     user_email = request.session.get('user_email', None)
+    logger.info(f'user_email: {user_email}')
 
     if not user_email:
         # If no email is in the session, redirect to login
         return redirect('login')
 
+    logger.info(f'request.method == {request.method}')
+
     if request.method == 'POST':
         try:
             user = CustomUser.objects.get(email=user_email)
+            logger.info(f'184 user: {user}')
             if not user.is_active:
                 # Send the verification email
                 send_verification_email(request, user)

@@ -15,10 +15,8 @@ import os
 load_dotenv()
 
 SECRET_KEY = os.getenv('SECRET_KEY')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-
-
-
 
 from pathlib import Path
 
@@ -63,7 +61,7 @@ ROOT_URLCONF = 'pro.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],           # Modified 2024 09 21
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -156,23 +154,23 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in the 
 SESSION_COOKIE_AGE = 1209600  # 2 weeks (default)
 SESSION_SAVE_EVERY_REQUEST = True  # Save the session to the database on every request
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'console': {
-#             'level': 'DEBUG',
-#             'class': 'logging.StreamHandler',
-#         },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['console'],
-#             'level': 'DEBUG',
-#         },
-#         'user': {  # Enable logging for the 'user' app
-#             'handlers': ['console'],
-#             'level': 'DEBUG',
-#         },
-#     },
-# }
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+        'authenticate': {  # Enable logging for the 'user' app
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+}
