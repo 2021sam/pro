@@ -26,6 +26,8 @@ python manage.py makemigrations authenticate
 python mange.py migrate
 python manage.py createsuperuser
 export DJANGO_ENV=production
+export DJANGO_SETTINGS_MODULE=pro.settings.production
+
 edit .env
 sudo systemctl daemon-reload
 sudo systemctl restart gunicorn
@@ -53,4 +55,7 @@ drwxr-xr-x 3 g2019supersam www-data        4096 Sep 22 05:16 templates
 
 
 Note: gunicorn.sock
+python manage.py collectstatic
+sudo systemctl reload nginx
+
 Should be working.
