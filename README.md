@@ -18,3 +18,39 @@ Here's a typical setup:
    
 Gunicorn starts Django's WSGI application (`wsgi.py`) to serve incoming requests.
 
+
+
+
+sudo chown -R g2019supersam:www-data /home/g2019supersam/apps/zyxe/pro
+python manage.py makemigrations authenticate
+python mange.py migrate
+python manage.py createsuperuser
+export DJANGO_ENV=production
+edit .env
+sudo systemctl daemon-reload
+sudo systemctl restart gunicorn
+sudo systemctl status gunicorn
+
+
+g2019supersam@instance-20240908-083334:~/apps/zyxe/pro$ pwd
+/home/g2019supersam/apps/zyxe/pro
+g2019supersam@instance-20240908-083334:~/apps/zyxe/pro$ ls -la
+total 288
+drwxr-xr-x 7 g2019supersam www-data        4096 Sep 23 07:35 .
+drwxr-xr-x 5 g2019supersam g2019supersam   4096 Sep 22 05:16 ..
+-rw-r--r-- 1 g2019supersam www-data         262 Sep 23 05:16 .env
+drwxr-xr-x 8 g2019supersam www-data        4096 Sep 23 05:17 .git
+-rw-r--r-- 1 g2019supersam www-data         576 Sep 22 05:16 .gitignore
+-rw-r--r-- 1 g2019supersam www-data         681 Sep 23 05:15 README.md
+drwxr-xr-x 5 g2019supersam www-data        4096 Sep 23 07:31 authenticate
+-rw-r--r-- 1 g2019supersam g2019supersam 122880 Sep 23 07:32 db.sqlite3
+-rw-r--r-- 1 g2019supersam g2019supersam 122880 Sep 23 07:32 db2.sqlite3
+srwxrwxrwx 1 g2019supersam www-data           0 Sep 23 07:35 gunicorn.sock
+-rw-r--r-- 1 g2019supersam www-data         847 Sep 23 05:15 manage.py
+drwxr-xr-x 4 g2019supersam www-data        4096 Sep 23 07:34 pro
+drwxr-xr-x 4 g2019supersam www-data        4096 Sep 22 05:16 static
+drwxr-xr-x 3 g2019supersam www-data        4096 Sep 22 05:16 templates
+
+
+Note: gunicorn.sock
+Should be working.
