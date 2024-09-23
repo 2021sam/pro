@@ -157,24 +157,3 @@ EMAIL_USE_SSL = True
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Store sessions in the database
 SESSION_COOKIE_AGE = 1209600  # 2 weeks (default)
 SESSION_SAVE_EVERY_REQUEST = True  # Save the session to the database on every request
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-        },
-        'authenticate': {  # Enable logging for the 'user' app
-            'handlers': ['console'],
-            'level': 'DEBUG',
-        },
-    },
-}
