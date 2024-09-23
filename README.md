@@ -55,7 +55,8 @@ drwxr-xr-x 3 g2019supersam www-data        4096 Sep 22 05:16 templates
 
 
 Note: gunicorn.sock
-python manage.py collectstatic
+export DJANGO_ENV=production
+python manage.py collectstatic      # Need to first export DJANGO_ENV=production
 sudo systemctl reload nginx
 
 Should be working.
