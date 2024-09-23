@@ -1,7 +1,7 @@
 # production.py
 from .settings import *
 
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['zyxe.com', 'www.zyxe.com']
 
 # Production database (PostgreSQL example)
