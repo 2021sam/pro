@@ -5,6 +5,7 @@
 <h2>{% if id %} Edit {% else %} New {% endif %} Post</h2>
 <form method="post" novalidate>
 	{% csrf_token %}
+	<p>Email: {{ form.user.value }}</p> <!-- Read-only user email display -->
 	{{ form.as_p }}
 	<input type="submit" value="Save" />
 </form>
