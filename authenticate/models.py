@@ -1,4 +1,4 @@
-# /Users/2021sam/apps/authuser/user/models.py
+# /Users/2021sam/apps/zyxe/pro/authenticate/models.py
 
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models

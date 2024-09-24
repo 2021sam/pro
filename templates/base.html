@@ -22,6 +22,17 @@
                             <img src="{% static 'images/profile-icon.png' %}" alt="Profile" width="30" height="30">
                         </a>{{ user.email }} <!-- Show user's email or name -->
                     </li>
+
+<li>
+
+		<p>
+			<a href="{% url 'pro_profile:profile-edit' %}">Profile</a>
+		</p>
+</li>
+
+
+
+
                     <li>
                         <a href="{% url 'logout' %}">Logout</a>
                     </li>

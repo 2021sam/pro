@@ -11,5 +11,6 @@ urlpatterns = [
     path('accounts/login/', custom_login, name='login'),  # Override the default login view
     path('accounts/', include('django.contrib.auth.urls')),  # Include Django's built-in authentication views for the other routes
     path('logout/', custom_logout, name='logout'),
-    path('', include('trailhead.urls'))
+    path('', include('trailhead.urls')),
+    path('pro/', include('pro_profile.urls'))
 ]
