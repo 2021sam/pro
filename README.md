@@ -60,3 +60,14 @@ python manage.py collectstatic      # Need to first export DJANGO_ENV=production
 sudo systemctl reload nginx
 
 Should be working.
+
+
+Django's Interactive Shell:
+python manage.py shell
+from pro_profile.models import Profile
+from authenticate.models import CustomUser  # If needed for user-related queries
+
+user = CustomUser.objects.get(email="2019supersam@gmail.com")  # Fetch the user
+profile = Profile.objects.create(user=user, address="123 Example St")
+
+profile = Profile.objects.get(user=user)

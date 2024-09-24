@@ -46,7 +46,12 @@ from django.contrib.auth.models import User
 #   chat suggests this version
 @login_required
 def profile_edit(request):
+    queryset = Profile.objects.filter(user=request.user)
+    print(queryset)
+
     profile, created = Profile.objects.get_or_create(user=request.user)
+    print(f'profile: {profile}')
+    print(f'created: {created}')
 
     if created:
         print("Profile created for the user.")
