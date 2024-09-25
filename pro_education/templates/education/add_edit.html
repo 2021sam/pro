@@ -1,12 +1,22 @@
 {% extends 'base.html' %}
-	
+
 {% block content %}
-
-<h2>{% if id %} Edit {% else %} New {% endif %} Education</h2>
+<h2>Edit Profile</h2>
 <form method="post" novalidate>
-	{% csrf_token %}
-	{{ form.as_p }}
-	<input type="submit" value="Save" />
+    {% csrf_token %}
+    
+    {% for field in form %}
+        <div class="form-group">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.errors %}
+                <div class="text-danger">
+                    {{ field.errors }}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+    
+    <input type="submit" value="Save" />
 </form>
-
 {% endblock content %}
