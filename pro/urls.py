@@ -12,5 +12,6 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),  # Include Django's built-in authentication views for the other routes
     path('logout/', custom_logout, name='logout'),
     path('', include('trailhead.urls')),
-    path('pro/', include('pro_profile.urls'))
+    path('pro/profile/', include('pro_profile.urls')),
+    path('pro/education/', include('pro_education.urls')),
 ]

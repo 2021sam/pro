@@ -134,3 +134,8 @@ form label {
         font-size: 2rem;
     }
 }
+
+
+.text-danger {
+    color: red;
+}

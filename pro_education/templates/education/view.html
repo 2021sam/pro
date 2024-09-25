@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+	
+{% block content %}
+<h1>My Education</h1>
+<p><a href="{% url 'education-add' %}">Add</a></p>
+
+	{% for e in education %}
+		<h2>School Name: {{ e.school_name }}</h2>
+		<p>Web: <a href="{{ e.school_web_site }}">{{ e.school_web_site }}</a></p>
+		<p>Degree: {{ e.degree_type }}</p>
+        <p>Major: {{ e.major }}</p>
+        <p>Year Graduated: {{ e.year_graduated}}</p>
+        <p>Currently Enrolled: {{ e.currently_enrolled }}</p>
+        <p>GPA: {{ e.gpa }}</p>
+        <small>Timestamp on {{ e.timestamp | date:"M d, Y" }} by {{ e.user | title}}</small>
+		{% if request.user.is_authenticated and request.user == e.user %}
+		<p>
+			<a href="{% url 'education-edit' e.id %}">Edit</a> 
+			<a href="{% url 'education-delete' e.id%}">Delete</a>
+		</p>
+		{% endif %}
+		
+	{% endfor %}
+{% endblock content %}

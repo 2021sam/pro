@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'authenticate',
     'trailhead',
-    'pro_profile'
+    'pro_profile',
+    'pro_education'
 ]
 
 MIDDLEWARE = [

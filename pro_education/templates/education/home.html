@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+	
+{% block content %}
+<h1>My Education</h1>
+	<p>Create motivation for people to take the time to manually insert their entire resume in this format.</p>
+
+	<a href="{% url 'education-add' %}">Add</a>
+	<a href="{% url 'education-view' %}">View</a> 
+
+{% endblock content %}
