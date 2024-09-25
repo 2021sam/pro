@@ -10,8 +10,10 @@
             {{ field.label_tag }}
             {{ field }}
             {% if field.errors %}
-                <div class="text-danger">
-                    {{ field.errors }}
+                <div class="text-danger"> <!-- Ensure this class is present -->
+                    {% for error in field.errors %}
+                        <p>{{ error }}</p> <!-- Ensure this part exists -->
+                    {% endfor %}
                 </div>
             {% endif %}
         </div>
