@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if form_type == 'edit' %}Edit Skill{% else %}Add Skill{% endif %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1>{% if form_type == 'edit' %}Edit Skill{% else %}Add Skill{% endif %}</h1>
+    <form method="POST" novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Renders all form fields -->
+        <button type="submit">{% if form_type == 'edit' %}Save Changes{% else %}Add Skill{% endif %}</button>
+    </form>
+    <a href="{% url 'skill_list' %}">Back to Skill List</a>
+</body>
+</html>

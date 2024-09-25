@@ -14,5 +14,6 @@ urlpatterns = [
     path('', include('trailhead.urls')),
     path('pro/profile/', include('pro_profile.urls')),
     path('pro/education/', include('pro_education.urls')),
-    path('pro/experience/', include('pro_experience.urls'))
+    path('pro/experience/', include('pro_experience.urls')),
+    path('pro/skills/', include('pro_skills.urls'))
 ]

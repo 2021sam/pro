@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'pro_profile',
     'pro_education',
     'pro_experience',
+    'pro_skills'
 ]
 
 MIDDLEWARE = [
