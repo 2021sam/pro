@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'authenticate',
     'trailhead',
     'pro_profile',
-    'pro_education'
+    'pro_education',
+    'pro_experience',
 ]
 
 MIDDLEWARE = [
