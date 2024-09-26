@@ -1,3 +1,6 @@
+gitbash: source env\Scripts\activate
+pip install django
+pip install python-dotenv
 
 
 
