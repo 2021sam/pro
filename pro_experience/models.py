@@ -7,9 +7,7 @@ from django.conf import settings
 
 
 class Experience(models.Model):
-    # default: blank = name  --> company_name
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Allow multiple skills per user
     timestamp = models.DateTimeField(default=timezone.now)
     title = models.CharField(max_length=120)
 

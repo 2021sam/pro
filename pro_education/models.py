@@ -17,8 +17,7 @@ CHOICES_DEGREE_TYPE = (
 
 
 class Education(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Allow multiple skills per user
     timestamp = models.DateTimeField(default=timezone.now)
     school_name = models.CharField(max_length=30, blank=True)
     school_web_site = models.URLField(max_length=50, blank=True)
