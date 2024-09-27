@@ -8,55 +8,60 @@ CARRIER_CHOICES = [
     # Add more carriers as needed
 ]
 
-from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.db import models
+# from django.contrib.auth.models import AbstractUser, BaseUserManager
+# from django.db import models
 
 
 # Custom user manager
+from django.contrib.auth.models import BaseUserManager
+
 class CustomUserManager(BaseUserManager):
-    def create_user(self, username, password=None, **extra_fields):
+    def create_user(self, username, email, password=None, **extra_fields):
+        """
+        Create and return a regular user with a username and email.
+        """
         if not username:
             raise ValueError("The Username field must be set")
+        if not email:
+            raise ValueError("The Email field must be set")
 
-        # Normalize the email based on the username field
-        email = self.normalize_email(username)  # Set email equal to username
-
-        # Remove email from extra_fields to avoid passing it twice
-        extra_fields.pop('email', None)
-
+        email = self.normalize_email(email)
         user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, password=None, **extra_fields):
+    def create_superuser(self, username, email, password=None, **extra_fields):
+        """
+        Create and return a superuser with a username and email.
+        """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
         if extra_fields.get('is_staff') is not True:
-            raise ValueError("Superuser must have is_staff=True.")
+            raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
-            raise ValueError("Superuser must have is_superuser=True.")
+            raise ValueError('Superuser must have is_superuser=True.')
 
-        return self.create_user(username, password, **extra_fields)
+        return self.create_user(username, email, password, **extra_fields)
 
 
 # Custom user model
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
 class CustomUser(AbstractUser):
-    # Keep the username field from AbstractUser
-    username = models.CharField(max_length=150, unique=True)
-
-    # Email will be set equal to the username field
-    email = models.EmailField(unique=True)  # Email is still required and unique
-
+    # No need to redefine username, it's already included in AbstractUser
+    email = models.EmailField(unique=True)  # Email should still be unique and required
     mobile_number = models.CharField(max_length=15, unique=True, null=True, blank=True)
     mobile_carrier = models.CharField(max_length=10, choices=CARRIER_CHOICES, null=True, blank=True)
-    mobile_authenticated = models.BooleanField(default=False)  # For 2FA status
+    mobile_authenticated = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'username'  # Use username as the unique identifier for users
-    REQUIRED_FIELDS = ['email']  # Email is still a required field, but username is the login field
+    # Keep username as the unique identifier
+    USERNAME_FIELD = 'username'  # Username remains the unique identifier for authentication
+    REQUIRED_FIELDS = ['email']  # Email is required but not the unique identifier
 
-    objects = CustomUserManager()  # Use CustomUserManager to handle user creation
+    objects = CustomUserManager()
 
     def __str__(self):
-        return self.username
+        return self.username  # You can return either username or email based on preference
