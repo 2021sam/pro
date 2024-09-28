@@ -1,92 +1,155 @@
-gitbash: source env\Scripts\activate
-pip install django
-pip install python-dotenv
+1. Organize the Project Directory
 
+Ensure your Django project is organized in a folder structure like this:
 
+scss
 
+/home/g2019supersam/apps/zyxe/pro
+├── pro (your project folder)
+├── authenticate (your app folder)
+├── pro_profile (other apps like profile, etc.)
+├── static (static files)
+├── templates (HTML templates)
+├── db.sqlite3 (or your database files)
+├── manage.py
+└── .env (environment variables)
 
+2. Save Environment Variables in .env
 
-To set an environment variable for production mode, you can use the following command in your terminal:
-For Linux or macOS:
+Create a .env file in the root directory of your project /home/g2019supersam/apps/zyxe/pro. This file should contain sensitive environment variables, such as your Django secret key, database credentials, and debug settings.
+
+Example .env file:
+
+makefile
+
+DJANGO_ENV=production
+DJANGO_SETTINGS_MODULE=pro.settings.production
+SECRET_KEY=your_secret_key_here
+DATABASE_URL=postgres://username:password@localhost:5432/dbname
+ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
+
+How to create it:
+
+    Use your preferred text editor:
+
+    bash
+
+    nano .env
+
+3. Configure wsgi.py for Gunicorn
+
+Ensure your Django project’s wsgi.py is correctly set up as the entry point for Gunicorn:
+
+python
+
+# pro/wsgi.py
+import os
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pro.settings.production')
+application = get_wsgi_application()
+
+4. Gunicorn Configuration
+
+Create a Gunicorn systemd service file to ensure Gunicorn starts with the system.
+
+Create the file /etc/systemd/system/gunicorn.service:
+
+bash
+
+sudo nano /etc/systemd/system/gunicorn.service
+
+Add the following content to the file:
+
+ini
+
+[Unit]
+Description=gunicorn daemon for Django project
+After=network.target
+
+[Service]
+User=g2019supersam
+Group=www-data
+WorkingDirectory=/home/g2019supersam/apps/zyxe/pro
+ExecStart=/home/g2019supersam/apps/zyxe/pro/env/bin/gunicorn --access-logfile - --workers 3 --bind unix:/home/g2019supersam/apps/zyxe/pro/gunicorn.sock pro.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+
+How to enable Gunicorn:
+
+    Reload systemd to read the new service file:
+
+    bash
+
+    sudo systemctl daemon-reload
+    sudo systemctl start gunicorn
+    sudo systemctl enable gunicorn
+
+5. Nginx Configuration
+
+Nginx will serve as a reverse proxy for Gunicorn. Create a new Nginx configuration file for your project:
+
+Edit /etc/nginx/sites-available/zyxe:
+
+bash
+
+sudo nano /etc/nginx/sites-available/zyxe
+
+Add this Nginx configuration:
+
+nginx
+
+server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /home/g2019supersam/apps/zyxe/pro;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/g2019supersam/apps/zyxe/pro/gunicorn.sock;
+    }
+}
+
+Enable the site and reload Nginx:
+
+bash
+
+sudo ln -s /etc/nginx/sites-available/zyxe /etc/nginx/sites-enabled
+sudo nginx -t
+sudo systemctl reload nginx
+
+6. Collect Static Files
+
+Ensure you collect static files into the /static directory and that they are served by Nginx:
 
 bash
 
 export DJANGO_ENV=production
+python manage.py collectstatic
 
+7. Set Proper Permissions
 
+Ensure that your directories and files are owned by the correct users and groups (like www-data for Nginx):
 
-Yes, both **Nginx** and **Gunicorn** typically use **wsgi.py** in Django projects to serve the application. The `wsgi.py` file acts as an entry point for WSGI-compatible web servers (like Gunicorn) to communicate with your Django application.
-
-Here's a typical setup:
-1. **Nginx** acts as a reverse proxy, handling client requests, SSL, etc.
-2. **Gunicorn** serves the Django application using `wsgi.py` to run the WSGI server.
-
-Gunicorn starts Django's WSGI application (`wsgi.py`) to serve incoming requests.
-
-
-
+bash
 
 sudo chown -R g2019supersam:www-data /home/g2019supersam/apps/zyxe/pro
-python manage.py makemigrations authenticate
-python mange.py migrate
-python manage.py createsuperuser
-export DJANGO_ENV=production
-export DJANGO_SETTINGS_MODULE=pro.settings.production
+sudo chmod -R 755 /home/g2019supersam/apps/zyxe/pro
 
-edit .env
-sudo systemctl daemon-reload
-sudo systemctl restart gunicorn
-sudo systemctl status gunicorn
+8. Testing and Final Steps
 
+    Restart Gunicorn and Nginx:
 
-g2019supersam@instance-20240908-083334:~/apps/zyxe/pro$ pwd
-/home/g2019supersam/apps/zyxe/pro
-g2019supersam@instance-20240908-083334:~/apps/zyxe/pro$ ls -la
-total 288
-drwxr-xr-x 7 g2019supersam www-data        4096 Sep 23 07:35 .
-drwxr-xr-x 5 g2019supersam g2019supersam   4096 Sep 22 05:16 ..
--rw-r--r-- 1 g2019supersam www-data         262 Sep 23 05:16 .env
-drwxr-xr-x 8 g2019supersam www-data        4096 Sep 23 05:17 .git
--rw-r--r-- 1 g2019supersam www-data         576 Sep 22 05:16 .gitignore
--rw-r--r-- 1 g2019supersam www-data         681 Sep 23 05:15 README.md
-drwxr-xr-x 5 g2019supersam www-data        4096 Sep 23 07:31 authenticate
--rw-r--r-- 1 g2019supersam g2019supersam 122880 Sep 23 07:32 db.sqlite3
--rw-r--r-- 1 g2019supersam g2019supersam 122880 Sep 23 07:32 db2.sqlite3
-srwxrwxrwx 1 g2019supersam www-data           0 Sep 23 07:35 gunicorn.sock
--rw-r--r-- 1 g2019supersam www-data         847 Sep 23 05:15 manage.py
-drwxr-xr-x 4 g2019supersam www-data        4096 Sep 23 07:34 pro
-drwxr-xr-x 4 g2019supersam www-data        4096 Sep 22 05:16 static
-drwxr-xr-x 3 g2019supersam www-data        4096 Sep 22 05:16 templates
+    bash
 
+    sudo systemctl restart gunicorn
+    sudo systemctl reload nginx
 
-Note: gunicorn.sock
-export DJANGO_ENV=production
-python manage.py collectstatic      # Need to first export DJANGO_ENV=production
-sudo systemctl reload nginx
+    Visit your website to ensure everything is running correctly.
 
-Should be working.
-
-
-Django's Interactive Shell:
-python manage.py shell
-from pro_profile.models import Profile
-from authenticate.models import CustomUser  # If needed for user-related queries
-
-user = CustomUser.objects.get(email="2019supersam@gmail.com")  # Fetch the user
-profile = Profile.objects.create(user=user, address="123 Example St")
-
-profile = Profile.objects.get(user=user)
-
-rm db.sqlite3
-find . -path "*/migrations" -type d -exec rm -r {} +
-
-
-
-python manage.py makemigrations authenticate
-python manage.py makemigrations pro_profile
-python manage.py makemigrations pro_education
-python manage.py makemigrations pro_experience
-python manage.py makemigrations pro_skills
-python manage.py migrate
-
-python manage.py createsuperuser
+By saving your configuration files (.env, Gunicorn service, Nginx config) in the appropriate places, you’ll have a structured Django project ready for production. Let me know if you need further clarification or help with any specific steps!
