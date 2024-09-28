@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Django Production Setup Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        code {
+            background-color: #f1f1f1;
+            padding: 5px;
+            display: block;
+            margin-bottom: 10px;
+            border-left: 5px solid #ccc;
+        }
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: auto;
+        }
+        .section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Django Production Setup with Nginx and Gunicorn</h1>
+    <div class="section">
+        <h2>1. Organize the Project Directory</h2>
+        <p>Ensure your Django project is organized in this structure:</p>
+        <pre>
+/home/g2019supersam/apps/zyxe/pro
+├── pro (project folder)
+├── authenticate (app folder)
+├── pro_profile (other apps)
+├── static (static files)
+├── templates (HTML templates)
+├── db.sqlite3 (database)
+├── manage.py
+└── .env (environment variables)
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>2. Create and Configure `.env`</h2>
+        <p>Create a <code>.env</code> file in the project root directory with the following content:</p>
+        <pre>
+DJANGO_ENV=production
+DJANGO_SETTINGS_MODULE=pro.settings.production
+SECRET_KEY=your_secret_key_here
+DATABASE_URL=postgres://username:password@localhost:5432/dbname
+ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
+        </pre>
+        <p>To create the file, use a text editor like this:</p>
+        <code>nano .env</code>
+    </div>
+
+    <div class="section">
+        <h2>3. Configure `wsgi.py`</h2>
+        <p>Ensure your <code>wsgi.py</code> file is configured for Gunicorn:</p>
+        <pre>
+# pro/wsgi.py
+import os
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pro.settings.production')
+application = get_wsgi_application()
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>4. Gunicorn Configuration</h2>
+        <p>Create the Gunicorn service file at <code>/etc/systemd/system/gunicorn.service</code> with the following content:</p>
+        <pre>
+[Unit]
+Description=gunicorn daemon for Django project
+After=network.target
+
+[Service]
+User=g2019supersam
+Group=www-data
+WorkingDirectory=/home/g2019supersam/apps/zyxe/pro
+ExecStart=/home/g2019supersam/apps/zyxe/pro/env/bin/gunicorn --access-logfile - --workers 3 --bind unix:/home/g2019supersam/apps/zyxe/pro/gunicorn.sock pro.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+        </pre>
+        <p>Enable and start Gunicorn:</p>
+        <code>
+sudo systemctl daemon-reload<br>
+sudo systemctl start gunicorn<br>
+sudo systemctl enable gunicorn
+        </code>
+    </div>
+
+    <div class="section">
+        <h2>5. Nginx Configuration</h2>
+        <p>Create an Nginx configuration file at <code>/etc/nginx/sites-available/zyxe</code> with the following content:</p>
+        <pre>
+server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /home/g2019supersam/apps/zyxe/pro;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/g2019supersam/apps/zyxe/pro/gunicorn.sock;
+    }
+}
+        </pre>
+        <p>Enable the site and reload Nginx:</p>
+        <code>
+sudo ln -s /etc/nginx/sites-available/zyxe /etc/nginx/sites-enabled<br>
+sudo nginx -t<br>
+sudo systemctl reload nginx
+        </code>
+    </div>
+
+    <div class="section">
+        <h2>6. Collect Static Files</h2>
+        <p>Run the following commands to collect static files for production:</p>
+        <code>
+export DJANGO_ENV=production<br>
+python manage.py collectstatic
+        </code>
+    </div>
+
+    <div class="section">
+        <h2>7. Set File Permissions</h2>
+        <p>Ensure proper permissions for the project directory:</p>
+        <code>
+sudo chown -R g2019supersam:www-data /home/g2019supersam/apps/zyxe/pro<br>
+sudo chmod -R 755 /home/g2019supersam/apps/zyxe/pro
+        </code>
+    </div>
+
+    <div class="section">
+        <h2>8. Final Steps</h2>
+        <p>Restart Gunicorn and Nginx:</p>
+        <code>
+sudo systemctl restart gunicorn<br>
+sudo systemctl reload nginx
+        </code>
+        <p>After that, visit your site to confirm everything is working as expected.</p>
+    </div>
+</body>
+</html>
