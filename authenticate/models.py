@@ -16,20 +16,40 @@ CARRIER_CHOICES = [
 from django.contrib.auth.models import BaseUserManager
 
 
+# class CustomUserManager(BaseUserManager):
+#     def create_user(self, email, password=None, **extra_fields):
+#         if not email:
+#             raise ValueError("The Email field must be set")
+#
+#         email = self.normalize_email(email)
+#
+#         # Set username as the email if not provided
+#         username = extra_fields.get('username', email)
+#
+#         user = self.model(username=username, email=email, **extra_fields)
+#         user.set_password(password)
+#         user.save(using=self._db)
+#         return user
+# Custom user manager
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
-        if not email:
-            raise ValueError("The Email field must be set")
+    def create_user(self, username, password=None, **extra_fields):
+        if not username:
+            raise ValueError("The Username field must be set")
 
-        email = self.normalize_email(email)
+        # Normalize the email based on the username field
+        email = self.normalize_email(username)  # Set email equal to username
 
-        # Set username as the email if not provided
-        username = extra_fields.get('username', email)
+        # Remove email from extra_fields to avoid passing it twice
+        extra_fields.pop('email', None)
 
         user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
+
+
+
+
 
     def create_superuser(self, username, email, password=None, **extra_fields):
         """
