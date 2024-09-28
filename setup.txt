@@ -77,7 +77,7 @@ profile = Profile.objects.create(user=user, address="123 Example St")
 
 profile = Profile.objects.get(user=user)
 
-
+rm db.squite3
 find . -path "*/migrations" -type d -exec rm -r {} +
 
 

@@ -32,29 +32,20 @@ from django.contrib.auth.models import BaseUserManager
 #         return user
 # Custom user manager
 class CustomUserManager(BaseUserManager):
-    def create_user(self, username, password=None, **extra_fields):
+    def create_user(self, username, email=None, password=None, **extra_fields):
         if not username:
             raise ValueError("The Username field must be set")
 
-        # Normalize the email based on the username field
-        email = self.normalize_email(username)  # Set email equal to username
-
-        # Remove email from extra_fields to avoid passing it twice
-        extra_fields.pop('email', None)
+        # Use the provided email or set it equal to the username
+        if email is None:
+            email = self.normalize_email(username)
 
         user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-
-
-
-
-    def create_superuser(self, username, email, password=None, **extra_fields):
-        """
-        Create and return a superuser with a username and email.
-        """
+    def create_superuser(self, username, email=None, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
