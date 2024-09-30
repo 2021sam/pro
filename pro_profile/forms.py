@@ -6,7 +6,7 @@ from .models import Profile
 class ProfileForm(ModelForm):
     class Meta:
         model = Profile
-        fields = ['user', 'work_authorization', 'willing_to_relocate', 'address', 'birth_month', 'birth_day', 'birth_date', 'drivers_license', 'linkedin', 'open_to_public']
+        fields = ['user', 'work_authorization', 'willing_to_relocate', 'birth_month', 'birth_day', 'birth_date', 'drivers_license', 'linkedin', 'open_to_public']
 
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)

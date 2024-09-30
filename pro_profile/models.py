@@ -23,7 +23,7 @@ class Profile(models.Model):
     # user = models.OneToOneField(User, on_delete=models.CASCADE)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
-    address = models.TextField(max_length=500, blank=True)
+    # address = models.TextField(max_length=500, blank=True)
     birth_date = models.DateField(null=True, blank=True, help_text='Please use the following format: <em>YYYY-MM-DD</em>.')
     # birth_month = models.IntegerField(blank=True, min_value=1, max_value=12)
     birth_month = models.PositiveSmallIntegerField(blank=True, null=True, validators=[MinValueValidator(1), MaxValueValidator(12)])
@@ -39,6 +39,8 @@ class Profile(models.Model):
     residential_city_address = models.TextField(max_length=50, blank=True)
     residential_state_address = models.TextField(max_length=50, blank=True)
     residential_zip_address = models.TextField(max_length=50, blank=True)
+    company = models.TextField(max_length=50, blank=True)
+    company_web_site = models.TextField(max_length=50, blank=True)
     work_street_address = models.TextField(max_length=50, blank=True)
     work_city_address = models.TextField(max_length=50, blank=True)
     work_state_address = models.TextField(max_length=50, blank=True)
@@ -50,7 +52,7 @@ class Profile(models.Model):
     open_to_public = models.BooleanField(default=False)
     # https://stackoverflow.com/questions/51623747/django-best-way-to-create-a-multiple-choice-field
     def __str__(self):
-        return f'{self.id} {self.user}, {self.address}'
+        return f'{self.id} {self.user}, {self.linkedin}'
 
 #this method to generate profile when user is created
 @receiver(post_save, sender=User)
