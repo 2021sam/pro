@@ -20,12 +20,9 @@ CHOICES_WORK_AUTHORIZATION = (
 
 # Create your models here.
 class Profile(models.Model):
-    # user = models.OneToOneField(User, on_delete=models.CASCADE)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
-    # address = models.TextField(max_length=500, blank=True)
     birth_date = models.DateField(null=True, blank=True, help_text='Please use the following format: <em>YYYY-MM-DD</em>.')
-    # birth_month = models.IntegerField(blank=True, min_value=1, max_value=12)
     birth_month = models.PositiveSmallIntegerField(blank=True, null=True, validators=[MinValueValidator(1), MaxValueValidator(12)])
     birth_day = models.PositiveSmallIntegerField(blank=True, null=True, validators=[MinValueValidator(1), MaxValueValidator(31)])
     ip1 = models.TextField(max_length=46, blank=True)
