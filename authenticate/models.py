@@ -8,28 +8,9 @@ CARRIER_CHOICES = [
     # Add more carriers as needed
 ]
 
-# from django.contrib.auth.models import AbstractUser, BaseUserManager
-# from django.db import models
 
-
-# Custom user manager
 from django.contrib.auth.models import BaseUserManager
 
-
-# class CustomUserManager(BaseUserManager):
-#     def create_user(self, email, password=None, **extra_fields):
-#         if not email:
-#             raise ValueError("The Email field must be set")
-#
-#         email = self.normalize_email(email)
-#
-#         # Set username as the email if not provided
-#         username = extra_fields.get('username', email)
-#
-#         user = self.model(username=username, email=email, **extra_fields)
-#         user.set_password(password)
-#         user.save(using=self._db)
-#         return user
 # Custom user manager
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email=None, password=None, **extra_fields):
@@ -76,3 +57,21 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username  # You can return either username or email based on preference
+
+
+# models.py
+from django.db import models
+from django.conf import settings  # Import the custom user model
+
+class UserSettings(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='settings')
+
+    # Various user-specific settings
+    color_theme = models.CharField(max_length=20, default='light')  # 'light' or 'dark' theme
+    role = models.CharField(max_length=20, choices=[('freelancer', 'Freelancer'), ('recruiter', 'Recruiter'), ('both', 'Both')])
+    receive_reminders = models.BooleanField(default=True)
+    receive_alerts = models.BooleanField(default=True)
+    # Add other settings as needed
+
+    def __str__(self):
+        return f"{self.user.username}'s Settings"
