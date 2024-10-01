@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'authenticate',
     'trailhead',
+    'employer_profile',
     'pro_profile',
     'pro_education',
     'pro_experience',

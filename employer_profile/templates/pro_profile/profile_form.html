@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+	
+{% block content %}
+
+<h2>{% if id %} Edit {% else %} New {% endif %} Profile</h2>
+<form method="post" novalidate>
+	{% csrf_token %}
+	<!-- Display email as read-only text -->
+	<p>Email: {{ form.instance.user.email }}</p>
+	{{ form.as_p }}
+	<input type="submit" value="Save" />
+</form>
+
+{% endblock content %}
