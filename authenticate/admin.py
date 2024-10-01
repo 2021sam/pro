@@ -1,3 +1,5 @@
+# /Users/2021sam/apps/zyxe/pro/authenticate/admin.py
+
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser
@@ -27,3 +29,12 @@ class CustomUserAdmin(UserAdmin):
 
 # Register the CustomUserAdmin to manage CustomUser in the admin panel
 admin.site.register(CustomUser, CustomUserAdmin)
+
+
+
+from .models import CustomUser, UserSettings
+# admin.site.register(UserSettings, UserSettingsAdmin)  # Manually registering the model
+@admin.register(UserSettings)
+class UserSettingsAdmin(admin.ModelAdmin):
+    list_display = ('user', 'role', 'color_theme', 'receive_reminders', 'receive_alerts')
+    search_fields = ('user__username', 'role')

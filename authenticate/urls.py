@@ -2,7 +2,7 @@
 from django.urls import path
 from .views import sign_up, activate, resend_verification_email, custom_login, verify_account, waiting_for_approval, delete_account
 from django.contrib.auth import views as auth_views
-from .views import check_verification_status, profile, enable_2fa, disable_2fa, request_2fa_approval, verify_2fa_code
+from .views import check_verification_status, profile, enable_2fa, disable_2fa, request_2fa_approval, verify_2fa_code, initialize_settings
 
 urlpatterns = [
     path('register/', sign_up, name='register'),  # Registration
@@ -39,4 +39,8 @@ urlpatterns = [
 
     path('request_2fa_approval/', request_2fa_approval, name='request_2fa_approval'),
     path('verify-2fa/', verify_2fa_code, name='verify_2fa'),
+
+
+    path('initialize-settings/', initialize_settings, name='initialize_settings'),  # Add this line
+
 ]

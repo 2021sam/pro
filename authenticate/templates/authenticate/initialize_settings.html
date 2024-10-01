@@ -1,0 +1,8 @@
+<!-- /Users/2021sam/apps/zyxe/pro/authenticate/templates/authenticate/initialize_settings.html -->
+
+<h2>Initialize Your Settings</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Settings</button>
+</form>

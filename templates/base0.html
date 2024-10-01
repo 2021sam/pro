@@ -1,0 +1,62 @@
+<!-- pro/templates/base.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Website{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/global.css' %}">
+
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                {% if user.is_authenticated %}
+                <li>
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'images/home-icon.png' %}" alt="Home" width="30" height="30">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'profile' %}">
+                            <img src="{% static 'images/profile-icon.png' %}" alt="Profile" width="30" height="30">
+                        </a>{{ user.email }} <!-- Show user's email or name -->
+                    </li>
+
+<li>
+
+		<p>
+			<a href="{% url 'pro_profile:profile-edit' %}">Profile</a>
+            <a href="{% url 'education' %}">Education</a>
+            <a href="{% url 'experience' %}">Experience</a>
+            <a href="{% url 'skill_list' %}">Skills</a>
+		</p>
+</li>
+
+
+
+
+                    <li>
+                        <a href="{% url 'logout' %}">Logout</a>
+                    </li>
+                {% else %}
+                    <!-- Show login and register buttons if user is not logged in -->
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'register' %}">Register</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My Website</p>
+    </footer>
+</body>
+</html>

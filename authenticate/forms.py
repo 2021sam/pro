@@ -68,3 +68,15 @@ from django import forms
 
 class TwoFactorForm(forms.Form):
     code = forms.CharField(max_length=6, label='Enter 2FA Code')
+
+
+
+# forms.py
+
+from django import forms
+from .models import UserSettings
+
+class UserSettingsForm(forms.ModelForm):
+    class Meta:
+        model = UserSettings
+        fields = ['role', 'receive_reminders', 'receive_alerts', 'color_theme']  # Add any fields you want the user to set

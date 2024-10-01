@@ -437,3 +437,27 @@ def verify_2fa_code(request):
             return redirect('verify_2fa')
 
     return render(request, 'authenticate/verify_2fa.html')
+
+
+# views.py
+
+from django.shortcuts import render, redirect
+from .models import UserSettings
+from .forms import UserSettingsForm
+
+def initialize_settings(request):
+    # Check if the user already has settings
+    if hasattr(request.user, 'settings'):
+        settings_instance = request.user.settings
+    else:
+        settings_instance = UserSettings(user=request.user)
+
+    if request.method == 'POST':
+        form = UserSettingsForm(request.POST, instance=settings_instance)
+        if form.is_valid():
+            form.save()
+            return redirect('home')  # Redirect back to home after saving settings
+    else:
+        form = UserSettingsForm(instance=settings_instance)
+
+    return render(request, 'authenticate/initialize_settings.html', {'form': form})
