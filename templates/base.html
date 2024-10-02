@@ -33,6 +33,12 @@
                             </p>
                         </li>
                     {% endif %}
+
+                    <a href="{% url 'initialize_settings' %}">
+                        <img src="{% static 'images/cog-icon.png' %}" alt="Settings" width="30" height="30">Settings
+                    </a>
+
+
                     <li>
                         <a href="{% url 'logout' %}">Logout</a>
                     </li>
