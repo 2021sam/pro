@@ -29,6 +29,10 @@ class CheckUserSettingsMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        # Exclude admin URLs from the middleware logic
+        if request.path.startswith(reverse('admin:index')):
+            return self.get_response(request)
+
         # Check if the user is authenticated
         if request.user.is_authenticated:
             # Check if the user has initialized their settings (e.g., role is None)
