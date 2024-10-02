@@ -1,3 +1,4 @@
+# /Users/2021sam/apps/zyxe/pro/employer_job/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_datetime
