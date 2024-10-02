@@ -74,9 +74,9 @@ class TwoFactorForm(forms.Form):
 # forms.py
 
 from django import forms
-from .models import UserSettings
+from .models import UserSetting
 
 class UserSettingsForm(forms.ModelForm):
     class Meta:
-        model = UserSettings
+        model = UserSetting
         fields = ['role', 'receive_reminders', 'receive_alerts', 'color_theme']  # Add any fields you want the user to set

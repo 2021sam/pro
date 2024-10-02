@@ -32,9 +32,9 @@ admin.site.register(CustomUser, CustomUserAdmin)
 
 
 
-from .models import CustomUser, UserSettings
+from .models import CustomUser, UserSetting
 # admin.site.register(UserSettings, UserSettingsAdmin)  # Manually registering the model
-@admin.register(UserSettings)
+@admin.register(UserSetting)
 class UserSettingsAdmin(admin.ModelAdmin):
     list_display = ('user', 'role', 'color_theme', 'receive_reminders', 'receive_alerts')
     search_fields = ('user__username', 'role')

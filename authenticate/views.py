@@ -468,11 +468,11 @@ def verify_2fa_code(request):
 
 from django.shortcuts import render, redirect
 from .forms import UserSettingsForm
-from .models import UserSettings
+from .models import UserSetting
 
 def initialize_settings(request):
     # Get or create user settings
-    settings_instance, created = UserSettings.objects.get_or_create(user=request.user)
+    settings_instance, created = UserSetting.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
         form = UserSettingsForm(request.POST, instance=settings_instance)
