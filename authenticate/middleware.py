@@ -18,9 +18,34 @@ class EmailVerificationMiddleware:
         return self.get_response(request)
     
 
-# middleware.py in your app
+# # middleware.py in your app
+# from django.shortcuts import redirect
+# from django.conf import settings
+
+# class CheckUserSettingsMiddleware:
+#     def __init__(self, get_response):
+#         self.get_response = get_response
+
+#     def __call__(self, request):
+#         # Check if the user is authenticated
+#         if request.user.is_authenticated:
+#             # Check if the user has initialized their settings (e.g., role is None)
+#             if not hasattr(request.user, 'settings') or not request.user.settings.role:
+#                 # Redirect to the settings initialization page
+#                 return redirect('initialize_settings')  # 'initialize_settings' is a URL where the user can set their settings
+
+#         response = self.get_response(request)
+#         return response
+
+
+
+# /Users/2021sam/apps/zyxe/pro/authenticate/middleware.py
+
+import logging
 from django.shortcuts import redirect
-from django.conf import settings
+from django.urls import reverse
+
+logger = logging.getLogger(__name__)
 
 class CheckUserSettingsMiddleware:
     def __init__(self, get_response):
@@ -31,8 +56,15 @@ class CheckUserSettingsMiddleware:
         if request.user.is_authenticated:
             # Check if the user has initialized their settings (e.g., role is None)
             if not hasattr(request.user, 'settings') or not request.user.settings.role:
-                # Redirect to the settings initialization page
-                return redirect('initialize_settings')  # 'initialize_settings' is a URL where the user can set their settings
-
+                # Prevent redirect loop by checking if the user is already on the initialize-settings page
+                if request.path != reverse('initialize_settings'):
+                    logger.debug("User has no role, redirecting to initialize settings.")
+                    return redirect('initialize_settings')
+                else:
+                    logger.debug("Already on the settings page.")
+            else:
+                logger.debug(f"User {request.user.username} has initialized settings.")
+        
+        # Proceed with the normal response
         response = self.get_response(request)
         return response
