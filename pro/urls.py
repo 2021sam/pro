@@ -15,5 +15,6 @@ urlpatterns = [
     path('pro/profile/', include('pro_profile.urls')),
     path('pro/education/', include('pro_education.urls')),
     path('pro/experience/', include('pro_experience.urls')),
-    path('pro/skills/', include('pro_skills.urls'))
+    path('pro/skills/', include('pro_skills.urls')),
+    path('employer/job/', include('employer_job.urls'))
 ]

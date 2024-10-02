@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+	
+{% block content %}
+<h1>My Jobs</h1>
+	<a href="{% url 'job-add' %}">Add</a>
+
+	{% for e in job %}
+		<h2>title: {{ e.title }}</h2>
+        <p>Description: {{ e.description }}</p>
+        <small>Timestamp: {{ e.timestamp | date:"M d, Y" }} by {{ e.user | title}}</small>
+		{% if request.user.is_authenticated and request.user == e.user %}
+		<p>
+			<a href="{% url 'job-edit' e.id %}">Edit</a> 
+			<a href="{% url 'job-delete' e.id%}">Delete</a>
+		</p>
+		{% endif %}
+		
+	{% endfor %}
+{% endblock content %}

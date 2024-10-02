@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'authenticate',
     'trailhead',
     'employer_profile',
+    'employer_job',
     'pro_profile',
     'pro_education',
     'pro_experience',
