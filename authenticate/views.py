@@ -441,22 +441,44 @@ def verify_2fa_code(request):
 
 # views.py
 
+# from django.shortcuts import render, redirect
+# from .models import UserSettings
+# from .forms import UserSettingsForm
+
+# def initialize_settings(request):
+#     # Check if the user already has settings
+#     if hasattr(request.user, 'settings'):
+#         settings_instance = request.user.settings
+#     else:
+#         settings_instance = UserSettings(user=request.user)
+
+#     if request.method == 'POST':
+#         form = UserSettingsForm(request.POST, instance=settings_instance)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('home')  # Redirect back to home after saving settings
+#     else:
+#         form = UserSettingsForm(instance=settings_instance)
+
+#     return render(request, 'authenticate/initialize_settings.html', {'form': form})
+
+
+
+# /Users/2021sam/apps/zyxe/pro/authenticate/views.py
+
 from django.shortcuts import render, redirect
-from .models import UserSettings
 from .forms import UserSettingsForm
+from .models import UserSettings
 
 def initialize_settings(request):
-    # Check if the user already has settings
-    if hasattr(request.user, 'settings'):
-        settings_instance = request.user.settings
-    else:
-        settings_instance = UserSettings(user=request.user)
+    # Get or create user settings
+    settings_instance, created = UserSettings.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
         form = UserSettingsForm(request.POST, instance=settings_instance)
         if form.is_valid():
             form.save()
-            return redirect('home')  # Redirect back to home after saving settings
+            return redirect('home')  # Redirect after saving the settings
     else:
         form = UserSettingsForm(instance=settings_instance)
 
