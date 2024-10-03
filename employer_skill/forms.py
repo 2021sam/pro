@@ -16,7 +16,7 @@ class EmployerSkillForm(forms.ModelForm):
 
     class Meta:
         model = EmployerSkill
-        fields = ['skill', 'skill_years', 'skill_months', 'experience']
+        fields = ['skill', 'skill_years', 'skill_months', 'job']
 
     def clean(self):
         cleaned_data = super().clean()
