@@ -1,0 +1,240 @@
+{
+    "software_engineer": {
+      "categories": {
+        "programming_languages": {
+          "languages": [
+            {
+              "name": "JavaScript",
+              "levels": {
+                "beginner": {
+                  "description": "Basic understanding of syntax, variables, data types, and control flow.",
+                  "skills": ["Variables", "Functions", "Conditionals", "Loops", "DOM Manipulation"]
+                },
+                "intermediate": {
+                  "description": "Good grasp of modern JavaScript, including ES6+ features.",
+                  "skills": ["Promises", "Async/Await", "Arrow Functions", "Modules", "Classes", "Error Handling"]
+                },
+                "expert": {
+                  "description": "Deep understanding of JavaScript engines, performance optimization, and asynchronous patterns.",
+                  "skills": ["Event Loop", "Closures", "Prototyping", "Memory Management", "Concurrency", "WebAssembly"]
+                }
+              }
+            },
+            {
+              "name": "Python",
+              "levels": {
+                "beginner": {
+                  "description": "Basic syntax, data types, and control flow.",
+                  "skills": ["Variables", "Loops", "Functions", "Dictionaries", "Lists", "Tuples"]
+                },
+                "intermediate": {
+                  "description": "Knowledge of advanced Python libraries and object-oriented programming.",
+                  "skills": ["Generators", "Decorators", "List Comprehensions", "Lambda Functions", "OOP", "Error Handling"]
+                },
+                "expert": {
+                  "description": "Mastery in Python, including memory management, performance, and concurrency.",
+                  "skills": ["Concurrency", "Asyncio", "Metaclasses", "Multithreading", "Multiprocessing", "C-Extensions"]
+                }
+              }
+            },
+            {
+              "name": "Java",
+              "levels": {
+                "beginner": {
+                  "description": "Basic understanding of Java syntax, classes, and data structures.",
+                  "skills": ["Primitive Types", "Control Flow", "Classes", "Methods", "ArrayLists", "Inheritance"]
+                },
+                "intermediate": {
+                  "description": "Understanding of advanced Java topics and frameworks like Spring.",
+                  "skills": ["Generics", "Streams", "Concurrency", "JVM Internals", "Spring Boot", "Collections Framework"]
+                },
+                "expert": {
+                  "description": "Proficiency in Java with deep knowledge of performance tuning and enterprise-level architecture.",
+                  "skills": ["JVM Tuning", "Garbage Collection", "Thread Management", "Microservices", "Dependency Injection"]
+                }
+              }
+            }
+          ]
+        },
+        "web_development": {
+          "frontend": {
+            "frameworks": [
+              {
+                "name": "React",
+                "levels": {
+                  "beginner": {
+                    "description": "Understanding of React basics and component-based architecture.",
+                    "skills": ["JSX", "Components", "Props", "State", "Event Handling", "Basic Hooks (useState, useEffect)"]
+                  },
+                  "intermediate": {
+                    "description": "Knowledge of React ecosystem and advanced hooks.",
+                    "skills": ["Context API", "React Router", "useReducer", "useMemo", "Performance Optimization"]
+                  },
+                  "expert": {
+                    "description": "Proficiency in React, including custom hooks, state management, and optimization.",
+                    "skills": ["React Performance", "React.memo", "Recoil", "React Native", "Server-Side Rendering (SSR)"]
+                  }
+                }
+              },
+              {
+                "name": "Angular",
+                "levels": {
+                  "beginner": {
+                    "description": "Basic understanding of Angular components, modules, and two-way data binding.",
+                    "skills": ["Components", "Modules", "Services", "Directives", "Pipes", "Forms"]
+                  },
+                  "intermediate": {
+                    "description": "Familiarity with Angular lifecycle hooks, routing, and reactive programming.",
+                    "skills": ["Dependency Injection", "Routing", "Observables", "RxJS", "State Management (NgRx)"]
+                  },
+                  "expert": {
+                    "description": "Mastery of Angular architecture, performance, and scaling applications.",
+                    "skills": ["Lazy Loading", "Advanced RxJS Patterns", "Ahead-of-Time Compilation", "Server-Side Rendering", "Custom Directives"]
+                  }
+                }
+              }
+            ]
+          },
+          "backend": {
+            "frameworks": [
+              {
+                "name": "Django",
+                "levels": {
+                  "beginner": {
+                    "description": "Basic knowledge of Django models, views, and templates.",
+                    "skills": ["Models", "Views", "Forms", "Admin Interface", "Templates", "URL Routing"]
+                  },
+                  "intermediate": {
+                    "description": "Understanding of Django ORM, middleware, and authentication.",
+                    "skills": ["Querysets", "Middleware", "User Authentication", "Permissions", "Forms API"]
+                  },
+                  "expert": {
+                    "description": "Proficiency in advanced Django topics, including optimization and scalability.",
+                    "skills": ["Database Optimization", "Celery for Task Queues", "Custom Middleware", "Caching", "DRF for APIs"]
+                  }
+                }
+              },
+              {
+                "name": "Flask",
+                "levels": {
+                  "beginner": {
+                    "description": "Basic understanding of Flask routes, templates, and forms.",
+                    "skills": ["Routes", "Templates", "Forms", "Static Files", "Jinja2"]
+                  },
+                  "intermediate": {
+                    "description": "Familiarity with Flask extensions and application structure.",
+                    "skills": ["Flask Blueprints", "SQLAlchemy", "WTForms", "Sessions", "Error Handling"]
+                  },
+                  "expert": {
+                    "description": "Mastery of Flask for building scalable web applications.",
+                    "skills": ["API Design", "Flask-Restful", "Socket.IO", "Asynchronous Flask", "Scaling Flask Apps"]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "database_management": {
+          "sql_databases": [
+            {
+              "name": "PostgreSQL",
+              "levels": {
+                "beginner": {
+                  "description": "Basic CRUD operations and understanding of database structure.",
+                  "skills": ["Tables", "CRUD Operations", "Joins", "Indexes", "Basic Queries"]
+                },
+                "intermediate": {
+                  "description": "Knowledge of database optimization, indexing, and querying.",
+                  "skills": ["Advanced Joins", "Subqueries", "Triggers", "Stored Procedures", "Foreign Keys", "Query Optimization"]
+                },
+                "expert": {
+                  "description": "Deep understanding of PostgreSQL internals, performance tuning, and replication.",
+                  "skills": ["Partitioning", "Advanced Indexing", "Database Tuning", "Replication", "Backup and Recovery", "Sharding"]
+                }
+              }
+            }
+          ],
+          "nosql_databases": [
+            {
+              "name": "MongoDB",
+              "levels": {
+                "beginner": {
+                  "description": "Basic understanding of collections, documents, and CRUD operations.",
+                  "skills": ["Documents", "Collections", "CRUD Operations", "Indexes", "Basic Aggregation"]
+                },
+                "intermediate": {
+                  "description": "Proficiency in MongoDB aggregation, schema design, and indexing.",
+                  "skills": ["Aggregation Framework", "Sharding", "Schema Design", "Indexes", "Replication", "Geospatial Queries"]
+                },
+                "expert": {
+                  "description": "Mastery in MongoDB, including performance optimization and scalability.",
+                  "skills": ["Advanced Indexes", "MongoDB Atlas", "Data Replication", "Backup and Recovery", "Advanced Aggregation"]
+                }
+              }
+            }
+          ]
+        },
+        "cloud_computing": {
+          "services": [
+            {
+              "name": "AWS",
+              "levels": {
+                "beginner": {
+                  "description": "Basic understanding of core AWS services like EC2 and S3.",
+                  "skills": ["EC2", "S3", "IAM", "CloudWatch", "RDS"]
+                },
+                "intermediate": {
+                  "description": "Knowledge of AWS architectures, VPCs, and advanced services.",
+                  "skills": ["Elastic Load Balancing", "CloudFormation", "VPC", "Lambda", "Auto Scaling"]
+                },
+                "expert": {
+                  "description": "Expertise in designing scalable, secure, and highly available applications on AWS.",
+                  "skills": ["Serverless Architectures", "API Gateway", "Security Groups", "Advanced Networking", "Data Pipelines", "Cost Optimization"]
+                }
+              }
+            }
+          ]
+        },
+        "development_methodologies": {
+          "methodologies": [
+            {
+              "name": "Agile",
+              "levels": {
+                "beginner": {
+                  "description": "Basic understanding of Agile principles and ceremonies.",
+                  "skills": ["Scrum", "Daily Standups", "Sprint Planning", "User Stories"]
+                },
+                "intermediate": {
+                  "description": "Proficiency in Agile practices and leading small teams.",
+                  "skills": ["Sprint Retrospectives", "Backlog Grooming", "Story Points", "Continuous Integration"]
+                },
+                "expert": {
+                  "description": "Expert in Agile frameworks, scaling Agile, and optimizing team productivity.",
+                  "skills": ["Scrum of Scrums", "Kanban", "Agile Scaling Frameworks", "Team Leadership", "Product Roadmaps"]
+                }
+              }
+            }
+          ]
+        },
+        "soft_skills": {
+          "communication": {
+            "levels": {
+              "beginner": {
+                "description": "Basic written and verbal communication skills.",
+                "skills": ["Email Writing", "Task Reporting", "Basic Collaboration", "Documentation"]
+              },
+              "intermediate": {
+                "description": "Proficiency in leading meetings, technical presentations, and team discussions.",
+                "skills": ["Meeting Facilitation", "Presentations", "Technical Documentation", "Feedback Management"]
+              },
+              "expert": {
+                "description": "Mastery in communication, leadership, and cross-functional team collaboration.",
+                "skills": ["Mentorship", "Conflict Resolution", "Strategic Communication", "Leadership Communication"]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
