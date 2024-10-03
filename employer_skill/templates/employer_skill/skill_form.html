@@ -13,6 +13,6 @@
         {{ form.as_p }}  <!-- Renders all form fields -->
         <button type="submit">{% if form_type == 'edit' %}Save Changes{% else %}Add Skill{% endif %}</button>
     </form>
-    <a href="{% url 'skill_list' %}">Back to Skill List</a>
+    <a href="{% url 'employer_skill:emp_skill_list' %}">Back to Skill List</a>
 </body>
 </html>

@@ -1,15 +1,16 @@
-# /Users/2021sam/apps/zyxe/pro/pro_skills/forms.py
+# /Users/2021sam/apps/zyxe/pro/employer_skill/forms.py
 from django import forms
 from django.forms import modelformset_factory
 from .models import EmployerSkill
-# from pro_experience.models import Experience
+from employer_job.models import EmployerJob
+
 
 class EmployerSkillForm(forms.ModelForm):
     skill_years = forms.IntegerField(required=False)
     skill_months = forms.IntegerField(required=False)
 
-    # experience = forms.ModelMultipleChoiceField(
-    #     queryset=Experience.objects.all(),
+    # job = forms.ModelMultipleChoiceField(
+    #     queryset=EmployerJob.objects.all(),
     #     widget=forms.CheckboxSelectMultiple,  # Use SelectMultiple if you prefer dropdown
     #     required=False
     # )

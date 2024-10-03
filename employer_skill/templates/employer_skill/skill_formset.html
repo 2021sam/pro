@@ -1,3 +1,5 @@
+<!-- /Users/2021sam/apps/zyxe/pro/employer_skill/templates/employer_skill/skill_formset.html -->
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +18,7 @@
                     <th>Skill</th>
                     <th>Years of Experience</th>
                     <th>Months of Experience</th>
-                    <th>Experience</th>
+                    <th>Job</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,9 +43,9 @@
                             {% endif %}
                         </td>
                         <td class="form-group">
-                            {{ form.experience }}
-                            {% if form.experience.errors %}
-                                <div class="error-message">{{ form.experience.errors }}</div>
+                            {{ form.job }}
+                            {% if form.job.errors %}
+                                <div class="error-message">{{ form.job.errors }}</div>
                             {% endif %}
                         </td>
                     </tr>

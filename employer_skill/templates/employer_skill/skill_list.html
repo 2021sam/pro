@@ -8,14 +8,14 @@
     <title>Skills List</title>
 </head>
 <body>
-    <h1>Skills</h1>
-    <a href="{% url 'skill_create' %}">Add New Skill</a>
+    <h1>Employer Skills</h1>
+    <a href="{% url 'employer_skill:skill_add' %}">Add New Skill</a>
     <ul>
         {% for skill in skills %}
             <li>
                 {{ skill.skill }} {{ skill.skill_years }} {{ skill.skill_months }} 
-                <a href="{% url 'skill_edit' skill.id %}">Edit</a>
-                <a href="{% url 'skill_delete' skill.id %}">Delete</a>
+                <a href="{% url 'employer_skill:skill_edit' skill.id %}">Edit</a>
+                <a href="{% url 'employer_skill:skill_delete' skill.id %}">Delete</a>
             </li>
         {% endfor %}
     </ul>

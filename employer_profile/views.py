@@ -1,3 +1,4 @@
+# /Users/2021sam/apps/zyxe/pro/employer_profile/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import  login_required
 from django.http import HttpResponse
@@ -32,7 +33,7 @@ def profile_edit(request):
         form = EmployerProfileForm(instance=profile)
 
     context = {'form': form, 'id': profile.id}
-    return render(request, 'pro_profile/profile_form.html', context)
+    return render(request, 'employer_profile/profile_form.html', context)
 
 
 

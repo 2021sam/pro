@@ -1,10 +1,12 @@
 # urls.py
 from django.urls import path
-from .views import skill_edit_view, skill_create_view, skill_list_view, skill_delete_view
+from . import views
+
+app_name = 'employer_skill'  # This is necessary when using namespaces
 
 urlpatterns = [
-    path('edit/<int:pk>/', skill_edit_view, name='skill_edit'),  # Passes the ID (pk) to the view
-    path('create/', skill_create_view, name='skill_create'),
-    path('', skill_list_view, name='skill_list'),
-    path('delete/<int:pk>/', skill_delete_view, name='skill_delete'),
+    path('', views.skill_list, name='emp_skill_list'),
+    path('add/', views.skill_add, name='skill_add'),
+    path('edit/<int:pk>/', views.skill_edit, name='skill_edit'),  # Passes the ID (pk) to the view
+    path('delete/<int:pk>/', views.skill_delete, name='skill_delete'),
 ]

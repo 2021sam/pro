@@ -23,6 +23,8 @@
                             <img src="{% static 'images/profile-icon.png' %}" alt="Profile" width="30" height="30">
                         </a>{{ user.email }} <!-- Show user's email or name -->
                     </li>
+                    
+                    <!-- Check for Freelancer role -->
                     {% if user.settings.role == 'freelancer' %}
                         <li>
                             <p>
@@ -33,11 +35,21 @@
                             </p>
                         </li>
                     {% endif %}
+                    
+                    <!-- Check for Employer role -->
+                    {% if user.settings.role == 'recruiter' %}
+                        <li>
+                            <p>
+                                <a href="{% url 'employer_profile:profile-edit' %}">Profile</a>
+                                <a href="{% url 'employer_job:job' %}">Jobs</a>
+                                <a href="{% url 'employer_skill:emp_skill_list' %}">Manage Skills</a>
+                            </p>
+                        </li>
+                    {% endif %}
 
                     <a href="{% url 'initialize_settings' %}">
                         <img src="{% static 'images/cog-icon.png' %}" alt="Settings" width="30" height="30">Settings
                     </a>
-
 
                     <li>
                         <a href="{% url 'logout' %}">Logout</a>
