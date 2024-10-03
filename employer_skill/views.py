@@ -1,13 +1,12 @@
-# /Users/2021sam/apps/zyxe/pro/pro_skills/views.py
-# views.py
+# /Users/2021sam/apps/zyxe/pro/employer_skill/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Skill
-from .forms import SkillForm, SkillFormSet
+from .forms import EmployerSkillForm, EmployerSkillFormSet
 from django.forms import modelformset_factory
 
 def skill_create_view(request):
     # Use modelformset_factory to create a formset for Skill model
-    SkillFormSet = modelformset_factory(Skill, form=SkillForm, extra=1)
+    SkillFormSet = modelformset_factory(Skill, form=EmployerSkillForm, extra=1)
     if request.method == 'POST':
         formset = SkillFormSet(request.POST)
         if formset.is_valid():
@@ -28,12 +27,12 @@ def skill_create_view(request):
 def skill_edit_view(request, pk):
     skill = get_object_or_404(Skill, pk=pk)
     if request.method == 'POST':
-        form = SkillForm(request.POST, instance=skill)
+        form = EmployerSkillForm(request.POST, instance=skill)
         if form.is_valid():
             form.save()
             return redirect('skill_list')
     else:
-        form = SkillForm(instance=skill)
+        form = EmployerSkillForm(instance=skill)
 
     # Render the single form in the template for editing an existing skill
     return render(request, 'skill/skill_form.html', {'form': form, 'form_type': 'edit'})

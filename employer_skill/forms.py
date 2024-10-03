@@ -1,10 +1,10 @@
 # /Users/2021sam/apps/zyxe/pro/pro_skills/forms.py
 from django import forms
 from django.forms import modelformset_factory
-from .models import Skill
-from pro_experience.models import Experience
+from .models import EmployerSkill
+# from pro_experience.models import Experience
 
-class SkillForm(forms.ModelForm):
+class EmployerSkillForm(forms.ModelForm):
     skill_years = forms.IntegerField(required=False)
     skill_months = forms.IntegerField(required=False)
 
@@ -15,7 +15,7 @@ class SkillForm(forms.ModelForm):
     # )
 
     class Meta:
-        model = Skill
+        model = EmployerSkill
         fields = ['skill', 'skill_years', 'skill_months', 'experience']
 
     def clean(self):
@@ -33,4 +33,4 @@ class SkillForm(forms.ModelForm):
 
         return cleaned_data
 
-SkillFormSet = modelformset_factory(Skill, form=SkillForm, extra=1)
+EmployerSkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillForm, extra=1)
