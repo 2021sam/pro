@@ -31,15 +31,18 @@ def skill_list(request):
 
 from employer_job.models import EmployerJob
 
-def skill_add(request, job_id=None):
-    # Ensure a job is selected first; if no job_id, redirect to job selection/creation page
-    if not job_id:
-        return redirect('employer_skill:job_add')
+# from django.shortcuts import render, redirect, get_object_or_404
+# from .models import EmployerSkill
+# from .forms import EmployerSkillForm, EmployerSkillFormSet
+# from employer_job.models import EmployerJob
+# from django.forms import modelformset_factory
 
-    # Get the selected job
-    selected_job = get_object_or_404(EmployerJob, id=job_id)
 
-    # Use modelformset_factory to create a formset for Skill model
+def skill_add(request, job_id):
+    # Get the job based on the job_id from the URL
+    job = get_object_or_404(EmployerJob, id=job_id)
+
+    # Use modelformset_factory to create a formset for the EmployerSkill model
     SkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillForm, extra=1)
 
     if request.method == 'POST':
@@ -47,18 +50,18 @@ def skill_add(request, job_id=None):
         if formset.is_valid():
             instances = formset.save(commit=False)
             for instance in instances:
-                instance.user = request.user
-                instance.job = selected_job  # Lock job to the selected one
+                instance.user = request.user  # Assign the current user
+                instance.job = job  # Assign the job passed in the URL
                 instance.save()
-            formset.save_m2m()
+            formset.save_m2m()  # Save any many-to-many relationships, if any
             return redirect('employer_skill:emp_skill_list')
         else:
             print('Formset Errors:', formset.errors)
     else:
-        formset = SkillFormSet(queryset=EmployerSkill.objects.none())  # Show empty formset for new entries
+        formset = SkillFormSet(queryset=EmployerSkill.objects.none())  # Show an empty formset for new entries
 
-    # Render the formset in the template and pass the selected job
-    return render(request, 'employer_skill/skill_formset.html', {'formset': formset, 'job': selected_job, 'form_type': 'create'})
+    # Render the formset in the template for creating multiple skills, with the job already set
+    return render(request, 'employer_skill/skill_formset.html', {'formset': formset, 'job': job, 'form_type': 'create'})
 
 
 

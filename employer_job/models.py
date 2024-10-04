@@ -5,7 +5,6 @@ from django.conf import settings
 
 
 class EmployerJob(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Allow multiple skills per user
     timestamp = models.DateTimeField(default=timezone.now)
     title = models.CharField(max_length=30)

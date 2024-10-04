@@ -16,6 +16,5 @@ class EmployerSkill(models.Model):
     skill_months = models.PositiveIntegerField(default=0)  # Months of experience
 
 
-    def __str__(self):
-            job = ', '.join([str(exp) for exp in self.job.all()])
-            return f"{self.skill} ({self.skill_years} years, {self.skill_months} months), {job}"
+def __str__(self):
+    return f"{self.skill} ({self.skill_years} years, {self.skill_months} months), {self.job}"
