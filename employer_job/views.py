@@ -21,22 +21,39 @@ def view(request):
     return render(request,'employer_job/view.html', context)
 
 
-@login_required
+# @login_required
+# def add(request):
+#     if request.method == 'GET':
+#         context = {'form': EmployerJobForm()}
+#         return render(request,'employer_job/add_edit.html',context)
+#     elif request.method == 'POST':
+#         form = EmployerJobForm(request.POST)
+#         if form.is_valid():
+#             i = form.save(commit=False)
+#             i.user = request.user
+#             i.save()
+#             messages.success(request, 'The post has been successfully created.')
+#             return redirect('job-view')
+#         else:
+#             messages.error(request, 'Please correct the following errors:')
+#             return render(request,'employer_job/add_edit.html', {'form':form})
+
 def add(request):
-    if request.method == 'GET':
-        context = {'form': EmployerJobForm()}
-        return render(request,'employer_job/add_edit.html',context)
-    elif request.method == 'POST':
+    # Create or select a job first before adding skills
+    if request.method == 'POST':
         form = EmployerJobForm(request.POST)
         if form.is_valid():
-            i = form.save(commit=False)
-            i.user = request.user
-            i.save()
-            messages.success(request, 'The post has been successfully created.')
-            return redirect('job-view')
-        else:
-            messages.error(request, 'Please correct the following errors:')
-            return render(request,'employer_job/add_edit.html', {'form':form})
+            job = form.save(commit=False)
+            job.user = request.user
+            job.save()
+            return redirect('employer_skill:skill_add', job_id=job.id)
+    else:
+        form = EmployerJobForm()
+
+    return render(request, 'employer_job/add.html', {'form': form})
+
+
+
 
 
 @login_required    
