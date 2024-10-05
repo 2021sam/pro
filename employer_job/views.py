@@ -28,9 +28,13 @@ def view(request):
 
 
 
+# /Users/2021sam/apps/zyxe/pro/employer_job/views.py
+
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import EmployerJob, Skill
-from .forms import EmployerJobForm, SkillFormSet
+from .models import EmployerJob
+from employer_skill.models import EmployerSkill  # Adjusted to use EmployerSkill
+from .forms import EmployerJobForm
+# from employer_skill.forms import EmployerSkillFormSet  # Adjusted to use EmployerSkillFormSet
 from django.forms import modelformset_factory
 
 def add_edit_job_with_skills(request, job_id=None):
@@ -38,17 +42,17 @@ def add_edit_job_with_skills(request, job_id=None):
     if job_id:
         job = get_object_or_404(EmployerJob, pk=job_id)
         job_form = EmployerJobForm(instance=job)
-        SkillFormSet = modelformset_factory(Skill, form=SkillForm, extra=1)
-        formset = SkillFormSet(queryset=Skill.objects.filter(job=job))
+        EmployerSkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillFormSet, extra=1)  # Using EmployerSkill
+        formset = EmployerSkillFormSet(queryset=EmployerSkill.objects.filter(job=job))  # Adjusted to filter by EmployerSkill
     else:
         job = None
         job_form = EmployerJobForm()
-        SkillFormSet = modelformset_factory(Skill, form=SkillForm, extra=1)
-        formset = SkillFormSet(queryset=Skill.objects.none())
+        EmployerSkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillFormSet, extra=1)  # Using EmployerSkill
+        formset = EmployerSkillFormSet(queryset=EmployerSkill.objects.none())
 
     if request.method == 'POST':
         job_form = EmployerJobForm(request.POST, instance=job)
-        formset = SkillFormSet(request.POST)
+        formset = EmployerSkillFormSet(request.POST)
 
         # Validate both job form and formset
         if job_form.is_valid() and formset.is_valid():
@@ -61,7 +65,7 @@ def add_edit_job_with_skills(request, job_id=None):
                 skill.job = job
                 skill.save()
 
-            return redirect('job_list')  # Adjust to your desired redirect URL
+            return redirect('job')  # Adjust to your desired redirect URL
 
         else:
             print("Job form errors:", job_form.errors)
@@ -73,13 +77,6 @@ def add_edit_job_with_skills(request, job_id=None):
         'job': job,
         'job_id': job_id,
     })
-
-
-
-
-
-
-
 
 
 
