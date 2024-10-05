@@ -1,4 +1,3 @@
-<!-- /Users/2021sam/apps/zyxe/pro/employer_job/templates/employer_job/add_edit_job_with_skills.html -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -9,23 +8,55 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    add_edit_job_with_skills.html
     <h1>{% if job_id %}Edit Job{% else %}Add Job{% endif %}</h1>
-    <form method="POST">
+
+    <form method="POST" novalidate>
         {% csrf_token %}
-        {{ job_form.as_p }}  <!-- Render the job form -->
+        
+        <div class="selected-job">
+            <h3>Selected Job: {{ job.name }}</h3>
+            <input type="hidden" name="job_id" value="{{ job.id }}">
+        </div>
+        
+
+        {{ job_form.as_p }} <!-- Render the job form -->
 
         <h3>Skills</h3>
-        <table>
+        <table id="formset-container">
             {{ formset.management_form }}
-            {% for form in formset %}
+            <thead>
                 <tr>
-                    <td>{{ form.skill }}</td>
-                    <td>{{ form.skill_years }}</td>
-                    <td>{{ form.skill_months }}</td>
+                    <th>Skill</th>
+                    <th>Years of Experience</th>
+                    <th>Months of Experience</th>
                 </tr>
-            {% endfor %}
+            </thead>
+            <tbody>
+                {% for form in formset %}
+                <tr class="form-row">
+                    <td class="form-group">
+                        {{ form.skill }}
+                        {% if form.skill.errors %}
+                            <div class="error-message">{{ form.skill.errors }}</div>
+                        {% endif %}
+                    </td>
+                    <td class="form-group">
+                        {{ form.skill_years }}
+                        {% if form.skill_years.errors %}
+                            <div class="error-message">{{ form.skill_years.errors }}</div>
+                        {% endif %}
+                    </td>
+                    <td class="form-group">
+                        {{ form.skill_months }}
+                        {% if form.skill_months.errors %}
+                            <div class="error-message">{{ form.skill_months.errors }}</div>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
+
         <button type="submit">Save</button>
     </form>
 

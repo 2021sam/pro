@@ -26,17 +26,22 @@ def view(request):
 
 @login_required
 def add_or_edit_job_with_skills(request, id=None):
+    print(f'id: {id}')
     # Handle job editing if ID is provided, else handle adding a new job
     if id:
         job = get_object_or_404(EmployerJob, pk=id, user=request.user)
+        print(f'job: {job}')
     else:
         job = None
 
     if request.method == 'POST':
+        print('POST')
         job_form = EmployerJobForm(request.POST, instance=job)
         SkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillForm, extra=1)
         formset = SkillFormSet(request.POST)
-        
+        print(job_form.is_valid())
+        print(formset.is_valid() )
+
         if job_form.is_valid() and formset.is_valid():
             job = job_form.save(commit=False)
             job.user = request.user
@@ -50,6 +55,10 @@ def add_or_edit_job_with_skills(request, id=None):
 
             messages.success(request, 'Job and skills have been saved successfully.')
             return redirect('employer_job:job-view')
+        else:
+            print("Job form errors:", job_form.errors)
+            print("Formset errors:", formset.errors)  # Print formset errors here
+
     
     else:
         job_form = EmployerJobForm(instance=job)
@@ -59,7 +68,8 @@ def add_or_edit_job_with_skills(request, id=None):
     return render(request, 'employer_job/add_edit_job_with_skills.html', {
         'job_form': job_form,
         'formset': formset,
-        'job': job,
+        'job': job if id else None,  # Pass job instance for display
+        'id': id,
     })
 
 
