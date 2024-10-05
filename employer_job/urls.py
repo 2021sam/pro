@@ -8,6 +8,6 @@ urlpatterns = [
     path('', views.home, name='job'),
     path('view/', views.view, name='job-view'),
     path('add/', views.add_edit_job_with_skills, name='job-add'),
-    path('edit/<int:id>/', views.add_edit_job_with_skills, name='job-edit'),
-    path('delete/<int:id>/', views.delete, name='job-delete')
+    path('edit/<int:job_id>/', views.add_edit_job_with_skills, name='job-edit'),  # Use job_id to match view
+    path('delete/<int:job_id>/', views.delete, name='job-delete')  # Use job_id to match view
 ]
