@@ -24,57 +24,55 @@ def view(request):
     context = {'job':  job}
     return render(request,'employer_job/view.html', context)
 
-@login_required
-def add_or_edit_job_with_skills(request, id=None):
-    print(f'id: {id}')
-    # Handle job editing if ID is provided, else handle adding a new job
-    if id:
-        job = get_object_or_404(EmployerJob, pk=id, user=request.user)
-        print(f'job: {job}')
+
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import EmployerJob, Skill
+from .forms import EmployerJobForm, SkillFormSet
+from django.forms import modelformset_factory
+
+def add_edit_job_with_skills(request, job_id=None):
+    # Fetch job if job_id is provided (edit case), otherwise create new (add case)
+    if job_id:
+        job = get_object_or_404(EmployerJob, pk=job_id)
+        job_form = EmployerJobForm(instance=job)
+        SkillFormSet = modelformset_factory(Skill, form=SkillForm, extra=1)
+        formset = SkillFormSet(queryset=Skill.objects.filter(job=job))
     else:
         job = None
+        job_form = EmployerJobForm()
+        SkillFormSet = modelformset_factory(Skill, form=SkillForm, extra=1)
+        formset = SkillFormSet(queryset=Skill.objects.none())
 
     if request.method == 'POST':
-        print('POST')
         job_form = EmployerJobForm(request.POST, instance=job)
-        SkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillForm, extra=1)
         formset = SkillFormSet(request.POST)
-        print(job_form.is_valid())
-        print(formset.is_valid() )
 
+        # Validate both job form and formset
         if job_form.is_valid() and formset.is_valid():
-            job = job_form.save(commit=False)
-            job.user = request.user
-            job.save()
+            # Save the job
+            job = job_form.save()
 
-            instances = formset.save(commit=False)
-            for instance in instances:
-                instance.job = job  # Associate the skills with the job
-                instance.user = request.user
-                instance.save()
+            # Save the skills, assigning the job to each skill in the formset
+            skills = formset.save(commit=False)
+            for skill in skills:
+                skill.job = job
+                skill.save()
 
-            messages.success(request, 'Job and skills have been saved successfully.')
-            return redirect('employer_job:job-view')
+            return redirect('job_list')  # Adjust to your desired redirect URL
+
         else:
             print("Job form errors:", job_form.errors)
-            print("Formset errors:", formset.errors)  # Print formset errors here
-
-    
-    else:
-        job_form = EmployerJobForm(instance=job)
-        SkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillForm, extra=1)
-        formset = SkillFormSet(queryset=EmployerSkill.objects.filter(job=job))
+            print("Formset errors:", formset.errors)
 
     return render(request, 'employer_job/add_edit_job_with_skills.html', {
         'job_form': job_form,
         'formset': formset,
-        'job': job if id else None,  # Pass job instance for display
-        'id': id,
+        'job': job,
+        'job_id': job_id,
     })
-
-
-
-
 
 
 
