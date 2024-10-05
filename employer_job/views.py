@@ -8,9 +8,9 @@ from .models import EmployerJob
 from .forms import EmployerJobForm
 from django.urls import path
 
-from .forms import EmployerSkillForm, EmployerSkillFormSet
+from employer_skill.forms import EmployerSkillForm, EmployerSkillFormSet
 from django.forms import modelformset_factory
-from .models import EmployerSkill
+from employer_skill.models import EmployerSkill
 
 @login_required
 def home(request):
