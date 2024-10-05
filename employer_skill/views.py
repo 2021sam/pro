@@ -20,7 +20,8 @@ from employer_job.models import EmployerJob
 def skill_add(request, job_id):
     # Get the job based on the job_id from the URL
     job = get_object_or_404(EmployerJob, id=job_id)
-
+    print(f'job_id: {job_id}')
+    print(f'job: {job}')
     # Use modelformset_factory to create a formset for the EmployerSkill model
     SkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillForm, extra=1)
 
@@ -38,7 +39,8 @@ def skill_add(request, job_id):
             print('Formset Errors:', formset.errors)
     else:
         # Ensure to set the job for each form in the formset
-        formset = SkillFormSet(queryset=EmployerSkill.objects.filter(job=job))
+        # formset = SkillFormSet(queryset=EmployerSkill.objects.filter(job=job))
+        formset = SkillFormSet(queryset=EmployerSkill.objects.none())  # Show an empty formset for new entries
 
     # Render the formset in the template for creating multiple skills, with the job already set
     return render(request, 'employer_skill/skill_formset.html', {'formset': formset, 'job': job, 'form_type': 'create'})

@@ -19,8 +19,8 @@ function printFormRows() {
         const skill = skillInput.value;
         const skillYears = formRow.querySelector('[name$="-skill_years"]').value;
         const skillMonths = formRow.querySelector('[name$="-skill_months"]').value;
-        const experience = formRow.querySelector('[name$="-experience"]').value;
-        console.log(`Row ${index + 1} (ID: ${formId}, Name: ${formName}): Skill: ${skill}, Skill Years: ${skillYears}, Skill Months: ${skillMonths}, Experience: ${experience}`);
+        // const experience = formRow.querySelector('[name$="-experience"]').value;
+        console.log(`Row ${index + 1} (ID: ${formId}, Name: ${formName}): Skill: ${skill}, Skill Years: ${skillYears}, Skill Months: ${skillMonths}`);
     });
 }
 

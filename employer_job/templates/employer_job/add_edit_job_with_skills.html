@@ -1,0 +1,35 @@
+<!-- /Users/2021sam/apps/zyxe/pro/employer_job/templates/employer_job/add_edit_job_with_skills.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add/Edit Job with Skills</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    add_edit_job_with_skills.html
+    <h1>{% if job_id %}Edit Job{% else %}Add Job{% endif %}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ job_form.as_p }}  <!-- Render the job form -->
+
+        <h3>Skills</h3>
+        <table>
+            {{ formset.management_form }}
+            {% for form in formset %}
+                <tr>
+                    <td>{{ form.skill }}</td>
+                    <td>{{ form.skill_years }}</td>
+                    <td>{{ form.skill_months }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <button type="submit">Save</button>
+    </form>
+
+    <!-- Include the JavaScript file -->
+    <script src="{% static 'js/formset.js' %}"></script>
+</body>
+</html>
