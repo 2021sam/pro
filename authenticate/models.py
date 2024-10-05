@@ -68,7 +68,7 @@ class UserSetting(models.Model):
 
     # Various user-specific settings
     color_theme = models.CharField(max_length=20, default='light')  # 'light' or 'dark' theme
-    role = models.CharField(max_length=20, choices=[('freelancer', 'Freelancer'), ('recruiter', 'Recruiter'), ('both', 'Both')])
+    role = models.CharField(max_length=20, choices=[('freelancer', 'Freelancer'), ('recruiter', 'Recruiter')])
     receive_reminders = models.BooleanField(default=True)
     receive_alerts = models.BooleanField(default=True)
     # Add other settings as needed
