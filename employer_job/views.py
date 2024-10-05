@@ -29,25 +29,21 @@ def view(request):
 
 
 # /Users/2021sam/apps/zyxe/pro/employer_job/views.py
-
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import EmployerJob
-from employer_skill.models import EmployerSkill  # Adjusted to use EmployerSkill
+from employer_skill.models import EmployerSkill  # Assuming EmployerSkill is the correct model name
 from .forms import EmployerJobForm
-# from employer_skill.forms import EmployerSkillFormSet  # Adjusted to use EmployerSkillFormSet
-from django.forms import modelformset_factory
+from employer_skill.forms import EmployerSkillFormSet  # Make sure this is imported
 
 def add_edit_job_with_skills(request, job_id=None):
     # Fetch job if job_id is provided (edit case), otherwise create new (add case)
     if job_id:
         job = get_object_or_404(EmployerJob, pk=job_id)
         job_form = EmployerJobForm(instance=job)
-        EmployerSkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillFormSet, extra=1)  # Using EmployerSkill
-        formset = EmployerSkillFormSet(queryset=EmployerSkill.objects.filter(job=job))  # Adjusted to filter by EmployerSkill
+        formset = EmployerSkillFormSet(queryset=EmployerSkill.objects.filter(job=job))
     else:
         job = None
         job_form = EmployerJobForm()
-        EmployerSkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillFormSet, extra=1)  # Using EmployerSkill
         formset = EmployerSkillFormSet(queryset=EmployerSkill.objects.none())
 
     if request.method == 'POST':
@@ -57,15 +53,20 @@ def add_edit_job_with_skills(request, job_id=None):
         # Validate both job form and formset
         if job_form.is_valid() and formset.is_valid():
             # Save the job
-            job = job_form.save()
+            # Save the job and assign the user
+            job = job_form.save(commit=False)
+            job.user = request.user  # Set the current logged-in user
+            job.save()
+
 
             # Save the skills, assigning the job to each skill in the formset
             skills = formset.save(commit=False)
             for skill in skills:
                 skill.job = job
+                skill.user = request.user  # Set the current logged-in user for each skill
                 skill.save()
 
-            return redirect('job')  # Adjust to your desired redirect URL
+            return redirect('employer_job:job-view')  # Adjust to your desired redirect URL
 
         else:
             print("Job form errors:", job_form.errors)
@@ -83,25 +84,6 @@ def add_edit_job_with_skills(request, job_id=None):
 
 
 
-
-
-
-# @login_required
-# def add(request):
-#     if request.method == 'GET':
-#         context = {'form': EmployerJobForm()}
-#         return render(request,'employer_job/add_edit.html',context)
-#     elif request.method == 'POST':
-#         form = EmployerJobForm(request.POST)
-#         if form.is_valid():
-#             i = form.save(commit=False)
-#             i.user = request.user
-#             i.save()
-#             messages.success(request, 'The post has been successfully created.')
-#             return redirect('job-view')
-#         else:
-#             messages.error(request, 'Please correct the following errors:')
-#             return render(request,'employer_job/add_edit.html', {'form':form})
 
 def add(request):
     # Create or select a job first before adding skills
@@ -142,9 +124,9 @@ def edit(request, id):
 
 
 @login_required
-def delete(request, id):
+def delete(request, job_id):
     queryset = EmployerJob.objects.filter(user=request.user)
-    job = get_object_or_404(queryset, pk=id)
+    job = get_object_or_404(queryset, pk=job_id)
     context = {'job': job}
     
     if request.method == 'GET':

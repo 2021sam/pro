@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add/Edit Job with Skills</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
 </head>
 <body>
     <h1>{% if job_id %}Edit Job{% else %}Add Job{% endif %}</h1>
+    <h2>2:24</h2>
 
     <form method="POST" novalidate>
         {% csrf_token %}
@@ -34,6 +35,8 @@
             <tbody>
                 {% for form in formset %}
                 <tr class="form-row">
+                                 <!-- Include the hidden id field -->
+                {{ form.id }}  <!-- Render the id field as a hidden input -->
                     <td class="form-group">
                         {{ form.skill }}
                         {% if form.skill.errors %}
