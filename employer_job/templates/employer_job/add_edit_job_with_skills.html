@@ -17,21 +17,21 @@
             opacity: 0.7;
             transition: opacity .2s;
         }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
     <h1>{% if job_id %}Edit Job{% else %}Add Job{% endif %}</h1>
-    <h2>12:24</h2>
 
     <form method="POST" novalidate>
         {% csrf_token %}
-        
+
         <div class="selected-job">
             <h3>Selected Job: {{ job.name }}</h3>
             <input type="hidden" name="job_id" value="{{ job.id }}">
         </div>
         
-        {{ job_form.as_p }} <!-- Render the job form -->
+        {{ job_form.as_p }}
 
         <h3>Skills</h3>
         <table id="formset-container">
@@ -40,30 +40,25 @@
                 <tr>
                     <th>Skill</th>
                     <th>Years of Experience</th>
+                    {% if show_months %} <th>Months of Experience</th> {% endif %}
                 </tr>
             </thead>
             <tbody>
                 {% for form in formset %}
                 <tr class="form-row">
-                                 <!-- Include the hidden id field -->
-                {{ form.id }}  <!-- Render the id field as a hidden input -->
+                    {{ form.id }}  <!-- Render the id field as a hidden input -->
+                    <td class="form-group">{{ form.skill }}</td>
                     <td class="form-group">
-                        {{ form.skill }}
-                        {% if form.skill.errors %}
-                            <div class="error-message">{{ form.skill.errors }}</div>
-                        {% endif %}
+                        <input type="range" class="slider" min="0" max="{{ max_slider_value }}" value="{{ form.skill_years.value|default:0 }}" name="years_required">
+                        <p>Years: <span class="slider-value">{{ form.skill_years.value|default:0 }}</span></p>
                     </td>
+
+                    {% if show_months %}
                     <td class="form-group">
-                        <!-- {{ form.skill_years }}
-                        {% if form.skill_years.errors %}
-                            <div class="error-message">{{ form.skill_years.errors }}</div>
-                        {% endif %} -->
-
-
-                        <input type="range" class="slider" min="0" max="{{ max_slider_value }}" value="0" name="years_required">
-                        <p>Years: <span id="slider-value">{{ form.skill_years.value|default:0 }}</span></p>
-
+                        <input type="range" class="slider" min="0" max="11" value="{{ form.skill_months.value|default:0 }}" name="months_required">
+                        <p>Months: <span class="slider-value">{{ form.skill_months.value|default:0 }}</span></p>
                     </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -71,16 +66,17 @@
 
         <button type="submit">Save</button>
     </form>
+    
     <script>
         const sliders = document.querySelectorAll('.slider');
         sliders.forEach(slider => {
             slider.oninput = function() {
-                const valueDisplay = this.parentElement.querySelector('#slider-value');
+                const valueDisplay = this.parentElement.querySelector('.slider-value');
                 valueDisplay.textContent = this.value;
             };
         });
     </script>
-    <!-- Include the JavaScript file -->
+
     <script src="{% static 'js/formset.js' %}"></script>
 </body>
 </html>

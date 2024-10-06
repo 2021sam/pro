@@ -69,12 +69,16 @@ def add_edit_job_with_skills(request, job_id=None):
             print("Job form errors:", job_form.errors)
             print("Formset errors:", formset.errors)
 
+    # Variable to toggle months display (can be set based on business logic)
+    show_months = True  # or False based on your logic
+
     return render(request, 'employer_job/add_edit_job_with_skills.html', {
         'job_form': job_form,
         'formset': formset,
         'job': job,
         'job_id': job_id,
-        'max_slider_value': 10  # Pass the slider max value to the template
+        'max_slider_value': 10,     # Pass the slider max value to the template
+        'show_months': show_months  # Pass the toggle variable for months
     })
 
 
