@@ -17,7 +17,6 @@
             opacity: 0.7;
             transition: opacity .2s;
         }
-        .hidden { display: none; }
     </style>
 </head>
 <body>
@@ -39,8 +38,7 @@
             <thead>
                 <tr>
                     <th>Skill</th>
-                    <th>Years of Experience</th>
-                    {% if show_months %} <th>Months of Experience</th> {% endif %}
+                    <th>Experience (Years and Months)</th>
                 </tr>
             </thead>
             <tbody>
@@ -49,16 +47,10 @@
                     {{ form.id }}  <!-- Render the id field as a hidden input -->
                     <td class="form-group">{{ form.skill }}</td>
                     <td class="form-group">
-                        <input type="range" class="slider" min="0" max="{{ max_slider_value }}" value="{{ form.skill_years.value|default:0 }}" name="years_required">
-                        <p>Years: <span class="slider-value">{{ form.skill_years.value|default:0 }}</span></p>
+                        <input type="range" class="slider" min="0" max="{{ max_slider_value }}" value="{{ form.skill_years.value|default:0 }}" name="experience_range">
+                        <p>Total Experience: <span class="slider-value">{{ form.skill_years.value|default:0 }}</span> Months</p>
+                        <p>Years: <span class="years-value">0</span>, Months: <span class="months-value">0</span></p>
                     </td>
-
-                    {% if show_months %}
-                    <td class="form-group">
-                        <input type="range" class="slider" min="0" max="11" value="{{ form.skill_months.value|default:0 }}" name="months_required">
-                        <p>Months: <span class="slider-value">{{ form.skill_months.value|default:0 }}</span></p>
-                    </td>
-                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -71,8 +63,18 @@
         const sliders = document.querySelectorAll('.slider');
         sliders.forEach(slider => {
             slider.oninput = function() {
-                const valueDisplay = this.parentElement.querySelector('.slider-value');
-                valueDisplay.textContent = this.value;
+                const totalMonths = parseInt(this.value);
+                const years = Math.floor(totalMonths / 12);
+                const months = totalMonths % 12;
+
+                const totalDisplay = this.parentElement.querySelector('.slider-value');
+                totalDisplay.textContent = totalMonths;
+
+                const yearsDisplay = this.parentElement.querySelector('.years-value');
+                yearsDisplay.textContent = years;
+
+                const monthsDisplay = this.parentElement.querySelector('.months-value');
+                monthsDisplay.textContent = months;
             };
         });
     </script>
