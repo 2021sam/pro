@@ -11,21 +11,22 @@ class EmployerSkillForm(forms.ModelForm):
 
     class Meta:
         model = EmployerSkill
-        fields = ['id', 'skill', 'skill_years']
+        fields = ['id', 'skill', 'skill_years', 'skill_months']
 
     def clean(self):
         cleaned_data = super().clean()
         skill_years = cleaned_data.get('skill_years', 0)
-        # skill_months = cleaned_data.get('skill_months', 0)
+        skill_months = cleaned_data.get('skill_months', 0)
 
         # Ensure at least one of skill_years or skill_months is filled
-        if skill_years == 0:
+        if skill_years == 0 and skill_months == 0:
             raise forms.ValidationError("At least one of 'Skill Years' or 'Skill Months' must be filled.")
 
         # Return 0 for blank fields instead of None
         cleaned_data['skill_years'] = skill_years if skill_years is not None else 0
-        # cleaned_data['skill_months'] = skill_months if skill_months is not None else 0
+        cleaned_data['skill_months'] = skill_months if skill_months is not None else 0
 
         return cleaned_data
+
 
 EmployerSkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillForm, extra=1)

@@ -74,6 +74,7 @@ def add_edit_job_with_skills(request, job_id=None):
         'formset': formset,
         'job': job,
         'job_id': job_id,
+        'max_slider_value': 10  # Pass the slider max value to the template
     })
 
 

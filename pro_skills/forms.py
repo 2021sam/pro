@@ -8,12 +8,6 @@ class SkillForm(forms.ModelForm):
     skill_years = forms.IntegerField(required=False)
     skill_months = forms.IntegerField(required=False)
 
-    # experience = forms.ModelMultipleChoiceField(
-    #     queryset=Experience.objects.all(),
-    #     widget=forms.CheckboxSelectMultiple,  # Use SelectMultiple if you prefer dropdown
-    #     required=False
-    # )
-
     class Meta:
         model = Skill
         fields = ['skill', 'skill_years', 'skill_months', 'experience']
