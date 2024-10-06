@@ -29,7 +29,6 @@
                 <tr>
                     <th>Skill</th>
                     <th>Years of Experience</th>
-                    <th>Months of Experience</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,12 +46,6 @@
                         {{ form.skill_years }}
                         {% if form.skill_years.errors %}
                             <div class="error-message">{{ form.skill_years.errors }}</div>
-                        {% endif %}
-                    </td>
-                    <td class="form-group">
-                        {{ form.skill_months }}
-                        {% if form.skill_months.errors %}
-                            <div class="error-message">{{ form.skill_months.errors }}</div>
                         {% endif %}
                     </td>
                 </tr>
