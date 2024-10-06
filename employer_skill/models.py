@@ -13,8 +13,7 @@ class EmployerSkill(models.Model):
     job = models.ForeignKey(EmployerJob, on_delete=models.CASCADE)
     skill = models.CharField(max_length=100)
     skill_years = models.PositiveIntegerField(default=0)  # Years of experience
-    skill_months = models.PositiveIntegerField(default=0)  # Months of experience
 
 
 def __str__(self):
-    return f"{self.skill} ({self.skill_years} years, {self.skill_months} months), {self.job}"
+    return f"{self.skill} ({self.skill_years} years, {self.job}"

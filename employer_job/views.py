@@ -25,9 +25,6 @@ def view(request):
     return render(request,'employer_job/view.html', context)
 
 
-
-
-
 # /Users/2021sam/apps/zyxe/pro/employer_job/views.py
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import EmployerJob
@@ -79,48 +76,6 @@ def add_edit_job_with_skills(request, job_id=None):
         'job_id': job_id,
     })
 
-
-
-
-
-
-
-def add(request):
-    # Create or select a job first before adding skills
-    if request.method == 'POST':
-        form = EmployerJobForm(request.POST)
-        if form.is_valid():
-            job = form.save(commit=False)
-            job.user = request.user
-            job.save()
-            return redirect('employer_skill:skill_add', job_id=job.id)
-    else:
-        form = EmployerJobForm()
-
-    return render(request, 'employer_job/add.html', {'form': form})
-
-
-
-
-
-@login_required    
-def edit(request, id):
-    queryset = EmployerJob.objects.filter(user=request.user)
-    job = get_object_or_404(queryset, pk=id)
-
-    if request.method == 'GET':
-        context = {'form': EmployerJobForm(instance=job), 'id': id}
-        return render(request,'employer_job/add_edit.html', context)
-    
-    elif request.method == 'POST':
-        form = EmployerJobForm(request.POST, instance=job)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'The post has been updated successfully.')
-            return redirect('employer_job:job-view')
-        else:
-            messages.error(request, 'Please correct the following errors:')
-            return render(request,'employer_job/add_edit.html', {'form':form})
 
 
 @login_required
