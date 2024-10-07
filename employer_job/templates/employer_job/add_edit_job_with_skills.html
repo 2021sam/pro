@@ -169,25 +169,31 @@
         });
 
         // Handle slider input changes
-        sliders.forEach(slider => {
-            slider.oninput = function () {
-                const yearsDisplay = this.parentElement.querySelector('.slider-years');
-                const monthsDisplay = this.parentElement.querySelector('.slider-months');
-                const sliderValue = this.value;
+// Handle slider input changes
+sliders.forEach(slider => {
+    slider.oninput = function () {
+        const yearsDisplay = this.parentElement.querySelector('.slider-years');
+        const monthsDisplay = this.parentElement.querySelector('.slider-months');
+        const skillMonthsHidden = this.parentElement.parentElement.querySelector('.skill-months-hidden');
 
-                if (!incrementByYears) {
-                    // Incrementing by months
-                    const years = Math.floor(sliderValue / 12);
-                    const months = sliderValue % 12;
-                    yearsDisplay.textContent = years;
-                    monthsDisplay.textContent = months;
-                } else {
-                    // Incrementing by years
-                    yearsDisplay.textContent = sliderValue;
-                    monthsDisplay.textContent = 0; // Reset months when incrementing by years
-                }
-            };
-        });
-    </script>
+        const sliderValue = this.value;
+
+        if (!incrementByYears) {
+            // Incrementing by months
+            const years = Math.floor(sliderValue / 12);
+            const months = sliderValue % 12;
+            yearsDisplay.textContent = years;
+            monthsDisplay.textContent = months;
+            skillMonthsHidden.value = months; // Update the hidden field
+        } else {
+            // Incrementing by years
+            yearsDisplay.textContent = sliderValue;
+            monthsDisplay.textContent = 0; // Reset months when incrementing by years
+            skillMonthsHidden.value = 0; // Reset hidden months
+        }
+    };
+});
+
+</script>
 </body>
 </html>
