@@ -33,8 +33,12 @@
                 </td>
                 <td class="form-group">
                     <input type="range" class="slider" min="0" max="{{ max_slider_value }}" value="0" name="years_required">
-                    <p>Years: <span class="slider-years">{{ form.skill_years.value|default:0 }}</span></p>
-                    <p class="slider-months-container">Months: <span class="slider-months">{{ form.skill_months.value|default:0 }}</span></p>
+                    
+                    <!-- Years and Months displayed on the same line -->
+                    <p>
+                        Years: <span class="slider-years">{{ form.skill_years.value|default:0 }}</span>, 
+                        <span class="slider-months-container">Months: <span class="slider-months">{{ form.skill_months.value|default:0 }}</span></span>
+                    </p>
                 </td>
             </tr>
             {% endfor %}
@@ -44,8 +48,8 @@
     <button type="submit">Save</button>
 </form>
 
+<!-- JavaScript Section -->
 <script>
-    // Handle slider input and update years and months
     const sliders = document.querySelectorAll('.slider');
     const toggleMonths = document.getElementById('toggle-months');
     let showMonths = toggleMonths.checked; // Initially, months are shown
@@ -53,11 +57,10 @@
     toggleMonths.addEventListener('change', function () {
         showMonths = this.checked;
 
-        // Adjust max slider value based on whether months are shown
         sliders.forEach(slider => {
             if (showMonths) {
                 slider.max = 120; // 10 years * 12 months
-                document.querySelectorAll('.slider-months-container').forEach(container => container.style.display = 'block');
+                document.querySelectorAll('.slider-months-container').forEach(container => container.style.display = 'inline');
             } else {
                 slider.max = 10; // 10 years max when months are hidden
                 document.querySelectorAll('.slider-months-container').forEach(container => container.style.display = 'none');
@@ -72,13 +75,11 @@
             const sliderValue = this.value;
 
             if (showMonths) {
-                // Calculate and display both years and months
                 const years = Math.floor(sliderValue / 12);
                 const months = sliderValue % 12;
                 yearsDisplay.textContent = years;
                 monthsDisplay.textContent = months;
             } else {
-                // Only display years
                 yearsDisplay.textContent = sliderValue;
             }
         };
