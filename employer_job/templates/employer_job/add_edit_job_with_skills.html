@@ -1,115 +1,86 @@
-<!-- /Users/2021sam/apps/zyxe/pro/employer_job/templates/employer_job/add_edit_job_with_skills.html -->
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add/Edit Job with Skills</title>
-    <link rel="stylesheet" href="{% static 'css/global.css' %}">
-    <style>
-        .slider {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 15px;
-            background: #ddd;
-            outline: none;
-            opacity: 0.7;
-            transition: opacity .2s;
-        }
-        .hidden {
-            display: none; /* Hide the months field when toggled off */
-        }
-    </style>
-</head>
-<body>
-    <h1>{% if job_id %}Edit Job{% else %}Add Job{% endif %}</h1>
-    <h2>12:24</h2>
+<!-- Add a toggle switch for showing/hiding months -->
+<label for="toggle-months">Show months</label>
+<input type="checkbox" id="toggle-months" name="toggle-months" checked>
 
-    <form method="POST" novalidate>
-        {% csrf_token %}
-        
-        <div class="selected-job">
-            <h3>Selected Job: {{ job.name }}</h3>
-            <input type="hidden" name="job_id" value="{{ job.id }}">
-        </div>
-        
-        {{ job_form.as_p }} <!-- Render the job form -->
+<form method="POST" novalidate>
+    {% csrf_token %}
+    
+    <div class="selected-job">
+        <h3>Selected Job: {{ job.name }}</h3>
+        <input type="hidden" name="job_id" value="{{ job.id }}">
+    </div>
+    
+    {{ job_form.as_p }} <!-- Render the job form -->
 
-        <h3>Skills</h3>
-        <table id="formset-container">
-            {{ formset.management_form }}
-            <thead>
-                <tr>
-                    <th>Skill</th>
-                    <th>Years of Experience</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for form in formset %}
-                <tr class="form-row">
-                    {{ form.id }}  <!-- Render the id field as a hidden input -->
-                    <td class="form-group">
-                        {{ form.skill }}
-                        {% if form.skill.errors %}
-                            <div class="error-message">{{ form.skill.errors }}</div>
-                        {% endif %}
-                    </td>
-                    <td class="form-group">
-                        <input type="range" class="slider" min="0" max="{{ max_slider_value }}" value="0" name="years_required">
-                        <p>Years: <span id="slider-value">{{ form.skill_years.value|default:0 }}</span></p>
-                        <p class="hidden">Months: <span id="slider-month-value">{{ form.skill_months.value|default:0 }}</span></p>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <h3>Skills</h3>
+    <table id="formset-container">
+        {{ formset.management_form }}
+        <thead>
+            <tr>
+                <th>Skill</th>
+                <th>Years of Experience</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for form in formset %}
+            <tr class="form-row">
+                {{ form.id }}  <!-- Render the id field as a hidden input -->
+                <td class="form-group">
+                    {{ form.skill }}
+                    {% if form.skill.errors %}
+                        <div class="error-message">{{ form.skill.errors }}</div>
+                    {% endif %}
+                </td>
+                <td class="form-group">
+                    <input type="range" class="slider" min="0" max="{{ max_slider_value }}" value="0" name="years_required">
+                    <p>Years: <span class="slider-years">{{ form.skill_years.value|default:0 }}</span></p>
+                    <p class="slider-months-container">Months: <span class="slider-months">{{ form.skill_months.value|default:0 }}</span></p>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-        <!-- **Toggle button to show months or just years** -->
-        <div>
-            <label>
-                <input type="checkbox" id="toggle-months" checked>
-                Show Months
-            </label>
-        </div>
+    <button type="submit">Save</button>
+</form>
 
-        <button type="submit">Save</button>
-    </form>
-    <script>
-        const sliders = document.querySelectorAll('.slider');
+<script>
+    // Handle slider input and update years and months
+    const sliders = document.querySelectorAll('.slider');
+    const toggleMonths = document.getElementById('toggle-months');
+    let showMonths = toggleMonths.checked; // Initially, months are shown
+
+    toggleMonths.addEventListener('change', function () {
+        showMonths = this.checked;
+
+        // Adjust max slider value based on whether months are shown
         sliders.forEach(slider => {
-            slider.oninput = function() {
-                const value = parseInt(this.value, 10);
-                const yearsDisplay = this.parentElement.querySelector('#slider-value');
-                const monthsDisplay = this.parentElement.querySelector('#slider-month-value');
-
-                // **Check if months are enabled**
-                const monthsEnabled = document.getElementById('toggle-months').checked;
-
-                if (monthsEnabled) {
-                    // **Increment by months (12 months = 1 year)**
-                    const years = Math.floor(value / 12);
-                    const months = value % 12;
-
-                    yearsDisplay.textContent = years;
-                    monthsDisplay.textContent = months;
-                } else {
-                    // **Increment by years only**
-                    yearsDisplay.textContent = value;
-                    monthsDisplay.textContent = 0; // Reset months when not shown
-                }
-            };
+            if (showMonths) {
+                slider.max = 120; // 10 years * 12 months
+                document.querySelectorAll('.slider-months-container').forEach(container => container.style.display = 'block');
+            } else {
+                slider.max = 10; // 10 years max when months are hidden
+                document.querySelectorAll('.slider-months-container').forEach(container => container.style.display = 'none');
+            }
         });
+    });
 
-        // **Event listener for the toggle button to hide/show months**
-        document.getElementById('toggle-months').addEventListener('change', function() {
-            const monthsElements = document.querySelectorAll('#slider-month-value');
-            monthsElements.forEach(month => {
-                month.parentElement.classList.toggle('hidden', !this.checked); // Toggle visibility
-            });
-        });
-    </script>
-    <!-- Include the JavaScript file -->
-    <script src="{% static 'js/formset.js' %}"></script>
-</body>
-</html>
+    sliders.forEach(slider => {
+        slider.oninput = function () {
+            const yearsDisplay = this.parentElement.querySelector('.slider-years');
+            const monthsDisplay = this.parentElement.querySelector('.slider-months');
+            const sliderValue = this.value;
+
+            if (showMonths) {
+                // Calculate and display both years and months
+                const years = Math.floor(sliderValue / 12);
+                const months = sliderValue % 12;
+                yearsDisplay.textContent = years;
+                monthsDisplay.textContent = months;
+            } else {
+                // Only display years
+                yearsDisplay.textContent = sliderValue;
+            }
+        };
+    });
+</script>
