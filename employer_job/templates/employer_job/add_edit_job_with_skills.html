@@ -7,7 +7,6 @@
     <title>Add/Edit Job with Skills</title>
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
     <style>
-        /* Customize the toggle switch appearance */
         .toggle {
             position: relative;
             display: inline-block;
@@ -21,7 +20,7 @@
             height: 0;
         }
 
-        .slider {
+        .slider-toggle {
             position: absolute;
             cursor: pointer;
             top: 0;
@@ -33,7 +32,7 @@
             border-radius: 34px;
         }
 
-        .slider:before {
+        .slider-toggle:before {
             position: absolute;
             content: "";
             height: 26px;
@@ -45,15 +44,14 @@
             border-radius: 50%;
         }
 
-        input:checked + .slider {
+        input:checked + .slider-toggle {
             background-color: #2196F3;
         }
 
-        input:checked + .slider:before {
+        input:checked + .slider-toggle:before {
             transform: translateX(26px);
         }
 
-        /* Toggle label styling */
         #toggle-label {
             margin-left: 10px;
             font-size: 16px;
@@ -85,7 +83,7 @@
     <!-- Toggle Button for Increment by Years/Months -->
     <label class="toggle">
         <input type="checkbox" id="toggle-increment">
-        <span class="slider"></span>
+        <span class="slider-toggle"></span>
         <span id="toggle-label">Increment by Years</span>
     </label>
 
@@ -110,7 +108,7 @@
             <tbody>
                 {% for form in formset %}
                 <tr class="form-row">
-                    {{ form.id }} <!-- Render the id field as a hidden input -->
+                    {{ form.id }}
                     <td class="form-group">
                         {{ form.skill }}
                         {% if form.skill.errors %}
@@ -138,11 +136,11 @@
         const sliders = document.querySelectorAll('.slider');
         const toggleIncrement = document.getElementById('toggle-increment');
         const toggleLabel = document.getElementById('toggle-label');
-        let incrementByYears = true; // Default increment mode
+        let incrementByYears = true;
 
         // Handle the toggle between years and months
         toggleIncrement.addEventListener('change', function () {
-            incrementByYears = !incrementByYears; // Toggle between true and false
+            incrementByYears = !incrementByYears;
 
             sliders.forEach(slider => {
                 const yearsDisplay = slider.parentElement.querySelector('.slider-years');
@@ -150,7 +148,7 @@
                 const sliderValue = parseInt(slider.value);
 
                 if (incrementByYears) {
-                    // Convert months back to years when switching to increment by years
+                    // Convert months to years when switching to increment by years
                     slider.max = 10; // Max 10 years
                     slider.value = Math.floor(sliderValue / 12); // Convert months to years
                     yearsDisplay.textContent = slider.value;
@@ -177,16 +175,4 @@
 
                 if (!incrementByYears) {
                     // Incrementing by months
-                    const years = Math.floor(sliderValue / 12);
-                    const months = sliderValue % 12;
-                    yearsDisplay.textContent = years;
-                    monthsDisplay.textContent = months;
-                } else {
-                    // Incrementing by years
-                    yearsDisplay.textContent = sliderValue;
-                }
-            };
-        });
-    </script>
-</body>
-</html>
+                  
