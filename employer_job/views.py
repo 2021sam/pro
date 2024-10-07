@@ -26,13 +26,21 @@ def view(request):
 
 
 # /Users/2021sam/apps/zyxe/pro/employer_job/views.py
-from django.shortcuts import render, get_object_or_404, redirect
+# from django.shortcuts import render, get_object_or_404, redirect
+# from .models import EmployerJob
+# from employer_skill.models import EmployerSkill  # Assuming EmployerSkill is the correct model name
+# from .forms import EmployerJobForm
+# from employer_skill.forms import EmployerSkillFormSet  # Make sure this is imported
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .models import EmployerJob
-from employer_skill.models import EmployerSkill  # Assuming EmployerSkill is the correct model name
 from .forms import EmployerJobForm
-from employer_skill.forms import EmployerSkillFormSet  # Make sure this is imported
-
-
+from employer_skill.forms import EmployerSkillFormSet
+from employer_skill.models import EmployerSkill
 
 @login_required
 def add_edit_job_with_skills(request, job_id=None):
@@ -47,10 +55,11 @@ def add_edit_job_with_skills(request, job_id=None):
         formset = EmployerSkillFormSet(queryset=EmployerSkill.objects.none())
 
     if request.method == 'POST':
-        # Pass the request.POST to the formset to include the hidden inputs
         job_form = EmployerJobForm(request.POST, instance=job)
-        formset = EmployerSkillFormSet(request.POST)  # This will include hidden inputs
-        print(f'formset: {formset}')
+        formset = EmployerSkillFormSet(request.POST)
+
+        # print(f'formset: {formset}')
+
         # Validate both job form and formset
         if job_form.is_valid() and formset.is_valid():
             # Save the job
@@ -63,14 +72,9 @@ def add_edit_job_with_skills(request, job_id=None):
             for skill in skills:
                 skill.job = job
                 skill.user = request.user  # Set the current logged-in user for each skill
-                
-                # Capture skill_months value
-                skill_months = request.POST.get(f'skill_months_{skill.id}')  # Adjust if necessary to match how your skill ID is formed
-                skill.skill_months = skill_months  # Assign the captured skill_months
                 skill.save()
 
             return redirect('employer_job:job-view')  # Adjust to your desired redirect URL
-
         else:
             print("Job form errors:", job_form.errors)
             print("Formset errors:", formset.errors)
@@ -84,10 +88,9 @@ def add_edit_job_with_skills(request, job_id=None):
         'formset': formset,
         'job': job,
         'job_id': job_id,
-        'max_slider_value': max_slider_value_months,     # Pass the slider max value to the template
+        'max_slider_value': max_slider_value_months,  # Pass the slider max value to the template
         'show_months': show_months  # Pass the toggle variable for months
     })
-
 
 
 

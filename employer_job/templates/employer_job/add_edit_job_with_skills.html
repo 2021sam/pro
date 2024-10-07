@@ -117,7 +117,8 @@
                     </td>
                     <td class="form-group">
                         <div class="slider-container">
-                            <input type="range" class="slider" min="0" max="10" value="0" name="years_required">
+                            <input type="range" class="slider" min="0" max="120" value="0" name="years_required">
+                            <input type="hidden" name="skill_months_{{ forloop.counter0 }}" class="skill-months" value="0">
                             <div class="slider-value">
                                 <span>Years: <span class="slider-years">0</span></span>
                                 <span class="slider-months-container">Months: <span class="slider-months">0</span></span>
@@ -143,7 +144,7 @@
         toggleIncrement.addEventListener('change', function () {
             incrementByYears = !incrementByYears;
 
-            sliders.forEach(slider => {
+            sliders.forEach((slider, index) => {
                 const yearsDisplay = slider.parentElement.querySelector('.slider-years');
                 const monthsDisplay = slider.parentElement.querySelector('.slider-months');
                 const sliderValue = parseInt(slider.value);
@@ -154,6 +155,11 @@
                     slider.value = Math.floor(sliderValue / 12); // Convert months to years
                     yearsDisplay.textContent = slider.value;
                     monthsDisplay.textContent = 0;
+
+                    // Update the hidden input for months
+                    const hiddenInput = document.querySelector(`input[name="skill_months_${index}"]`);
+                    hiddenInput.value = 0;
+
                     document.querySelectorAll('.slider-months-container').forEach(container => container.style.display = 'none');
                     toggleLabel.textContent = "Increment by Years";
                 } else {
@@ -162,6 +168,11 @@
                     slider.value = sliderValue * 12; // Convert years to months
                     yearsDisplay.textContent = Math.floor(slider.value / 12);
                     monthsDisplay.textContent = slider.value % 12;
+
+                    // Update the hidden input for months
+                    const hiddenInput = document.querySelector(`input[name="skill_months_${index}"]`);
+                    hiddenInput.value = monthsDisplay.textContent;
+
                     document.querySelectorAll('.slider-months-container').forEach(container => container.style.display = 'inline');
                     toggleLabel.textContent = "Increment by Months";
                 }
@@ -169,31 +180,33 @@
         });
 
         // Handle slider input changes
-// Handle slider input changes
-sliders.forEach(slider => {
-    slider.oninput = function () {
-        const yearsDisplay = this.parentElement.querySelector('.slider-years');
-        const monthsDisplay = this.parentElement.querySelector('.slider-months');
-        const skillMonthsHidden = this.parentElement.parentElement.querySelector('.skill-months-hidden');
+        sliders.forEach((slider, index) => {
+            slider.oninput = function () {
+                const yearsDisplay = this.parentElement.querySelector('.slider-years');
+                const monthsDisplay = this.parentElement.querySelector('.slider-months');
+                const sliderValue = this.value;
 
-        const sliderValue = this.value;
+                if (!incrementByYears) {
+                    // Incrementing by months
+                    const years = Math.floor(sliderValue / 12);
+                    const months = sliderValue % 12;
+                    yearsDisplay.textContent = years;
+                    monthsDisplay.textContent = months;
 
-        if (!incrementByYears) {
-            // Incrementing by months
-            const years = Math.floor(sliderValue / 12);
-            const months = sliderValue % 12;
-            yearsDisplay.textContent = years;
-            monthsDisplay.textContent = months;
-            skillMonthsHidden.value = months; // Update the hidden field
-        } else {
-            // Incrementing by years
-            yearsDisplay.textContent = sliderValue;
-            monthsDisplay.textContent = 0; // Reset months when incrementing by years
-            skillMonthsHidden.value = 0; // Reset hidden months
-        }
-    };
-});
+                    // Update the hidden input for months
+                    const hiddenInput = document.querySelector(`input[name="skill_months_${index}"]`);
+                    hiddenInput.value = months; // Update hidden input for months
+                } else {
+                    // Incrementing by years
+                    yearsDisplay.textContent = sliderValue;
+                    monthsDisplay.textContent = 0; // Reset months when incrementing by years
 
-</script>
+                    // Update the hidden input for months
+                    const hiddenInput = document.querySelector(`input[name="skill_months_${index}"]`);
+                    hiddenInput.value = 0; // Set months to 0 when using years
+                }
+            };
+        });
+    </script>
 </body>
 </html>
