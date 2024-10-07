@@ -116,9 +116,12 @@
                     </td>
                     <td class="form-group">
                         <div class="slider-container">
-                            <!-- Pre-fill the value for skill years and months -->
-                            <input type="number" name="form-{{ forloop.counter0 }}-skill_years" id="id_form-{{ forloop.counter0 }}-skill_years" value="{{ form.skill_years.value|default_if_none:0 }}">
-                            <input type="number" name="form-{{ forloop.counter0 }}-skill_months" id="id_form-{{ forloop.counter0 }}-skill_months" value="{{ form.skill_months.value|default_if_none:0 }}">
+                            <!-- Slider to control the years and months -->
+                            <input type="range" min="0" max="120" value="{{ form.skill_years.value|default_if_none:0 * 12 + form.skill_months.value|default_if_none:0 }}" class="slider" id="slider-{{ forloop.counter0 }}">
+                            
+                            <!-- Pre-fill the hidden inputs for skill years and months -->
+                            <input type="number" name="form-{{ forloop.counter0 }}-skill_years" id="id_form-{{ forloop.counter0 }}-skill_years" value="{{ form.skill_years.value|default_if_none:0 }}" hidden>
+                            <input type="number" name="form-{{ forloop.counter0 }}-skill_months" id="id_form-{{ forloop.counter0 }}-skill_months" value="{{ form.skill_months.value|default_if_none:0 }}" hidden>
 
                             <div class="slider-value">
                                 <span>Years: <span class="slider-years">{{ form.skill_years.value|default_if_none:0 }}</span></span>
@@ -143,10 +146,10 @@
         toggleIncrement.addEventListener('change', function () {
             incrementByYears = !incrementByYears;
 
-            sliders.forEach((slider, index) => {
+            sliders.forEach((slider) => {
                 const yearsDisplay = slider.parentElement.querySelector('.slider-years');
                 const monthsDisplay = slider.parentElement.querySelector('.slider-months');
-                const sliderValue = parseInt(slider.value);
+                let sliderValue = parseInt(slider.value);
 
                 if (incrementByYears) {
                     slider.max = 10;
@@ -170,16 +173,24 @@
             slider.oninput = function () {
                 const yearsDisplay = this.parentElement.querySelector('.slider-years');
                 const monthsDisplay = this.parentElement.querySelector('.slider-months');
-                const sliderValue = this.value;
+                let sliderValue = parseInt(this.value);
 
                 if (!incrementByYears) {
                     const years = Math.floor(sliderValue / 12);
                     const months = sliderValue % 12;
                     yearsDisplay.textContent = years;
                     monthsDisplay.textContent = months;
+
+                    // Update hidden inputs
+                    document.getElementById(`id_form-${index}-skill_years`).value = years;
+                    document.getElementById(`id_form-${index}-skill_months`).value = months;
                 } else {
                     yearsDisplay.textContent = sliderValue;
                     monthsDisplay.textContent = 0;
+
+                    // Update hidden inputs
+                    document.getElementById(`id_form-${index}-skill_years`).value = sliderValue;
+                    document.getElementById(`id_form-${index}-skill_months`).value = 0;
                 }
             };
         });
