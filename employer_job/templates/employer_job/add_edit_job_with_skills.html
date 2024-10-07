@@ -73,11 +73,7 @@
         }
 
         .slider-months-container {
-            display: none;
-        }
-
-        .error-message {
-            color: red;
+            display: inline; /* Show months input container */
         }
     </style>
 </head>
@@ -107,6 +103,7 @@
                 <tr>
                     <th>Skill</th>
                     <th>Years of Experience</th>
+                    <th>Months of Experience</th> <!-- Added Months header -->
                 </tr>
             </thead>
             <tbody>
@@ -121,13 +118,15 @@
                     </td>
                     <td class="form-group">
                         <div class="slider-container">
-                            <input type="range" class="slider" min="0" max="120" value="0" name="years_required_{{ forloop.counter0 }}">
-                            <input type="hidden" name="skill_months_{{ forloop.counter0 }}" class="skill-months" value="0">
+                            <input type="range" class="slider" min="0" max="120" value="0" name="years_required">
                             <div class="slider-value">
                                 <span>Years: <span class="slider-years">0</span></span>
-                                <span class="slider-months-container">Months: <span class="slider-months">0</span></span>
+                                <span>Months: <span class="slider-months">0</span></span> <!-- Always show Months -->
                             </div>
                         </div>
+                    </td>
+                    <td class="form-group">
+                        <input type="number" name="skill_months_{{ forloop.counter0 }}" class="skill-months" value="0" min="0">
                     </td>
                 </tr>
                 {% endfor %}
@@ -143,19 +142,19 @@
         const toggleIncrement = document.getElementById('toggle-increment');
         const toggleLabel = document.getElementById('toggle-label');
         let incrementByYears = true;
-
+    
         // Handle the toggle between years and months
         toggleIncrement.addEventListener('change', function () {
             incrementByYears = !incrementByYears;
-
+    
             sliders.forEach((slider, index) => {
                 const yearsDisplay = slider.parentElement.querySelector('.slider-years');
                 const monthsDisplay = slider.parentElement.querySelector('.slider-months');
                 const sliderValue = parseInt(slider.value);
-
+    
                 if (incrementByYears) {
                     // Convert months to years when switching to increment by years
-                    slider.max = 120; // Max 120 months (10 years)
+                    slider.max = 10; // Max 10 years
                     slider.value = Math.floor(sliderValue / 12); // Convert months to years
                     yearsDisplay.textContent = slider.value;
                     monthsDisplay.textContent = 0;
@@ -164,7 +163,6 @@
                     const hiddenInput = document.querySelector(`input[name="skill_months_${index}"]`);
                     hiddenInput.value = 0;
 
-                    document.querySelectorAll('.slider-months-container').forEach(container => container.style.display = 'none');
                     toggleLabel.textContent = "Increment by Years";
                 } else {
                     // Convert years to months when switching to increment by months
@@ -177,19 +175,18 @@
                     const hiddenInput = document.querySelector(`input[name="skill_months_${index}"]`);
                     hiddenInput.value = monthsDisplay.textContent;
 
-                    document.querySelectorAll('.slider-months-container').forEach(container => container.style.display = 'inline');
                     toggleLabel.textContent = "Increment by Months";
                 }
             });
         });
-
+    
         // Handle slider input changes
         sliders.forEach((slider, index) => {
             slider.oninput = function () {
                 const yearsDisplay = this.parentElement.querySelector('.slider-years');
                 const monthsDisplay = this.parentElement.querySelector('.slider-months');
                 const sliderValue = this.value;
-
+    
                 if (!incrementByYears) {
                     // Incrementing by months
                     const years = Math.floor(sliderValue / 12);
