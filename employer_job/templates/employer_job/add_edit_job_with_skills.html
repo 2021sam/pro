@@ -137,57 +137,61 @@
         <button type="submit">Save</button>
     </form>
 
+
     <script>
         const sliders = document.querySelectorAll('.slider');
         const toggleIncrement = document.getElementById('toggle-increment');
         const toggleLabel = document.getElementById('toggle-label');
-        let incrementByYears = true;
-
+        let incrementByYears = true;  // Default is incrementing by years
+    
+        // Toggle between incrementing by years or months
         toggleIncrement.addEventListener('change', function () {
             incrementByYears = !incrementByYears;
-
+    
             sliders.forEach((slider) => {
                 const yearsDisplay = slider.parentElement.querySelector('.slider-years');
                 const monthsDisplay = slider.parentElement.querySelector('.slider-months');
                 let sliderValue = parseInt(slider.value);
-
+    
                 if (incrementByYears) {
+                    // If incrementing by years, set max slider value to 10 (up to 10 years)
                     slider.max = 10;
-                    slider.value = Math.floor(sliderValue / 12);
+                    slider.value = Math.floor(sliderValue / 12);  // Convert months to years
                     yearsDisplay.textContent = slider.value;
                     monthsDisplay.textContent = 0;
                     document.querySelectorAll('.slider-months-container').forEach(container => container.style.display = 'none');
                     toggleLabel.textContent = "Increment by Years";
                 } else {
+                    // If incrementing by months, set max slider value to 120 (up to 120 months)
                     slider.max = 120;
-                    slider.value = sliderValue * 12;
-                    yearsDisplay.textContent = Math.floor(slider.value / 12);
+                    yearsDisplay.textContent = Math.floor(slider.value / 12);  // Convert slider value to years and months
                     monthsDisplay.textContent = slider.value % 12;
                     document.querySelectorAll('.slider-months-container').forEach(container => container.style.display = 'inline');
                     toggleLabel.textContent = "Increment by Months";
                 }
             });
         });
-
+    
+        // Update the year/month fields based on slider movement
         sliders.forEach((slider, index) => {
             slider.oninput = function () {
                 const yearsDisplay = this.parentElement.querySelector('.slider-years');
                 const monthsDisplay = this.parentElement.querySelector('.slider-months');
                 let sliderValue = parseInt(this.value);
-
+    
                 if (!incrementByYears) {
                     const years = Math.floor(sliderValue / 12);
                     const months = sliderValue % 12;
                     yearsDisplay.textContent = years;
                     monthsDisplay.textContent = months;
-
-                    // Update hidden inputs
+    
+                    // Update hidden inputs for form submission
                     document.getElementById(`id_form-${index}-skill_years`).value = years;
                     document.getElementById(`id_form-${index}-skill_months`).value = months;
                 } else {
                     yearsDisplay.textContent = sliderValue;
                     monthsDisplay.textContent = 0;
-
+    
                     // Update hidden inputs
                     document.getElementById(`id_form-${index}-skill_years`).value = sliderValue;
                     document.getElementById(`id_form-${index}-skill_months`).value = 0;
@@ -195,5 +199,8 @@
             };
         });
     </script>
+    
+
+
 </body>
 </html>
