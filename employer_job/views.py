@@ -46,7 +46,7 @@ def add_edit_job_with_skills(request, job_id=None):
     if request.method == 'POST':
         job_form = EmployerJobForm(request.POST, instance=job)
         formset = EmployerSkillFormSet(request.POST)
-
+        print(f'formset: {formset}')
         # Validate both job form and formset
         if job_form.is_valid() and formset.is_valid():
             # Save the job
