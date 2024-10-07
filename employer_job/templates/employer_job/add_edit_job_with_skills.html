@@ -133,6 +133,7 @@
     </form>
 
     <script>
+        // Get references to all sliders and the toggle switch
         const sliders = document.querySelectorAll('.slider');
         const toggleIncrement = document.getElementById('toggle-increment');
         const toggleLabel = document.getElementById('toggle-label');
@@ -152,6 +153,7 @@
                     slider.max = 10; // Max 10 years
                     slider.value = Math.floor(sliderValue / 12); // Convert months to years
                     yearsDisplay.textContent = slider.value;
+                    monthsDisplay.textContent = 0;
                     document.querySelectorAll('.slider-months-container').forEach(container => container.style.display = 'none');
                     toggleLabel.textContent = "Increment by Years";
                 } else {
@@ -175,4 +177,17 @@
 
                 if (!incrementByYears) {
                     // Incrementing by months
-                  
+                    const years = Math.floor(sliderValue / 12);
+                    const months = sliderValue % 12;
+                    yearsDisplay.textContent = years;
+                    monthsDisplay.textContent = months;
+                } else {
+                    // Incrementing by years
+                    yearsDisplay.textContent = sliderValue;
+                    monthsDisplay.textContent = 0; // Reset months when incrementing by years
+                }
+            };
+        });
+    </script>
+</body>
+</html>
