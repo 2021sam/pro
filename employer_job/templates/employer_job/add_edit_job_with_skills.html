@@ -75,6 +75,10 @@
         .slider-months-container {
             display: none;
         }
+
+        .error-message {
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -117,7 +121,7 @@
                     </td>
                     <td class="form-group">
                         <div class="slider-container">
-                            <input type="range" class="slider" min="0" max="120" value="0" name="years_required">
+                            <input type="range" class="slider" min="0" max="120" value="0" name="years_required_{{ forloop.counter0 }}">
                             <input type="hidden" name="skill_months_{{ forloop.counter0 }}" class="skill-months" value="0">
                             <div class="slider-value">
                                 <span>Years: <span class="slider-years">0</span></span>
@@ -151,7 +155,7 @@
 
                 if (incrementByYears) {
                     // Convert months to years when switching to increment by years
-                    slider.max = 10; // Max 10 years
+                    slider.max = 120; // Max 120 months (10 years)
                     slider.value = Math.floor(sliderValue / 12); // Convert months to years
                     yearsDisplay.textContent = slider.value;
                     monthsDisplay.textContent = 0;

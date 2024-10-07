@@ -1,13 +1,13 @@
 # /Users/2021sam/apps/zyxe/pro/employer_skill/forms.py
+
 from django import forms
 from django.forms import modelformset_factory
 from .models import EmployerSkill
 from employer_job.models import EmployerJob
 
-
 class EmployerSkillForm(forms.ModelForm):
     skill_years = forms.IntegerField(required=False)
-    # skill_months = forms.IntegerField(required=False)
+    skill_months = forms.IntegerField(required=False)  # Ensure this is included
 
     class Meta:
         model = EmployerSkill
@@ -28,5 +28,5 @@ class EmployerSkillForm(forms.ModelForm):
 
         return cleaned_data
 
-
+# Create a formset for EmployerSkill
 EmployerSkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillForm, extra=1)
