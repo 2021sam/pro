@@ -58,14 +58,14 @@
                     <td class="form-group">
                         <input type="range" class="slider" min="0" max="{{ max_slider_value }}" value="0" name="years_required">
                         <p>Years: <span id="slider-value">{{ form.skill_years.value|default:0 }}</span></p>
-                        <p>Months: <span id="slider-month-value">{{ form.skill_months.value|default:0 }}</span></p>
+                        <p class="hidden">Months: <span id="slider-month-value">{{ form.skill_months.value|default:0 }}</span></p>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
 
-        <!-- **Added toggle button to disable months** -->
+        <!-- **Toggle button to show months or just years** -->
         <div>
             <label>
                 <input type="checkbox" id="toggle-months" checked>
@@ -79,20 +79,33 @@
         const sliders = document.querySelectorAll('.slider');
         sliders.forEach(slider => {
             slider.oninput = function() {
-                const valueDisplay = this.parentElement.querySelector('#slider-value');
-                valueDisplay.textContent = this.value;
-
-                // **Added logic to update months based on the slider value**
+                const value = parseInt(this.value, 10);
+                const yearsDisplay = this.parentElement.querySelector('#slider-value');
                 const monthsDisplay = this.parentElement.querySelector('#slider-month-value');
-                monthsDisplay.textContent = this.value; // Adjust this logic as needed
+
+                // **Check if months are enabled**
+                const monthsEnabled = document.getElementById('toggle-months').checked;
+
+                if (monthsEnabled) {
+                    // **Increment by months (12 months = 1 year)**
+                    const years = Math.floor(value / 12);
+                    const months = value % 12;
+
+                    yearsDisplay.textContent = years;
+                    monthsDisplay.textContent = months;
+                } else {
+                    // **Increment by years only**
+                    yearsDisplay.textContent = value;
+                    monthsDisplay.textContent = 0; // Reset months when not shown
+                }
             };
         });
 
-        // **Added event listener for toggle button**
+        // **Event listener for the toggle button to hide/show months**
         document.getElementById('toggle-months').addEventListener('change', function() {
-            const months = document.querySelectorAll('#slider-month-value');
-            months.forEach(month => {
-                month.parentElement.classList.toggle('hidden', !this.checked); // Hide/show months based on toggle
+            const monthsElements = document.querySelectorAll('#slider-month-value');
+            monthsElements.forEach(month => {
+                month.parentElement.classList.toggle('hidden', !this.checked); // Toggle visibility
             });
         });
     </script>
