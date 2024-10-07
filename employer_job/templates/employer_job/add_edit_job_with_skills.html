@@ -17,20 +17,24 @@
             opacity: 0.7;
             transition: opacity .2s;
         }
+        .hidden {
+            display: none; /* Hide the months field when toggled off */
+        }
     </style>
 </head>
 <body>
     <h1>{% if job_id %}Edit Job{% else %}Add Job{% endif %}</h1>
+    <h2>12:24</h2>
 
     <form method="POST" novalidate>
         {% csrf_token %}
-
+        
         <div class="selected-job">
             <h3>Selected Job: {{ job.name }}</h3>
             <input type="hidden" name="job_id" value="{{ job.id }}">
         </div>
         
-        {{ job_form.as_p }}
+        {{ job_form.as_p }} <!-- Render the job form -->
 
         <h3>Skills</h3>
         <table id="formset-container">
@@ -38,47 +42,61 @@
             <thead>
                 <tr>
                     <th>Skill</th>
-                    <th>Experience (Years and Months)</th>
+                    <th>Years of Experience</th>
                 </tr>
             </thead>
             <tbody>
                 {% for form in formset %}
                 <tr class="form-row">
                     {{ form.id }}  <!-- Render the id field as a hidden input -->
-                    <td class="form-group">{{ form.skill }}</td>
                     <td class="form-group">
-                        <input type="range" class="slider" min="0" max="{{ max_slider_value }}" value="{{ form.skill_years.value|default:0 }}" name="experience_range">
-                        <p>Total Experience: <span class="slider-value">{{ form.skill_years.value|default:0 }}</span> Months</p>
-                        <p>Years: <span class="years-value">0</span>, Months: <span class="months-value">0</span></p>
+                        {{ form.skill }}
+                        {% if form.skill.errors %}
+                            <div class="error-message">{{ form.skill.errors }}</div>
+                        {% endif %}
+                    </td>
+                    <td class="form-group">
+                        <input type="range" class="slider" min="0" max="{{ max_slider_value }}" value="0" name="years_required">
+                        <p>Years: <span id="slider-value">{{ form.skill_years.value|default:0 }}</span></p>
+                        <p>Months: <span id="slider-month-value">{{ form.skill_months.value|default:0 }}</span></p>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
 
+        <!-- **Added toggle button to disable months** -->
+        <div>
+            <label>
+                <input type="checkbox" id="toggle-months" checked>
+                Show Months
+            </label>
+        </div>
+
         <button type="submit">Save</button>
     </form>
-    
     <script>
         const sliders = document.querySelectorAll('.slider');
         sliders.forEach(slider => {
             slider.oninput = function() {
-                const totalMonths = parseInt(this.value);
-                const years = Math.floor(totalMonths / 12);
-                const months = totalMonths % 12;
+                const valueDisplay = this.parentElement.querySelector('#slider-value');
+                valueDisplay.textContent = this.value;
 
-                const totalDisplay = this.parentElement.querySelector('.slider-value');
-                totalDisplay.textContent = totalMonths;
-
-                const yearsDisplay = this.parentElement.querySelector('.years-value');
-                yearsDisplay.textContent = years;
-
-                const monthsDisplay = this.parentElement.querySelector('.months-value');
-                monthsDisplay.textContent = months;
+                // **Added logic to update months based on the slider value**
+                const monthsDisplay = this.parentElement.querySelector('#slider-month-value');
+                monthsDisplay.textContent = this.value; // Adjust this logic as needed
             };
         });
-    </script>
 
+        // **Added event listener for toggle button**
+        document.getElementById('toggle-months').addEventListener('change', function() {
+            const months = document.querySelectorAll('#slider-month-value');
+            months.forEach(month => {
+                month.parentElement.classList.toggle('hidden', !this.checked); // Hide/show months based on toggle
+            });
+        });
+    </script>
+    <!-- Include the JavaScript file -->
     <script src="{% static 'js/formset.js' %}"></script>
 </body>
 </html>

@@ -70,7 +70,7 @@ def add_edit_job_with_skills(request, job_id=None):
             print("Formset errors:", formset.errors)
 
     # Variable to toggle months display (can be set based on business logic)
-    max_slider_value_months = 120
+    max_slider_value_months = 10
     show_months = True  # or False based on your logic
 
     return render(request, 'employer_job/add_edit_job_with_skills.html', {
