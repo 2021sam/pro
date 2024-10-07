@@ -116,10 +116,10 @@
                     </td>
                     <td class="form-group">
                         <div class="slider-container">
-                            <!-- Slider to control the years and months -->
-                            <input type="range" min="0" max="120" value="{{ form.skill_years.value|default_if_none:0 * 12 + form.skill_months.value|default_if_none:0 }}" class="slider" id="slider-{{ forloop.counter0 }}">
+                            <!-- Slider for controlling the years and months -->
+                            <input type="range" min="0" max="120" class="slider" id="slider-{{ forloop.counter0 }}">
                             
-                            <!-- Pre-fill the hidden inputs for skill years and months -->
+                            <!-- Hidden inputs for skill years and months -->
                             <input type="number" name="form-{{ forloop.counter0 }}-skill_years" id="id_form-{{ forloop.counter0 }}-skill_years" value="{{ form.skill_years.value|default_if_none:0 }}" hidden>
                             <input type="number" name="form-{{ forloop.counter0 }}-skill_months" id="id_form-{{ forloop.counter0 }}-skill_months" value="{{ form.skill_months.value|default_if_none:0 }}" hidden>
 
