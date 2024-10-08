@@ -1,4 +1,6 @@
 // /Users/2021sam/apps/zyxe/pro/static/js/formset.js
+// /Users/2021sam/apps/zyxe/pro/static/js/formset.js
+
 let debounceTimer;
 const maxForms = 10;  // Set a maximum number of rows
 
@@ -9,6 +11,7 @@ function debounce(callback, delay) {
     };
 }
 
+// Print the details of each form row to the console
 function printFormRows() {
     const formRows = document.querySelectorAll('.form-row');
     console.log(`Printing ${formRows.length} form rows:`);
@@ -19,19 +22,18 @@ function printFormRows() {
         const skill = skillInput.value;
         const skillYears = formRow.querySelector('[name$="-skill_years"]').value;
         const skillMonths = formRow.querySelector('[name$="-skill_months"]').value;
-        // const experience = formRow.querySelector('[name$="-experience"]').value;
         console.log(`Row ${index + 1} (ID: ${formId}, Name: ${formName}): Skill: ${skill}, Skill Years: ${skillYears}, Skill Months: ${skillMonths}`);
     });
 }
 
+// Validate a single form row
 function validateRow(formRow) {
     // Check if formRow is a single element and log it
     if (!(formRow instanceof HTMLElement) || !formRow.classList.contains('form-row')) {
         console.error('Invalid formRow passed to validateRow:', formRow);
-        return false;
+        return false; // Return false if the form row is invalid
     }
 
-    // Log the form row ID or a distinguishing feature
     console.log('Validating form row:', formRow.id || formRow);
 
     let isValid = true;
@@ -42,7 +44,7 @@ function validateRow(formRow) {
     // Validate skill input
     const skillInput = formRow.querySelector('[name$="-skill"]');
     if (skillInput.value.trim() === '') {
-        isValid = false;
+        isValid = false; // Mark the row as invalid if the skill input is empty
         const error = document.createElement('div');
         error.className = 'error-message';
         error.textContent = 'This field is required.';
@@ -53,7 +55,7 @@ function validateRow(formRow) {
     const skillYearsInput = formRow.querySelector('[name$="-skill_years"]');
     const skillMonthsInput = formRow.querySelector('[name$="-skill_months"]');
     if (skillYearsInput.value.trim() === '' && skillMonthsInput.value.trim() === '') {
-        isValid = false;
+        isValid = false; // Mark the row as invalid if both fields are empty
         const error = document.createElement('div');
         error.className = 'error-message';
         error.textContent = 'Either skill years or skill months must be filled.';
@@ -67,34 +69,20 @@ function validateRow(formRow) {
         formRow.classList.add('invalid-row');
     }
 
-    return isValid;
+    return isValid; // Return the validity status of the row
 }
 
+// Handle input events for form fields
 function handleInputEvent(event) {
     const formRow = event.target.closest('.form-row');
     const formRows = Array.from(document.querySelectorAll('.form-row'));
     const rowIndex = formRows.indexOf(formRow);
-    const isLastRow = rowIndex === formRows.length - 0; // Check if the current row is the last one
+    const isLastRow = rowIndex === formRows.length - 1; // Check if the current row is the last one
     const isOnlyRow = formRows.length === 1; // Check if it's the only row
 
     console.log('Input event on row:', formRow, 'Is last row:', isLastRow, 'Row index:', rowIndex, 'Total rows:', formRows.length);
-    console.log(`name: ${event.target.name}`);
 
-
-
-    if (event.target.name.includes('skill'))
-    {
-        console.log('name.includes - skill');
-    }
-
-
-
-    if (event.target.name.includes('skill_years'))
-    {
-        console.log('name.includes - skill_years');
-    }
-
-    // Validate the row if it's not the last, or if it's the only row
+    // Validate the row if it's not the last row or if it's the only row
     if (!isLastRow || isOnlyRow) {
         console.log('Validating row:', formRow);
         validateRow(formRow);
@@ -104,21 +92,21 @@ function handleInputEvent(event) {
 
     // Handle adding new forms
     if (event.target.name.includes('skill')) {
-        // console.log('Skill field changed, adding new form.');
-        // addNewForm();
-
+        // Only add a new form if the skill input is not empty
+        const lastSkillInput = formRow.querySelector('[name$="-skill"]');
+        if (lastSkillInput.value.trim() !== '') {
+            console.log('Skill field changed, adding new form.');
+            addNewForm();
+        }
     }
 
-
-
-
+    // Check for skill years or months input
     if (event.target.name.includes('skill_years') || event.target.name.includes('skill_months')) {
-        // console.log(event.target.name);
-        console.log('101');
         const skillInput = formRow.querySelector('[name$="-skill"]');
         const skillYears = formRow.querySelector('[name$="-skill_years"]').value.trim();
         const skillMonths = formRow.querySelector('[name$="-skill_months"]').value.trim();
 
+        // Add a new form if both skill input and at least one of years/months is filled
         if (skillInput.value.trim() !== '' && (skillYears !== '' || skillMonths !== '')) {
             console.log('Year or month data entered, adding new form.');
             addNewForm();
@@ -126,6 +114,7 @@ function handleInputEvent(event) {
     }
 }
 
+// Function to add a new form row
 function addNewForm() {
     const formRows = document.querySelectorAll('.form-row');
     const lastForm = formRows[formRows.length - 1];
@@ -135,6 +124,7 @@ function addNewForm() {
         return;  // Stop adding new rows if the maximum is reached
     }
 
+    // Clone the last form and reset its values
     if (lastSkillInput.value.trim() !== '') {
         const newRow = lastForm.cloneNode(true);
         newRow.querySelectorAll('input').forEach(input => input.value = '');
@@ -150,57 +140,62 @@ function addNewForm() {
         });
 
         document.getElementById('formset-container').appendChild(newRow);
-        updateManagementFormCount();
+        updateManagementFormCount(); // Update the total form count
 
         // Attach event listeners to inputs in the new row only
         newRow.querySelectorAll('[name$="-skill"], [name$="-skill_years"], [name$="-skill_months"]').forEach(input => {
             input.addEventListener('input', debounce(handleInputEvent, 500));
         });
 
-        printFormRows();
+        printFormRows(); // Print the current form rows for debugging
     }
 }
 
+// Update the total forms count in the management form
 function updateManagementFormCount() {
     const formsetContainer = document.getElementById('formset-container');
     const totalForms = formsetContainer.querySelectorAll('.form-row').length;
     const managementForm = formsetContainer.querySelector('input[name$="-TOTAL_FORMS"]');
     if (managementForm) {
-        managementForm.value = totalForms;
+        managementForm.value = totalForms; // Set the total forms count
     }
 }
 
+// Remove any empty forms before submission
 function removeEmptyForms() {
     const formRows = document.querySelectorAll('.form-row');
     formRows.forEach((formRow, index) => {
         const skillInput = formRow.querySelector('[name$="-skill"]');
         if (!skillInput.value.trim()) {
             console.log(`Removing empty form row: ${index}`);
-            formRow.remove();
+            formRow.remove(); // Remove the empty row
         }
     });
 }
 
+// Function to check if a form row is empty
 function isFormEmpty(formRow) {
     const skillInput = formRow.querySelector('[name$="-skill"]');
-    return skillInput && skillInput.value.trim() === '';
+    return skillInput && skillInput.value.trim() === ''; // Return true if the form row is empty
 }
 
+// Attach submit event listener to the form
 document.querySelector('form').addEventListener('submit', function(event) {
     console.log('Form submission triggered.');
-    removeEmptyForms();
-    updateManagementFormCount();
+    removeEmptyForms(); // Remove any empty form rows
+    updateManagementFormCount(); // Update the total forms count
     printFormRows();  // Print the form rows before submission
 
     // Run validation on all rows before submission
     const formRows = document.querySelectorAll('.form-row');
-    let allValid = true;
+    let allValid = true; // Flag to check if all form rows are valid
     formRows.forEach(formRow => {
         if (!validateRow(formRow)) {
-            allValid = false;
+            allValid = false; // Set flag to false if any row is invalid
         }
     });
 
+    // Prevent submission if any row is invalid
     if (!allValid) {
         console.log('Form contains validation errors. Submission prevented.');
         event.preventDefault(); // Prevent the form from submitting if validation fails
