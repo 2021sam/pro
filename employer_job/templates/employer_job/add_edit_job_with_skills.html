@@ -79,7 +79,7 @@
 </head>
 <body>
     <h1>{% if job_id %}Edit Job{% else %}Add Job{% endif %}</h1>
-    <h2>Version 1</h2>
+    <h2>Version 2</h2>
 
     <label class="toggle">
         <input type="checkbox" id="toggle-increment">
@@ -119,7 +119,7 @@
                     </td>
                     <td class="form-group">
                         <div class="slider-container">
-                            <input type="range" class="slider" min="0" max="120" value="{{ form.skill_years.value|default:0 }}" name="{{ form.prefix }}-skill_years">
+                            <input type="range" class="slider" min="0" max="10" value="{{ form.skill_years.value|default:0 }}" name="{{ form.prefix }}-skill_years">
                             <div class="slider-value">
                                 <span>Years: <span class="slider-years">{{ form.skill_years.value|default:0 }}</span></span>
                                 <span class="slider-months-container">Months: <span class="slider-months">0</span></span>
