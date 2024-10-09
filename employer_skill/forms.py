@@ -36,38 +36,41 @@ EmployerSkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillFor
 
 class JobFormSet(BaseInlineFormSet):
     print('employer_skill: forms.py: JobFormSet')
+
     def clean(self):
-        print('JobFormSet: clean')
         """Override clean method to handle blank forms."""
         super().clean()
+
         forms_to_keep = []
-        
-        # Iterate through forms and skip forms where the skill is blank
         for form in self.forms:
-            if form.has_changed():  # Only consider forms with changes
+            if form.is_valid():  # Ensure the form is valid
                 skill = form.cleaned_data.get('skill', None)
                 print(f'********************* skill: [{skill}]')
-                if skill:
-                    # If skill is filled, keep the form
+                # Only keep forms with non-empty skill
+                if skill and skill.strip():  # Check if skill is not empty or just whitespace
                     forms_to_keep.append(form)
                 else:
-                    # If skill is blank, clear the form's cleaned_data to ignore it
+                    # If skill is blank, remove it from cleaned_data to avoid saving
+                    print(f"Excluding form with empty skill.")
                     form.cleaned_data.clear()
-
-        # Reassign the formset's forms with only the valid forms
+            else:
+                print(f"Invalid form detected: {form.errors}")
+        
+        # Reassign the valid forms to the formset
         self.forms = forms_to_keep
 
     def save(self, commit=True):
-        print('JobFormSet: save')
         """Override save method to exclude empty forms."""
         # Collect forms where 'skill' is filled
         valid_forms = [form for form in self.forms if form.cleaned_data.get('skill')]
-        
-        # Use the parent class's save method, but only pass the valid forms
+
+        print(f"Valid forms count: {len(valid_forms)}")
+
+        # Use the parent class's save method, but only for valid forms
         instances = []
         for form in valid_forms:
             if form.instance.pk or form.has_changed():
                 instance = form.save(commit=commit)
                 instances.append(instance)
-        
+
         return instances  # Return the list of saved instances
