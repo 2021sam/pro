@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import modelformset_factory, BaseInlineFormSet
+from django.forms import modelformset_factory, BaseInlineFormSet, BaseFormSet
 from .models import EmployerSkill
 from employer_job.models import EmployerJob
 
@@ -30,31 +30,41 @@ class EmployerSkillForm(forms.ModelForm):
         return cleaned_data
 
 # Formset for EmployerSkill, using the custom EmployerSkillForm.
-EmployerSkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillForm, extra=1)
+EmployerSkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillForm, extra=1, can_delete=True)
 
-class JobFormSet(BaseInlineFormSet):
+# class JobFormSet(BaseInlineFormSet):
+class JobFormSet(BaseFormSet):
     def clean(self):
         """Override clean method to handle blank forms."""
         super().clean()
 
-        forms_to_keep = []
-        for form in self.forms:
-            if form.is_valid():  # Check if the form is valid
-                skill = form.cleaned_data.get('skill', None)
-                print(f'********************* skill: [{skill}]')  # Debugging output
+        for i, form in enumerate(self.forms):
+            skill = form.cleaned_data.get('skill')
+            print(f'JobFormSet: clean: skill: {i}:[{skill}]')
 
-                # Only keep forms where skill is not blank or just whitespace
-                if skill and skill.strip():
-                    forms_to_keep.append(form)
-                else:
-                    # Log and clear forms with empty skill
-                    print(f"Excluding form with empty skill: {skill}")
-                    form.cleaned_data.clear()  # Clear cleaned_data to avoid saving
-            else:
-                print(f"Form errors: {form.errors}")  # Log any form errors
 
+
+
+
+
+
+        # forms_to_keep = []
+        # for form in self.forms:
+        #     if form.is_valid():  # Check if the form is valid
+        #         skill = form.cleaned_data.get('skill', None)
+        #         print(f'********************* skill: [{skill}]')  # Debugging output
+
+        #         # Only keep forms where skill is not blank or just whitespace
+        #         if skill and skill.strip():
+        #             forms_to_keep.append(form)
+        #         else:
+        #             # Log and clear forms with empty skill
+        #             print(f"Excluding form with empty skill: {skill}")
+        #             form.cleaned_data.clear()  # Clear cleaned_data to avoid saving
+        #     else:
+        #         print(f"Form errors: {form.errors}")  # Log any form errors
         # Reassign only the valid forms (with non-blank skill) to the formset
-        self.forms = forms_to_keep
+        # self.forms = forms_to_keep
 
     def save(self, commit=True):
         print('************************   JobFormSet: save')

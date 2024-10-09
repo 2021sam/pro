@@ -58,6 +58,8 @@ def add_edit_job_with_skills(request, job_id=None):
         formset = EmployerSkillFormSet(request.POST, queryset=EmployerSkill.objects.none() if job is None else EmployerSkill.objects.filter(job=job))
         # print(formset)
         # Validate both job form and formset
+        if formset.is_valid():
+            print('views.py: formset.is_valid')
         if job_form.is_valid() and formset.is_valid():
             # Save the job
             job = job_form.save(commit=False)
@@ -67,10 +69,15 @@ def add_edit_job_with_skills(request, job_id=None):
             # Save the skills, assigning the job to each skill in the formset
             skills = formset.save(commit=False)
             for skill in skills:
-                print(f'Saving skill: {skill.skill}, Years: {skill.skill_years}, Months: {skill.skill_months}')
-                skill.job = job  # Assign the saved job to the skill
-                skill.user = request.user  # Set the current logged-in user for each skill
-                skill.save()
+                if skill.skill:
+                    print(f'Saving skill: [{skill.skill}], Years: {skill.skill_years}, Months: {skill.skill_months}')
+                    skill.job = job  # Assign the saved job to the skill
+                    skill.user = request.user  # Set the current logged-in user for each skill
+                    skill.save()
+                elif skill.pk is not None:  # Ensure the skill exists in the database
+                    # Handle deletion
+                    print(f'Delete skill: [{skill.skill}], Years: {skill.skill_years}, Months: {skill.skill_months}')
+                    skill.delete()
 
             return redirect('employer_job:job-view')  # Adjust to your desired redirect URL
         else:
