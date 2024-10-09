@@ -32,8 +32,8 @@ class EmployerSkillForm(forms.ModelForm):
 # Formset for EmployerSkill, using the custom EmployerSkillForm.
 EmployerSkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillForm, extra=1, can_delete=True)
 
-# class JobFormSet(BaseInlineFormSet):
-class JobFormSet(BaseFormSet):
+# class JobFormSet(BaseFormSet):
+class JobFormSet(BaseInlineFormSet):
     def clean(self):
         """Override clean method to handle blank forms."""
         super().clean()
