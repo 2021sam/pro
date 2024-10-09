@@ -24,16 +24,6 @@ def view(request):
     context = {'job':  job}
     return render(request,'employer_job/view.html', context)
 
-
-# /Users/2021sam/apps/zyxe/pro/employer_job/views.py
-# from django.shortcuts import render, get_object_or_404, redirect
-# from .models import EmployerJob
-# from employer_skill.models import EmployerSkill  # Assuming EmployerSkill is the correct model name
-# from .forms import EmployerJobForm
-# from employer_skill.forms import EmployerSkillFormSet  # Make sure this is imported
-
-
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
