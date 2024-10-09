@@ -5,6 +5,7 @@ from employer_job.models import EmployerJob
 
 # EmployerSkillForm handles the fields for skills, skill_years, and skill_months.
 class EmployerSkillForm(forms.ModelForm):
+    skill = forms.CharField(required=False)  # Make skill optional
     skill_years = forms.IntegerField(required=False, initial=0)
     skill_months = forms.IntegerField(required=False, initial=0)
 
@@ -20,6 +21,12 @@ class EmployerSkillForm(forms.ModelForm):
         # Ensure at least one of skill_years or skill_months is filled
         if skill_years == 0 and skill_months == 0:
             raise forms.ValidationError("At least one of 'Skill Years' or 'Skill Months' must be filled.")
+
+
+        # Make sure empty fields default to 0 instead of None
+        cleaned_data['skill_years'] = skill_years if skill_years is not None else 0
+        cleaned_data['skill_months'] = skill_months if skill_months is not None else 0
+
 
         return cleaned_data
 
@@ -46,7 +53,9 @@ class JobFormSet(BaseInlineFormSet):
     # Overriding the save method to ignore empty forms
     def save(self, commit=True):
         # Filter out any forms where the skill is blank before saving.
-        self.forms = [form for form in self.forms if form.cleaned_data.get('skill')]
+        valid_forms = [form for form in self.forms if form.cleaned_data.get('skill')]
+        # self.forms = [form for form in self.forms if form.cleaned_data.get('skill')]
+        self.forms = valid_forms
         return super().save(commit=commit)
 
 
