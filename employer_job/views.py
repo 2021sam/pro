@@ -35,7 +35,6 @@ from employer_skill.models import EmployerSkill
 
 
 
-
 @login_required
 def add_edit_job_with_skills(request, job_id=None):
     # Fetch job if job_id is provided (edit case), otherwise create new (add case)
@@ -54,19 +53,26 @@ def add_edit_job_with_skills(request, job_id=None):
 
         # Validate both job form and formset
         if job_form.is_valid() and formset.is_valid():
+            print('views.py: formset.is_valid')
+
             # Save the job
             job = job_form.save(commit=False)
             job.user = request.user  # Set the current logged-in user
             job.save()
 
             # Save the skills and handle deletions automatically
-            skills = formset.save(commit=False)
+            skills = formset.save(commit=False)  # Get the forms to save
             for skill in skills:
                 skill.job = job  # Assign the saved job to each skill
                 skill.user = request.user  # Set the current logged-in user for each skill
                 skill.save()
 
-            # Handle deletions automatically (Django will delete forms marked for deletion)
+            # Handle deletions manually if using commit=False
+            for obj in formset.deleted_objects:
+                print(f'Deleting skill: {obj.skill}, Years: {obj.skill_years}, Months: {obj.skill_months}')
+                obj.delete()
+
+            # Save the formset to ensure deletions are handled
             formset.save()
 
             return redirect('employer_job:job-view')  # Adjust to your desired redirect URL
@@ -80,6 +86,54 @@ def add_edit_job_with_skills(request, job_id=None):
         'job': job,
         'job_id': job_id
     })
+
+
+
+
+# @login_required
+# def add_edit_job_with_skills(request, job_id=None):
+#     # Fetch job if job_id is provided (edit case), otherwise create new (add case)
+#     if job_id:
+#         job = get_object_or_404(EmployerJob, pk=job_id)
+#         job_form = EmployerJobForm(instance=job)
+#         formset = EmployerSkillFormSet(queryset=EmployerSkill.objects.filter(job=job))
+#     else:
+#         job = None
+#         job_form = EmployerJobForm()
+#         formset = EmployerSkillFormSet(queryset=EmployerSkill.objects.none())
+
+#     if request.method == 'POST':
+#         job_form = EmployerJobForm(request.POST, instance=job)
+#         formset = EmployerSkillFormSet(request.POST, queryset=EmployerSkill.objects.filter(job=job) if job else EmployerSkill.objects.none())
+
+#         # Validate both job form and formset
+#         if job_form.is_valid() and formset.is_valid():
+#             # Save the job
+#             job = job_form.save(commit=False)
+#             job.user = request.user  # Set the current logged-in user
+#             job.save()
+
+#             # Save the skills and handle deletions automatically
+#             skills = formset.save(commit=False)
+#             for skill in skills:
+#                 skill.job = job  # Assign the saved job to each skill
+#                 skill.user = request.user  # Set the current logged-in user for each skill
+#                 skill.save()
+
+#             # Handle deletions automatically (Django will delete forms marked for deletion)
+#             formset.save()
+
+#             return redirect('employer_job:job-view')  # Adjust to your desired redirect URL
+#         else:
+#             print("Job form errors:", job_form.errors)
+#             print("Formset errors:", formset.errors)
+
+#     return render(request, 'employer_job/add_edit_job_with_skills.html', {
+#         'job_form': job_form,
+#         'formset': formset,
+#         'job': job,
+#         'job_id': job_id
+#     })
 
 
 
