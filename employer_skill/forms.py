@@ -5,6 +5,7 @@ from .models import EmployerSkill
 from employer_job.models import EmployerJob
 
 class EmployerSkillForm(forms.ModelForm):
+    skill = forms.CharField(required=False)  # Make skill optional
     skill_years = forms.IntegerField(required=False, initial=0)
     skill_months = forms.IntegerField(required=False, initial=0)
 
@@ -13,6 +14,7 @@ class EmployerSkillForm(forms.ModelForm):
         fields = ['skill', 'skill_years', 'skill_months']
 
     def clean(self):
+        print('EmployerSkillForm: clean')
         cleaned_data = super().clean()
         skill_years = cleaned_data.get('skill_years')
         skill_months = cleaned_data.get('skill_months')
@@ -50,19 +52,19 @@ class JobFormSet(BaseInlineFormSet):
 
         forms_to_keep = []
         for i, form in enumerate(self.forms):
-            # Get the values from the form fields
-            skill = form.cleaned_data.get('skill')
-            skill_years = form.cleaned_data.get('skill_years')
-            skill_months = form.cleaned_data.get('skill_months')
+            if form.cleaned_data:
+                skill = form.cleaned_data.get('skill')
+                skill_years = form.cleaned_data.get('skill_years')
+                skill_months = form.cleaned_data.get('skill_months')
 
-            # Log for debugging
-            print(f'JobFormSet: clean: skill: {i}:[{skill}], Years: {skill_years}, Months: {skill_months}')
+                # Log for debugging
+                print(f'JobFormSet: clean: skill: {i}:[{skill}], Years: {skill_years}, Months: {skill_months}')
 
-            # If the form has no skill and both years and months are zero, skip it
-            if not skill and skill_years == 0 and skill_months == 0:
-                form.cleaned_data.clear()  # Clear form data if it's essentially empty
-            else:
-                forms_to_keep.append(form)
+                # If the form is essentially empty, skip it (do not save)
+                if not skill and skill_years == 0 and skill_months == 0:
+                    form.cleaned_data.clear()  # Clear empty form data
+                else:
+                    forms_to_keep.append(form)
 
         # Reassign only valid forms
         self.forms = forms_to_keep
