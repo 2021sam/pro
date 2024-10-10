@@ -13,14 +13,36 @@ from django.forms import modelformset_factory, BaseInlineFormSet
 from .models import EmployerSkill
 from employer_job.models import EmployerJob
 
+# class EmployerSkillForm(forms.ModelForm):
+#     # skill = forms.CharField(required=False)  # Make skill optional
+#     skill_years = forms.IntegerField(required=False, initial=0)
+#     skill_months = forms.IntegerField(required=False, initial=0)
+
+#     class Meta:
+#         model = EmployerSkill
+#         fields = ['skill', 'skill_years', 'skill_months']
+
+
+
 class EmployerSkillForm(forms.ModelForm):
-    # skill = forms.CharField(required=False)  # Make skill optional
-    skill_years = forms.IntegerField(required=False, initial=0)
-    skill_months = forms.IntegerField(required=False, initial=0)
+    skill = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'skill-input', 'placeholder': 'Enter skill'})  # Add class here
+    )
+    skill_years = forms.IntegerField(
+        required=False,
+        widget=forms.NumberInput(attrs={'class': 'year-input'})  # Add class here
+    )
+    skill_months = forms.IntegerField(
+        required=False,
+        widget=forms.NumberInput(attrs={'class': 'month-input'})  # Add class here
+    )
 
     class Meta:
         model = EmployerSkill
         fields = ['skill', 'skill_years', 'skill_months']
+
+
 
 # Create formset with deletion support
 EmployerSkillFormSet = modelformset_factory(
