@@ -121,17 +121,22 @@
         });
 
 
+    // Event listener to handle form submission
+    document.querySelector('form').addEventListener('submit', function (event) {
+        const lastRow = formsetBody.querySelector('.form-row:last-child');
+        console.log('Form submission detected.');
 
-        // Event listener to handle form submission
-        document.querySelector('form').addEventListener('submit', function (event) {
-            const lastRow = formsetBody.querySelector('.form-row:last-child');
-            console.log(lastRow)
-            // If the last row is not filled, clear its inputs so it's ignored
-            if (!isRowFilled(lastRow)) {
-                console.log(isRowFilled(lastRow));
-                lastRow.querySelectorAll('input').forEach(input => input.value = '');
-            }
-        });
+        // If the last row is not filled, clear its inputs so it's ignored
+        if (!isRowFilled(lastRow)) {
+            console.log('Last row is empty. Clearing its values before submission.');
+            lastRow.querySelectorAll('input').forEach(input => {
+                console.log(`Clearing input: ${input.name}`);
+                input.value = '';
+            });
+        } else {
+            console.log('Last row is filled. Proceeding with form submission.');
+        }
+    });
 
 
     </script>
