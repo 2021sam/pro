@@ -70,6 +70,15 @@
             align-items: center;
         }
 
+        /* Add custom left margin for header items */
+        .header-years {
+            margin-left: -15%; /* Shift the Years header left by 10% */
+        }
+
+        .header-months {
+            margin-left: 7%; /* Shift the Months header left by 5% */
+        }
+
         /* Minimal padding for the form */
         .form-container {
             padding: 10px;
@@ -79,7 +88,7 @@
 </head>
 <body>
     <h1>{% if job_id %}Edit Job{% else %}Add Job{% endif %}</h1>
-    <h2>Version 17</h2>
+    <h2>Version 18</h2>
 
     <div class="form-container">
         <form method="POST" novalidate id="skill-form">
@@ -95,8 +104,8 @@
             <div class="header-row">
                 <div class="header-skill">Skill</div>
                 <div class="header-group">
-                    <div>Years</div>
-                    <div>Months</div>
+                    <div class="header-years">Years</div> <!-- Adjusted left by 10% -->
+                    <div class="header-months">Months</div> <!-- Adjusted left by 5% -->
                     <div>Delete</div>
                 </div>
             </div>
