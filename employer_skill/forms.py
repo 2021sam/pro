@@ -1,6 +1,15 @@
 # /Users/2021sam/apps/zyxe/pro/employer_skill/forms.py
+# from django import forms
+# from django.forms import modelformset_factory, BaseInlineFormSet, BaseFormSet
+# from .models import EmployerSkill
+# from employer_job.models import EmployerJob
+
+
+
+# /Users/2021sam/apps/zyxe/pro/employer_skill/forms.py
+
 from django import forms
-from django.forms import modelformset_factory, BaseInlineFormSet, BaseFormSet
+from django.forms import modelformset_factory, BaseInlineFormSet
 from .models import EmployerSkill
 from employer_job.models import EmployerJob
 
@@ -13,35 +22,53 @@ class EmployerSkillForm(forms.ModelForm):
         model = EmployerSkill
         fields = ['skill', 'skill_years', 'skill_months']
 
-    def clean(self):
-        print('EmployerSkillForm: clean')
-        cleaned_data = super().clean()
-        skill_years = cleaned_data.get('skill_years')
-        skill_months = cleaned_data.get('skill_months')
+# Create formset with deletion support
+EmployerSkillFormSet = modelformset_factory(
+    EmployerSkill,
+    form=EmployerSkillForm,
+    extra=1,  # You can control how many extra blank forms appear
+    can_delete=True  # Enable delete option for each form
+)
 
-        # Convert None to 0 for years and months to avoid NoneType errors
-        if skill_years is None:
-            skill_years = 0
-        if skill_months is None:
-            skill_months = 0
 
-        # Ensure months are within the valid range of 0 to 11
-        if skill_months < 0 or skill_months > 11:
-            raise forms.ValidationError("Months must be between 0 and 11.")
+# class EmployerSkillForm(forms.ModelForm):
+#     skill = forms.CharField(required=False)  # Make skill optional
+#     skill_years = forms.IntegerField(required=False, initial=0)
+#     skill_months = forms.IntegerField(required=False, initial=0)
+
+#     class Meta:
+#         model = EmployerSkill
+#         fields = ['skill', 'skill_years', 'skill_months']
+
+#     def clean(self):
+#         print('EmployerSkillForm: clean')
+#         cleaned_data = super().clean()
+#         skill_years = cleaned_data.get('skill_years')
+#         skill_months = cleaned_data.get('skill_months')
+
+#         # Convert None to 0 for years and months to avoid NoneType errors
+#         if skill_years is None:
+#             skill_years = 0
+#         if skill_months is None:
+#             skill_months = 0
+
+#         # Ensure months are within the valid range of 0 to 11
+#         if skill_months < 0 or skill_months > 11:
+#             raise forms.ValidationError("Months must be between 0 and 11.")
         
-        # Ensure at least one field is filled (skill, year, or month)
-        if not cleaned_data.get('skill') and skill_years == 0 and skill_months == 0:
-            raise forms.ValidationError("Please provide a skill or years/months of experience.")
+#         # Ensure at least one field is filled (skill, year, or month)
+#         if not cleaned_data.get('skill') and skill_years == 0 and skill_months == 0:
+#             raise forms.ValidationError("Please provide a skill or years/months of experience.")
 
-        # Update the cleaned_data dict with validated values
-        cleaned_data['skill_years'] = skill_years
-        cleaned_data['skill_months'] = skill_months
+#         # Update the cleaned_data dict with validated values
+#         cleaned_data['skill_years'] = skill_years
+#         cleaned_data['skill_months'] = skill_months
 
-        return cleaned_data
+#         return cleaned_data
 
 
 # Formset for EmployerSkill, using the custom EmployerSkillForm.
-EmployerSkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillForm, extra=1, can_delete=True)
+# EmployerSkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillForm, extra=1, can_delete=True)
 
 
 
