@@ -4,7 +4,6 @@ from django.forms import modelformset_factory, BaseInlineFormSet, BaseFormSet
 from .models import EmployerSkill
 from employer_job.models import EmployerJob
 
-# EmployerSkillForm handles the fields for skills, skill_years, and skill_months.
 class EmployerSkillForm(forms.ModelForm):
     skill_years = forms.IntegerField(required=False, initial=0)
     skill_months = forms.IntegerField(required=False, initial=0)
@@ -15,11 +14,26 @@ class EmployerSkillForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        skill_years = cleaned_data.get('skill_years', 0)
-        skill_months = cleaned_data.get('skill_months', 0)
+        skill_years = cleaned_data.get('skill_years')
+        skill_months = cleaned_data.get('skill_months')
 
+        # Convert None to 0 for years and months to avoid NoneType errors
+        if skill_years is None:
+            skill_years = 0
+        if skill_months is None:
+            skill_months = 0
+
+        # Ensure months are within the valid range of 0 to 11
         if skill_months < 0 or skill_months > 11:
             raise forms.ValidationError("Months must be between 0 and 11.")
+        
+        # Ensure at least one field is filled (skill, year, or month)
+        if not cleaned_data.get('skill') and skill_years == 0 and skill_months == 0:
+            raise forms.ValidationError("Please provide a skill or years/months of experience.")
+
+        # Update the cleaned_data dict with validated values
+        cleaned_data['skill_years'] = skill_years
+        cleaned_data['skill_months'] = skill_months
 
         return cleaned_data
 
