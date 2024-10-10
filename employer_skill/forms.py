@@ -1,3 +1,4 @@
+# /Users/2021sam/apps/zyxe/pro/employer_skill/forms.py
 from django import forms
 from django.forms import modelformset_factory, BaseInlineFormSet, BaseFormSet
 from .models import EmployerSkill
@@ -5,29 +6,23 @@ from employer_job.models import EmployerJob
 
 # EmployerSkillForm handles the fields for skills, skill_years, and skill_months.
 class EmployerSkillForm(forms.ModelForm):
-    skill = forms.CharField(required=False)  # Make skill optional
     skill_years = forms.IntegerField(required=False, initial=0)
     skill_months = forms.IntegerField(required=False, initial=0)
 
     class Meta:
         model = EmployerSkill
-        fields = ['id', 'skill', 'skill_years', 'skill_months']
+        fields = ['skill', 'skill_years', 'skill_months']
 
     def clean(self):
-        print('EmployerSkillForm: clean')
         cleaned_data = super().clean()
         skill_years = cleaned_data.get('skill_years', 0)
         skill_months = cleaned_data.get('skill_months', 0)
 
-        # Ensure at least one of skill_years or skill_months is filled
-        if skill_years == 0 and skill_months == 0:
-            raise forms.ValidationError("At least one of 'Skill Years' or 'Skill Months' must be filled.")
-
-        # Make sure empty fields default to 0 instead of None
-        cleaned_data['skill_years'] = skill_years if skill_years is not None else 0
-        cleaned_data['skill_months'] = skill_months if skill_months is not None else 0
+        if skill_months < 0 or skill_months > 11:
+            raise forms.ValidationError("Months must be between 0 and 11.")
 
         return cleaned_data
+
 
 # Formset for EmployerSkill, using the custom EmployerSkillForm.
 EmployerSkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillForm, extra=1, can_delete=True)
@@ -42,29 +37,6 @@ class JobFormSet(BaseInlineFormSet):
             skill = form.cleaned_data.get('skill')
             print(f'JobFormSet: clean: skill: {i}:[{skill}]')
 
-
-
-
-
-
-
-        # forms_to_keep = []
-        # for form in self.forms:
-        #     if form.is_valid():  # Check if the form is valid
-        #         skill = form.cleaned_data.get('skill', None)
-        #         print(f'********************* skill: [{skill}]')  # Debugging output
-
-        #         # Only keep forms where skill is not blank or just whitespace
-        #         if skill and skill.strip():
-        #             forms_to_keep.append(form)
-        #         else:
-        #             # Log and clear forms with empty skill
-        #             print(f"Excluding form with empty skill: {skill}")
-        #             form.cleaned_data.clear()  # Clear cleaned_data to avoid saving
-        #     else:
-        #         print(f"Form errors: {form.errors}")  # Log any form errors
-        # Reassign only the valid forms (with non-blank skill) to the formset
-        # self.forms = forms_to_keep
 
     def save(self, commit=True):
         print('************************   JobFormSet: save')
