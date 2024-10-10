@@ -4,6 +4,7 @@ const totalFormsInput = document.querySelector('#id_form-TOTAL_FORMS');  // Djan
 // Function to dynamically add a new form row in the Flexbox structure
 function addNewFormRow() {
     let formCount = parseInt(totalFormsInput.value);  // Get the current form count from the management form input
+    console.log(`Adding new form row. Current form count: ${formCount}`);
 
     // Create a new Flexbox row
     const newRow = document.createElement('div');
@@ -24,17 +25,22 @@ function addNewFormRow() {
 
     // Append the new Flexbox row to the formset body
     formsetBody.appendChild(newRow);
+    console.log('New row added to the formset body.');
 
     // Increment the total forms count in the management form
     totalFormsInput.value = formCount + 1;
+    console.log(`Total forms count updated to: ${totalFormsInput.value}`);
 }
 
-// Function to check if the last row is filled out
+// Function to check if the last form row is filled out
 function isLastRowFilled() {
     const lastRow = formsetBody.querySelector('.form-row:last-child');
     const skillInput = lastRow.querySelector('input[name$="-skill"]');
     const yearInput = lastRow.querySelector('input[name$="-skill_years"]');
     const monthInput = lastRow.querySelector('input[name$="-skill_months"]');
+
+    // Log the values for debugging
+    console.log(`Checking last row: Skill: ${skillInput.value}, Years: ${yearInput.value}, Months: ${monthInput.value}`);
 
     // Check if the skill is filled and at least one of years or months is non-zero
     return skillInput.value.trim() !== "" && (parseInt(yearInput.value) > 0 || parseInt(monthInput.value) > 0);
@@ -42,8 +48,12 @@ function isLastRowFilled() {
 
 // Event listener to dynamically add a new row when the last row is filled
 document.getElementById('skill-form').addEventListener('input', function () {
+    console.log('Input detected.');
     if (isLastRowFilled()) {
+        console.log('Last row is filled. Adding new form row.');
         addNewFormRow();  // Add a new empty form row when the last row is filled
+    } else {
+        console.log('Last row is not filled yet.');
     }
 });
 
