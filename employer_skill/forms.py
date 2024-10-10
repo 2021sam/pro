@@ -41,21 +41,37 @@ class EmployerSkillForm(forms.ModelForm):
 # Formset for EmployerSkill, using the custom EmployerSkillForm.
 EmployerSkillFormSet = modelformset_factory(EmployerSkill, form=EmployerSkillForm, extra=1, can_delete=True)
 
-# class JobFormSet(BaseFormSet):
+
+
 class JobFormSet(BaseInlineFormSet):
     def clean(self):
         """Override clean method to handle blank forms."""
         super().clean()
 
+        forms_to_keep = []
         for i, form in enumerate(self.forms):
+            # Get the values from the form fields
             skill = form.cleaned_data.get('skill')
-            print(f'JobFormSet: clean: skill: {i}:[{skill}]')
+            skill_years = form.cleaned_data.get('skill_years')
+            skill_months = form.cleaned_data.get('skill_months')
 
+            # Log for debugging
+            print(f'JobFormSet: clean: skill: {i}:[{skill}], Years: {skill_years}, Months: {skill_months}')
+
+            # If the form has no skill and both years and months are zero, skip it
+            if not skill and skill_years == 0 and skill_months == 0:
+                form.cleaned_data.clear()  # Clear form data if it's essentially empty
+            else:
+                forms_to_keep.append(form)
+
+        # Reassign only valid forms
+        self.forms = forms_to_keep
 
     def save(self, commit=True):
-        print('************************   JobFormSet: save')
         """Override save method to exclude empty forms."""
-        # Collect valid forms where 'skill' is filled
+        print('************************   JobFormSet: save')
+
+        # Collect valid forms where 'skill' is filled and strip any leading/trailing whitespace
         valid_forms = [form for form in self.forms if form.cleaned_data.get('skill') and form.cleaned_data['skill'].strip()]
 
         print(f"Valid forms count: {len(valid_forms)}")  # Debugging output
