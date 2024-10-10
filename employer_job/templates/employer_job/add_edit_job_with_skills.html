@@ -8,67 +8,123 @@
     <title>Add/Edit Job with Skills</title>
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
     <style>
+        /* Overall form styling */
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 2px;
         }
+
+        /* Flexbox container for aligning Year, Month, and Delete columns */
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .skill-col {
+            flex: 1; /* Skill takes up the remaining space */
+            padding-right: 15px;
+        }
+
+        .years-months-delete-container {
+            display: flex;
+            gap: 10px; /* Controls the space between Year, Month, and Delete */
+            align-items: center;
+        }
+
+        .year-input, .month-input {
+            width: 60px; /* Fixed small width for inputs */
+            padding: 3px;
+        }
+
+        .delete-checkbox {
+            text-align: center;
+            width: 50px; /* Small, fixed width for delete */
+        }
+
+        th {
+            text-align: left;
+            padding: 5px 0;
+        }
+
         table {
             width: 100%;
         }
-        td {
+
+        /* For the header row to align properly */
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #000;
+        }
+
+        .header-skill {
+            flex: 1;
+        }
+
+        .header-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        /* Minimal padding for the form */
+        .form-container {
             padding: 10px;
         }
+
     </style>
 </head>
 <body>
     <h1>{% if job_id %}Edit Job{% else %}Add Job{% endif %}</h1>
-    <h2>Version 5</h2>
+    <h2>Version 17</h2>
 
-    <form method="POST" novalidate id="skill-form">
-        {% csrf_token %}
-        <div class="selected-job">
-            <h3>Selected Job: {{ job.name }}</h3>
-            <input type="hidden" name="job_id" value="{{ job.id }}">
-        </div>
-    
-        {{ job_form.as_p }}
-    
-        <h3>Skills</h3>
-        <table id="formset-container">
-            {{ formset.management_form }}
-            <thead>
-                <tr>
-                    <th>Skill</th>
-                    <th>Years of Experience</th>
-                    <th>Months of Experience</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody id="formset-body">
+    <div class="form-container">
+        <form method="POST" novalidate id="skill-form">
+            {% csrf_token %}
+            <div class="selected-job">
+                <h3>Selected Job: {{ job.name }}</h3>
+                <input type="hidden" name="job_id" value="{{ job.id }}">
+            </div>
+        
+            {{ job_form.as_p }}
+        
+            <h3>Skills</h3>
+            <div class="header-row">
+                <div class="header-skill">Skill</div>
+                <div class="header-group">
+                    <div>Years</div>
+                    <div>Months</div>
+                    <div>Delete</div>
+                </div>
+            </div>
+            
+            <div id="formset-body">
                 {% for form in formset %}
-                <tr class="form-row">
+                <div class="form-row">
                     {{ form.id }}
-                    <td class="form-group">
+                    <div class="form-group skill-col">
                         {{ form.skill }}
                         {% if form.skill.errors %}
                             <div class="error-message">{{ form.skill.errors }}</div>
                         {% endif %}
-                    </td>
-                    <td class="form-group">
+                    </div>
+                    <div class="years-months-delete-container">
                         <input type="number" class="year-input" min="0" max="10" value="{{ form.skill_years.value|default:0 }}" name="{{ form.prefix }}-skill_years">
-                    </td>
-                    <td class="form-group">
                         <input type="number" class="month-input" min="0" max="11" value="{{ form.skill_months.value|default:0 }}" name="{{ form.prefix }}-skill_months">
-                    </td>
-                    <td class="delete-checkbox">
-                        {{ form.DELETE }}  <!-- Delete checkbox -->
-                    </td>
-                </tr>
+                        <div class="delete-checkbox">
+                            {{ form.DELETE }}  <!-- Delete checkbox -->
+                        </div>
+                    </div>
+                </div>
                 {% endfor %}
-            </tbody>
-        </table>
+            </div>
 
-        <button type="submit">Save</button>
-    </form>
+            <button type="submit">Save</button>
+        </form>
+    </div>
 
 <!-- Load external JavaScript file -->
 <script src="{% static 'js/add_edit_job_with_skills.js' %}"></script>
