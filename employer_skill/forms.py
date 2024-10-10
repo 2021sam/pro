@@ -14,7 +14,7 @@ from .models import EmployerSkill
 from employer_job.models import EmployerJob
 
 class EmployerSkillForm(forms.ModelForm):
-    skill = forms.CharField(required=False)  # Make skill optional
+    # skill = forms.CharField(required=False)  # Make skill optional
     skill_years = forms.IntegerField(required=False, initial=0)
     skill_months = forms.IntegerField(required=False, initial=0)
 
