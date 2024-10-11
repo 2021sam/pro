@@ -1,9 +1,4 @@
 # /Users/2021sam/apps/zyxe/pro/employer_skill/forms.py
-# from django import forms
-# from django.forms import modelformset_factory, BaseInlineFormSet, BaseFormSet
-# from .models import EmployerSkill
-# from employer_job.models import EmployerJob
-
 
 from django import forms
 from django.forms import modelformset_factory, BaseInlineFormSet
