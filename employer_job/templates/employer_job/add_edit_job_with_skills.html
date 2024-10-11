@@ -24,14 +24,14 @@
 
         .skill-col {
             flex: 1; /* Skill takes up the remaining space */
-            padding-right: 5px; /* Reduced padding to move Years/Months/Delete closer to Skill */
+            padding-right: 15px;
         }
 
         .years-months-delete-container {
             display: flex;
-            gap: 5px; /* Keep the gap between Year, Month, and Delete small */
+            gap: 10px; /* Space between Year, Month, and Delete */
             align-items: center;
-            margin-left: -5%; /* Move the Years/Months/Delete group left */
+            justify-content: space-between;
         }
 
         /* Standardize input height across Skill, Year, and Month fields */
@@ -49,6 +49,7 @@
         .delete-checkbox {
             text-align: right;
             width: 40px; /* Fixed smaller width for delete container */
+            margin-right: 30px; /* Add buffer to push checkbox to the left */
         }
 
         .delete-checkbox input {
@@ -79,22 +80,21 @@
 
         .header-group {
             display: flex;
-            gap: 5px;
+            gap: 10px;
             align-items: center;
-            margin-left: -5%; /* Move the Years/Months/Delete group in the header left */
         }
 
         /* Add custom left margin for header items */
         .header-years {
-            margin-left: -15%; /* Shift the Years header left */
+            margin-left: -28%; /* Shift the Years header left */
         }
 
         .header-months {
-            margin-left: 7%; /* Shift the Months header left */
+            margin-left: 9%; /* Shift the Months header left */
         }
 
         .header-delete {
-            margin-right: 2%; /* Move the Delete header closer to the right */
+            margin-right: 5%; /* Move the Delete header closer to the right */
         }
 
         /* Minimal padding for the form */
@@ -105,7 +105,7 @@
 </head>
 <body>
     <h1>{% if job_id %}Edit Job{% else %}Add Job{% endif %}</h1>
-    <h2>Version 25</h2>
+    <h2>Version 23 (Reverted)</h2>
 
     <div class="form-container">
         <form method="POST" novalidate id="skill-form">
