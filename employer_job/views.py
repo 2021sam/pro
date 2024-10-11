@@ -21,7 +21,7 @@ def home(request):
 def view(request):
     job = EmployerJob.objects.filter(user=request.user)
     context = {'job':  job}
-    return render(request,'employer_job/view.html', context)
+    return render(request,'employer_job/job_list.html', context)
 
 
 @login_required
@@ -69,7 +69,7 @@ def add_edit_job_with_skills(request, job_id=None):
             print("Job form errors:", job_form.errors)
             print("Formset errors:", formset.errors)
 
-    return render(request, 'employer_job/add_edit_job_with_skills.html', {
+    return render(request, 'employer_job/job_form.html', {
         'job_form': job_form,
         'formset': formset,
         'job': job,
@@ -84,7 +84,7 @@ def delete(request, job_id):
     context = {'job': job}
     
     if request.method == 'GET':
-        return render(request, 'employer_job/delete.html', context)
+        return render(request, 'employer_job/job_delete_confirmation.html', context)
     elif request.method == 'POST':
         job.delete()
         messages.success(request,  'The post has been deleted successfully.')
