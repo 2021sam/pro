@@ -33,20 +33,22 @@
             align-items: center;
         }
 
-        /* Standardize input height across Skill, Year, and Month fields */
-        .textinput, .year-input, .month-input {
-            height: 36px;  /* Set a consistent height */
-            padding: 5px;   /* Add consistent padding */
-            box-sizing: border-box; /* Ensure padding doesn't affect total height */
+        /* Standardize height and vertical alignment across all inputs */
+        .textinput, .year-input, .month-input, .delete-checkbox input {
+            height: 35px; /* Set the same height for all */
+            padding: 5px;
+            box-sizing: border-box;
+            vertical-align: middle; /* Align inputs vertically in the middle */
         }
 
         .year-input, .month-input {
-            width: 60px; /* Fixed small width for inputs */
+            width: 60px; /* Fixed width for year and month inputs */
         }
 
-        .delete-checkbox {
-            text-align: center;
-            width: 50px; /* Small, fixed width for delete */
+        .delete-checkbox input {
+            width: 20px; /* Smaller width for the delete checkbox */
+            height: 20px; /* Make the checkbox smaller and align with other inputs */
+            margin-top: 8px; /* Adjust margin to align vertically with other inputs */
         }
 
         th {
@@ -97,7 +99,7 @@
 </head>
 <body>
     <h1>{% if job_id %}Edit Job{% else %}Add Job{% endif %}</h1>
-    <h2>Version 22</h2>
+    <h2>Version 23</h2>
 
     <div class="form-container">
         <form method="POST" novalidate id="skill-form">
