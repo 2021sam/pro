@@ -24,16 +24,17 @@
 
         .skill-col {
             flex: 1; /* Skill takes up the remaining space */
-            padding-right: 15px;
+            padding-right: 5px; /* Reduced padding to move Years/Months/Delete closer to Skill */
         }
 
         .years-months-delete-container {
             display: flex;
-            gap: 10px; /* Controls the space between Year, Month, and Delete */
+            gap: 5px; /* Keep the gap between Year, Month, and Delete small */
             align-items: center;
+            margin-left: -5%; /* Move the Years/Months/Delete group left */
         }
 
-        /* Standardize height and vertical alignment across all inputs */
+        /* Standardize input height across Skill, Year, and Month fields */
         .textinput, .year-input, .month-input, .delete-checkbox input {
             height: 35px; /* Set the same height for all */
             padding: 5px;
@@ -42,13 +43,17 @@
         }
 
         .year-input, .month-input {
-            width: 60px; /* Fixed width for year and month inputs */
+            width: 60px; /* Fixed small width for inputs */
+        }
+
+        .delete-checkbox {
+            text-align: right;
+            width: 40px; /* Fixed smaller width for delete container */
         }
 
         .delete-checkbox input {
             width: 20px; /* Smaller width for the delete checkbox */
-            height: 20px; /* Make the checkbox smaller and align with other inputs */
-            margin-top: 8px; /* Adjust margin to align vertically with other inputs */
+            height: 20px; /* Set height for the delete checkbox */
         }
 
         th {
@@ -74,8 +79,9 @@
 
         .header-group {
             display: flex;
-            gap: 10px;
+            gap: 5px;
             align-items: center;
+            margin-left: -5%; /* Move the Years/Months/Delete group in the header left */
         }
 
         /* Add custom left margin for header items */
@@ -88,7 +94,7 @@
         }
 
         .header-delete {
-            margin-right: 8%; /* Move the Delete header to the right */
+            margin-right: 2%; /* Move the Delete header closer to the right */
         }
 
         /* Minimal padding for the form */
@@ -99,7 +105,7 @@
 </head>
 <body>
     <h1>{% if job_id %}Edit Job{% else %}Add Job{% endif %}</h1>
-    <h2>Version 23</h2>
+    <h2>Version 25</h2>
 
     <div class="form-container">
         <form method="POST" novalidate id="skill-form">
