@@ -33,9 +33,15 @@
             align-items: center;
         }
 
+        /* Standardize input height across Skill, Year, and Month fields */
+        .textinput, .year-input, .month-input {
+            height: 36px;  /* Set a consistent height */
+            padding: 5px;   /* Add consistent padding */
+            box-sizing: border-box; /* Ensure padding doesn't affect total height */
+        }
+
         .year-input, .month-input {
             width: 60px; /* Fixed small width for inputs */
-            padding: 3px;
         }
 
         .delete-checkbox {
@@ -72,27 +78,26 @@
 
         /* Add custom left margin for header items */
         .header-years {
-            margin-left: -15%; /* Shift the Years header left by 10% */
+            margin-left: -15%; /* Shift the Years header left */
         }
 
         .header-months {
-            margin-left: 7%; /* Shift the Months header left by 5% */
+            margin-left: 7%; /* Shift the Months header left */
         }
 
         .header-delete {
-            margin-right: 8%; /* Move the Delete header to the right by 5% */
+            margin-right: 8%; /* Move the Delete header to the right */
         }
 
         /* Minimal padding for the form */
         .form-container {
             padding: 10px;
         }
-
     </style>
 </head>
 <body>
     <h1>{% if job_id %}Edit Job{% else %}Add Job{% endif %}</h1>
-    <h2>Version 21</h2>
+    <h2>Version 22</h2>
 
     <div class="form-container">
         <form method="POST" novalidate id="skill-form">
@@ -105,9 +110,7 @@
             {{ job_form.as_p }}
         
             <h3>Skills</h3>
-            <!-- Include the management form here -->
             {{ formset.management_form }}
-            
             <div class="header-row">
                 <div class="header-skill">Skill</div>
                 <div class="header-group">
