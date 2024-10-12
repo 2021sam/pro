@@ -2,7 +2,7 @@
 	
 {% block content %}
 <h1>My Experience</h1>
-	<a href="{% url 'experience-add' %}">Add</a>
+	<a href="{% url 'pro_experience:experience-add' %}">Add</a>
 
 	{% for e in experience %}
 		<h2>Title: {{ e.title }}</h2>
@@ -15,8 +15,8 @@
         <small>Timestamp on {{ e.timestamp | date:"M d, Y" }} by {{ e.user | title}}</small>
 		{% if request.user.is_authenticated and request.user == e.user %}
 		<p>
-			<a href="{% url 'experience-edit' e.id %}">Edit</a> 
-			<a href="{% url 'experience-delete' e.id%}">Delete</a>
+			<a href="{% url 'pro_experience:experience-edit' e.id %}">Edit</a> 
+			<a href="{% url 'pro_experience:experience-delete' e.id%}">Delete</a>
 		</p>
 		{% endif %}
 		
