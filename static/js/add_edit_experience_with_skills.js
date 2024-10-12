@@ -37,12 +37,51 @@ document.getElementById('skill-form').addEventListener('input', function () {
     }
 });
 
-// Handle form submission
-document.querySelector('form').addEventListener('submit', function () {
-    const lastRow = formsetBody.querySelector('.form-row:last-child');
-    const skillInput = lastRow.querySelector('input[name$="-skill"]');
 
-    if (!skillInput.value.trim()) {
-        formsetBody.removeChild(lastRow); // Remove the last row if it's empty
+
+
+
+
+
+// Event listener to handle form submission
+document.querySelector('form').addEventListener('submit', function (event) {
+    event.preventDefault();  // Prevent form submission to view console logs
+
+    const lastRow = formsetBody.querySelector('.form-row:last-child');
+    console.log('Form submission detected.');
+
+    // If the last row is not filled, clear its inputs so it's ignored
+    if (!isLastRowFilled()) {
+        console.log('Last row is empty. Clearing its values before submission.');
+        lastRow.querySelectorAll('input').forEach(input => {
+            console.log(`Clearing input: ${input.name}`);
+            input.value = '';
+        });
+
+        // Decrement the total forms count to ignore the last empty form
+        const currentFormCount = parseInt(totalFormsInput.value);
+        totalFormsInput.value = currentFormCount - 1;
+        console.log(`Decremented form count. New form count: ${totalFormsInput.value}`);
+    } else {
+        console.log('Last row is filled. Proceeding with form submission.');
     }
+
+    // Uncomment the line below to allow the form to submit after checking logs
+    // this.submit();
 });
+
+
+
+
+
+// // Handle form submission
+// document.querySelector('form').addEventListener('submit', function () {
+//     const lastRow = formsetBody.querySelector('.form-row:last-child');
+//     const skillInput = lastRow.querySelector('input[name$="-skill"]');
+
+//     if (!skillInput.value.trim()) {
+//         formsetBody.removeChild(lastRow); // Remove the last row if it's empty
+//     }
+// });
+
+
