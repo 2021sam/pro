@@ -66,5 +66,5 @@ def delete(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
     if request.method == 'POST':
         experience.delete()
-        return redirect('pro_experience:experience-view')
+        return redirect('pro_experience:pro-experience-list')
     return render(request, 'pro_experience/experience_confirm_delete.html', {'experience': experience})

@@ -84,7 +84,7 @@ def delete(request, job_id):
     context = {'job': job}
     
     if request.method == 'GET':
-        return render(request, 'employer_job/job_delete_confirmation.html', context)
+        return render(request, 'employer_job/job_confirm_delete.html', context)
     elif request.method == 'POST':
         job.delete()
         messages.success(request,  'The post has been deleted successfully.')

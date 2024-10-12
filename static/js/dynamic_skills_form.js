@@ -1,12 +1,15 @@
+// /Users/2021sam/apps/zyxe/pro/static/js/dynamic_skills_form.js
 const formsetBody = document.getElementById('formset-body');
 const totalFormsInput = document.querySelector('#id_form-TOTAL_FORMS');  // Django formset management input for total forms
 
-// Function to dynamically add a new form row
+// Function to dynamically add a new form row in the Flexbox structure
 function addNewFormRow() {
-    let formCount = parseInt(totalFormsInput.value);
+    let formCount = parseInt(totalFormsInput.value);  // Get the current form count from the management form input
+    console.log(`Adding new form row. Current form count: ${formCount}`);
 
+    // Create a new Flexbox row
     const newRow = document.createElement('div');
-    newRow.classList.add('form-row');
+    newRow.classList.add('form-row');  // Flexbox row
 
     newRow.innerHTML = `
         <div class="form-group skill-col">
@@ -21,27 +24,39 @@ function addNewFormRow() {
         </div>
     `;
 
+    // Append the new Flexbox row to the formset body
     formsetBody.appendChild(newRow);
+    console.log('New row added to the formset body.');
+
+    // Increment the total forms count in the management form
     totalFormsInput.value = formCount + 1;
+    console.log(`Total forms count updated to: ${totalFormsInput.value}`);
 }
 
-// Event listener to dynamically add new row when the last row is filled
-document.getElementById('skill-form').addEventListener('input', function () {
+// Function to check if the last form row is filled out
+function isLastRowFilled() {
     const lastRow = formsetBody.querySelector('.form-row:last-child');
     const skillInput = lastRow.querySelector('input[name$="-skill"]');
     const yearInput = lastRow.querySelector('input[name$="-skill_years"]');
     const monthInput = lastRow.querySelector('input[name$="-skill_months"]');
 
-    if (skillInput.value.trim() !== "" && (parseInt(yearInput.value) > 0 || parseInt(monthInput.value) > 0)) {
-        addNewFormRow();
+    // Log the values for debugging
+    console.log(`Checking last row: Skill: ${skillInput.value}, Years: ${yearInput.value}, Months: ${monthInput.value}`);
+
+    // Check if the skill is filled and at least one of years or months is non-zero
+    return skillInput.value.trim() !== "" && (parseInt(yearInput.value) > 0 || parseInt(monthInput.value) > 0);
+}
+
+// Event listener to dynamically add a new row when the last row is filled
+document.getElementById('skill-form').addEventListener('input', function () {
+    console.log('Input detected.');
+    if (isLastRowFilled()) {
+        console.log('Last row is filled. Adding new form row.');
+        addNewFormRow();  // Add a new empty form row when the last row is filled
+    } else {
+        console.log('Last row is not filled yet.');
     }
 });
-
-
-
-
-
-
 
 // Event listener to handle form submission
 document.querySelector('form').addEventListener('submit', function (event) {
@@ -67,21 +82,5 @@ document.querySelector('form').addEventListener('submit', function (event) {
     }
 
     // Uncomment the line below to allow the form to submit after checking logs
-    // this.submit();
+    this.submit();
 });
-
-
-
-
-
-// // Handle form submission
-// document.querySelector('form').addEventListener('submit', function () {
-//     const lastRow = formsetBody.querySelector('.form-row:last-child');
-//     const skillInput = lastRow.querySelector('input[name$="-skill"]');
-
-//     if (!skillInput.value.trim()) {
-//         formsetBody.removeChild(lastRow); // Remove the last row if it's empty
-//     }
-// });
-
-
