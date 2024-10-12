@@ -1,10 +1,11 @@
+<!-- /Users/2021sam/apps/zyxe/pro/pro_experience/templates/pro_experience/experience_list.html -->
 {% extends 'base.html' %}
 	
 {% block content %}
 <h1>My Experience</h1>
 	<a href="{% url 'pro_experience:experience-add' %}">Add</a>
 
-	{% for e in experience %}
+	{% for e in experience_list %}
 		<h2>Title: {{ e.title }}</h2>
 		<p>Company: {{e.company}}
 		<p>Company Web: <a href="{{ e.company_web }}">{{ e.company_web }}</a></p>
