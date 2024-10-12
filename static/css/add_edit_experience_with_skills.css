@@ -1,0 +1,93 @@
+/* Overall form styling */
+.form-group {
+    margin-bottom: 2px;
+}
+
+/* Flexbox container for aligning Year, Month, and Delete columns */
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.skill-col {
+    flex: 1; /* Skill takes up the remaining space */
+    padding-right: 15px;
+}
+
+.years-months-delete-container {
+    display: flex;
+    gap: 10px; /* Space between Year, Month, and Delete */
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Standardize input height across Skill, Year, and Month fields */
+.textinput, .year-input, .month-input, .delete-checkbox input {
+    height: 35px; /* Set the same height for all */
+    padding: 5px;
+    box-sizing: border-box;
+    vertical-align: middle; /* Align inputs vertically in the middle */
+}
+
+.year-input, .month-input {
+    width: 60px; /* Fixed small width for inputs */
+}
+
+.delete-checkbox {
+    text-align: right;
+    width: 40px; /* Fixed smaller width for delete container */
+    margin-right: 30px; /* Add buffer to push checkbox to the left */
+}
+
+.delete-checkbox input {
+    width: 20px; /* Smaller width for the delete checkbox */
+    height: 20px; /* Set height for the delete checkbox */
+}
+
+th {
+    text-align: left;
+    padding: 5px 0;
+}
+
+table {
+    width: 100%;
+}
+
+/* For the header row to align properly */
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #000;
+}
+
+.header-skill {
+    flex: 1;
+}
+
+.header-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Add custom left margin for header items */
+.header-years {
+    margin-left: -28%; /* Shift the Years header left */
+}
+
+.header-months {
+    margin-left: 9%; /* Shift the Months header left */
+}
+
+.header-delete {
+    margin-right: 5%; /* Move the Delete header closer to the right */
+}
+
+/* Minimal padding for the form */
+.form-container {
+    padding: 10px;
+}
