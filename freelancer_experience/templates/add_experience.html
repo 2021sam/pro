@@ -1,0 +1,19 @@
+<!-- /Users/2021sam/apps/zyxe/freelancer_experience/templates/freelancer_experience/add_experience.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h1>Add Experience</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{ experience_form.as_p }}
+    <h2>Skills</h2>
+    {{ formset.management_form }}
+    {% for form in formset %}
+        <div>
+            {{ form.skill.label_tag }} {{ form.skill }} <br>
+            {{ form.skill_years.label_tag }} {{ form.skill_years }} <br>
+            {{ form.skill_months.label_tag }} {{ form.skill_months }}
+        </div>
+    {% endfor %}
+    <button type="submit">Save</button>
+</form>
+{% endblock %}
