@@ -2,6 +2,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<h1>Step {{ step }}: Add Experience</h1>
 <h2>Experience Form</h2>
 <form method="post" novalidate>
     {% csrf_token %}
@@ -20,6 +21,6 @@
         </div>
     {% endfor %}
     
-    <input type="submit" value="Save" />
+    <button type="submit">Next</button>
 </form>
 {% endblock content %}

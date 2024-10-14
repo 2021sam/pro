@@ -38,9 +38,9 @@ from .models import FreelancerExperience, FreelancerSkill
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(login_required, name='dispatch')  # Ensure all methods require login
 class MultiStepFormView(View):
-    form_list = [FreelancerExperienceForm, FreelancerSkillFormSet]
+    form_list = [FreelancerExperienceForm, FreelancerSkillFormSet]  # List of forms
     step_titles = ["Experience", "Skills"]
     template_list = [
         'freelancer_experience/experience_form.html',
@@ -51,37 +51,33 @@ class MultiStepFormView(View):
         """
         Handle the GET request, displaying the current step's form.
         """
-        form_class = self.form_list[step]
         if step == 0:
-            form = form_class()
+            form = self.form_list[step]()
         elif step == 1:
-            form = form_class(queryset=FreelancerSkill.objects.none())
-        
+            form = self.form_list[step](queryset=FreelancerSkill.objects.none())  # Pass formset for skills
+
         return self.render_step(request, form, step)
 
     def post(self, request, step=0):
         """
         Handle form submission and move to the next step.
         """
-        form_class = self.form_list[step]
         if step == 0:
-            form = form_class(request.POST)
+            form = self.form_list[step](request.POST)
         elif step == 1:
-            form = form_class(request.POST)
+            form = self.form_list[step](request.POST)
 
         if form.is_valid():
-            # Save the form data
+            # Save form data based on the step
             if step == 0:
-                # Save the experience
                 experience = form.save(commit=False)
                 experience.user = request.user
                 experience.save()
-                request.session['experience_id'] = experience.id  # Save experience ID in session
+                request.session['experience_id'] = experience.id
             elif step == 1:
-                # Save the skills and link them to the experience
-                skills = form.save(commit=False)
                 experience_id = request.session.get('experience_id')
                 experience = FreelancerExperience.objects.get(id=experience_id)
+                skills = form.save(commit=False)
                 for skill in skills:
                     skill.experience = experience
                     skill.save()
