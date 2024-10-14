@@ -21,7 +21,7 @@
             {% csrf_token %}
         
             <h3>Skills</h3>
-            {{ formset.management_form }}  <!-- This is required to manage the formset -->
+            {{ form.management_form }}  <!-- This is required to manage the formset -->
             <div class="header-row">
                 <div class="header-skill">Skill</div>
                 <div class="header-group">
@@ -32,7 +32,7 @@
             </div>
             
             <div id="formset-body">
-                {% for form in formset %}
+                {% for form in form %}
                 <div class="form-row">
                     {{ form.id }}
                     <div class="form-group skill-col">

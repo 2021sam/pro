@@ -76,7 +76,9 @@ class MultiStepFormView(View):
                 request.session['experience_id'] = experience.id
             elif step == 1:
                 experience_id = request.session.get('experience_id')
+                print(f'79 experience_id: {experience_id}')
                 experience = FreelancerExperience.objects.get(id=experience_id)
+                print(f'experience: {experience}')
                 skills = form.save(commit=False)
                 for skill in skills:
                     skill.experience = experience
@@ -103,3 +105,26 @@ class MultiStepFormView(View):
 
         template = self.template_list[step]
         return render(request, template, context)
+
+
+
+
+from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.views.generic import DeleteView
+from .models import FreelancerExperience
+
+@method_decorator(login_required, name='dispatch')
+class ExperienceDeleteView(DeleteView):
+    model = FreelancerExperience
+    template_name = 'freelancer_experience/experience_confirm_delete.html'
+    context_object_name = 'experience'
+    success_url = reverse_lazy('freelancer_experience:experience-list')
+
+    def get_object(self):
+        """Override this method to ensure only the user's experience can be deleted."""
+        experience_id = self.kwargs.get('experience_id')
+        experience = get_object_or_404(FreelancerExperience, pk=experience_id, user=self.request.user)
+        return experience
