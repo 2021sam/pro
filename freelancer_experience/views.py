@@ -1,7 +1,7 @@
 # /Users/2021sam/apps/zyxe/pro/freelancer_experience/views.py
 from django.shortcuts import render, redirect
 from django.views import View
-from django.forms import formset_factory
+from django.forms import modelformset_factory
 from .forms import FreelancerExperienceForm, FreelancerSkillForm
 from .models import FreelancerExperience, FreelancerSkill
 from django.contrib.auth.decorators import login_required
@@ -24,7 +24,7 @@ class ExperienceList(View):
 
 @method_decorator(login_required, name='dispatch')  # Ensure all methods require login
 class MultiStepFormView(View):
-    form_list = [FreelancerExperienceForm, formset_factory(FreelancerSkillForm, extra=1)]  # List of forms
+    form_list = [FreelancerExperienceForm, modelformset_factory(FreelancerSkillForm, extra=1)]  # List of forms
     step_titles = ["Experience", "Skills", "Manager Info", "Location Info"]
     template_list = [
         'freelancer_experience/experience_form.html',
@@ -39,11 +39,10 @@ class MultiStepFormView(View):
         """
         form_class = self.form_list[step]
         if step == 0:
-            form = form_class() if not isinstance(form_class, list) else form_class(queryset=FreelancerSkill.objects.none())
-        
-        if step == 1:
+            form = form_class()
+        elif step == 1:
             form = form_class(queryset=FreelancerSkill.objects.none())
-    
+        
         return self.render_step(request, form, step)
 
     def post(self, request, step=0):
@@ -51,41 +50,37 @@ class MultiStepFormView(View):
         Handle form submission and move to the next step.
         """
         form_class = self.form_list[step]
-        form = form_class(request.POST) if not isinstance(form_class, list) else form_class(request.POST)
+
+        if step == 0:
+            form = form_class(request.POST)
+        elif step == 1:
+            form = form_class(request.POST)  # Formset for skills
 
         if form.is_valid():
-            # Save the form data in session or DB (based on the step)
+            # Step 0: Saving Experience
             if step == 0:
                 experience = form.save(commit=False)
                 experience.user = request.user
                 experience.save()
                 request.session['experience_id'] = experience.id  # Save ID in session for later use
-            elif step == 1:
-                skills = form.save(commit=False)
-                for skill in skills:
-                    skill.experience_id = request.session['experience_id']
-                    skill.save()
-            else:
-                # Handle manager and location form data (Steps 2 and 3)
-                experience_id = request.session.get('experience_id')
-                if experience_id:
-                    experience = FreelancerExperience.objects.get(id=experience_id)
-                    if step == 2:
-                        experience.manager_name = form.cleaned_data['manager_name']
-                        experience.manager_email = form.cleaned_data['manager_email']
-                        experience.manager_phone = form.cleaned_data['manager_phone']
-                    elif step == 3:
-                        experience.on_site_work_city = form.cleaned_data['on_site_work_city']
-                        experience.on_site_work_state = form.cleaned_data['on_site_work_state']
-                        experience.location_remote = form.cleaned_data['location_remote']
-                        experience.location_hybrid = form.cleaned_data['location_hybrid']
-                    experience.save()
 
-            # Move to the next step, or finish
+            # Step 1: Saving Skills Formset
+            elif step == 1:
+                formset = form_class(request.POST)  # Handle formset specifically
+                if formset.is_valid():
+                    skills = formset.save(commit=False)
+                    experience_id = request.session['experience_id']
+                    experience = FreelancerExperience.objects.get(id=experience_id)
+
+                    for skill in skills:
+                        skill.experience = experience
+                        skill.save()
+
+            # Move to the next step
             if step + 1 < len(self.form_list):
                 return redirect('freelancer_experience:multi-step', step=step + 1)
             else:
-                return redirect('freelancer_experience:experience-list')  # Redirect to final view after all steps are done
+                return redirect('freelancer_experience:experience-list')  # Final redirection after completing all steps
 
         return self.render_step(request, form, step)
 
