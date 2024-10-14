@@ -1,10 +1,16 @@
+<!-- /Users/2021sam/apps/zyxe/pro/freelancer_experience/templates/freelancer_experience/home.html -->
 {% extends 'base.html' %}
-	
+
 {% block content %}
 <h1>My Experience</h1>
-	<p>Create motivation for people to take the time to manually insert their entire resume in this format.</p>
 
-	<a href="{% url 'pro_experience:experience-add' %}">Add</a>
-	<a href="{% url 'pro_experience:pro-experience-list' %}">View</a> 
+<p>Taking the time to manually insert your complete resume ensures better job matches, higher visibility to recruiters, and a more comprehensive profile that showcases all of your talents.</p>
+
+<p>Start building your profile now!</p>
+
+<div>
+    <a href="{% url 'freelancer_experience:multi-step' %}" class="btn btn-primary">Add Experience</a>
+    <a href="{% url 'freelancer_experience:experience-list' %}" class="btn btn-secondary">View Experience</a> 
+</div>
 
 {% endblock content %}
