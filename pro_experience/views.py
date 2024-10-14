@@ -9,13 +9,13 @@ from pro_skills.models import Skill
 @login_required
 def home(request):
     content = {}
-    return render(request, 'pro_experience/home.html', content)
+    return render(request, 'freelancer_experience/home.html', content)
 
 @login_required
 def view(request):
     experience_list = Experience.objects.filter(user=request.user)
     context = {'experience_list': experience_list}
-    return render(request, 'pro_experience/experience_list.html', context)
+    return render(request, 'freelancer_experience/experience_list.html', context)
 
 @login_required
 def add_edit_experience(request, experience_id=None):
@@ -66,5 +66,5 @@ def delete(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
     if request.method == 'POST':
         experience.delete()
-        return redirect('pro_experience:pro-experience-list')
-    return render(request, 'pro_experience/experience_confirm_delete.html', {'experience': experience})
+        return redirect('freelancer_experience:pro-experience-list')
+    return render(request, 'freelancer_experience/experience_confirm_delete.html', {'experience': experience})

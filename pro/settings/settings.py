@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'pro_education',
     'pro_experience',
     'pro_skills',
-     'freelancer_experience',
+    'phonenumbers',
+    'freelancer_experience',
 ]
 
 MIDDLEWARE = [

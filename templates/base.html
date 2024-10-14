@@ -35,6 +35,18 @@
                         </li>
                     {% endif %}
                     
+                    {% if user.settings.role == 'freelancer' %}
+                    <li>
+                        <p>
+                            <h3>Freelancer</h3>
+                            <a href="{% url 'freelancer_experience:home' %}">Profile</a>
+                        </p>
+                    </li>
+                {% endif %}
+                
+
+
+
                     <!-- Check for Employer role -->
                     {% if user.settings.role == 'recruiter' %}
                         <li>

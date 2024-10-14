@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+	
+{% block content %}
+<h1>My Experience</h1>
+	<p>Create motivation for people to take the time to manually insert their entire resume in this format.</p>
+
+	<a href="{% url 'pro_experience:experience-add' %}">Add</a>
+	<a href="{% url 'pro_experience:pro-experience-list' %}">View</a> 
+
+{% endblock content %}

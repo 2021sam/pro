@@ -1,0 +1,61 @@
+<!-- /Users/2021sam/apps/zyxe/pro/freelancer_experience/templates/freelancer_experience/skills_form.html -->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add/Edit Experience with Skills</title>
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/add_edit_experience_with_skills.css' %}">
+</head>
+<body>
+    <h1>{% if experience_id %}Edit Experience{% else %}Add Experience{% endif %}</h1>
+    <h2>Version 1</h2>  <!-- Update this for versioning control -->
+
+    <div class="form-container">
+        <form method="POST" novalidate id="skill-form">
+            {% csrf_token %}
+        
+            <h3>Skills</h3>
+            {{ formset.management_form }}  <!-- This is required to manage the formset -->
+            <div class="header-row">
+                <div class="header-skill">Skill</div>
+                <div class="header-group">
+                    <div class="header-years">Years</div>
+                    <div class="header-months">Months</div>
+                    <div class="header-delete">Delete</div>
+                </div>
+            </div>
+            
+            <div id="formset-body">
+                {% for form in formset %}
+                <div class="form-row">
+                    {{ form.id }}
+                    <div class="form-group skill-col">
+                        {{ form.skill }}
+                        {% if form.skill.errors %}
+                            <div class="error-message">{{ form.skill.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="years-months-delete-container">
+                        <input type="number" class="year-input" min="0" max="10" value="{{ form.skill_years.value|default:0 }}" name="{{ form.prefix }}-skill_years">
+                        <input type="number" class="month-input" min="0" max="11" value="{{ form.skill_months.value|default:0 }}" name="{{ form.prefix }}-skill_months">
+                        <div class="delete-checkbox">
+                            {{ form.DELETE }}  <!-- Delete checkbox -->
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit">Save</button>
+        </form>
+    </div>
+
+<!-- Load external JavaScript file -->
+<script src="{% static 'js/dynamic_skills_form.js' %}"></script>
+
+</body>
+</html>

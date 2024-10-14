@@ -17,5 +17,6 @@ urlpatterns = [
     path('pro/experience/', include('pro_experience.urls')),
     # path('pro/skills/', include('pro_skills.urls')),
     path('employer/profile/', include('employer_profile.urls', namespace='employer_profile')),
-    path('employer/job/', include('employer_job.urls', namespace='employer_job'))
+    path('employer/job/', include('employer_job.urls', namespace='employer_job')),
+    path('freelancer/freelancer_experience', include('freelancer_experience.urls'))
 ]

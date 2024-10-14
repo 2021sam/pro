@@ -171,3 +171,8 @@ python manage.py makemigrations pro_education
 python manage.py makemigrations pro_experience
 python manage.py makemigrations pro_skills
 python manage.py migrate
+
+
+
+pip install django-phonenumber-field
+pip install phonenumbers

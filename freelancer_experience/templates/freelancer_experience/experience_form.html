@@ -1,0 +1,25 @@
+<!-- /Users/2021sam/apps/zyxe/pro/freelancer_experience/templates/freelancer_experience/experience_form.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Experience Form</h2>
+<form method="post" novalidate>
+    {% csrf_token %}
+    
+    {% for field in form %}
+        <div class="form-group">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.errors %}
+                <div class="text-danger"> <!-- Ensure this class is present -->
+                    {% for error in field.errors %}
+                        <p>{{ error }}</p> <!-- Ensure this part exists -->
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+    
+    <input type="submit" value="Save" />
+</form>
+{% endblock content %}

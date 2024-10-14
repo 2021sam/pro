@@ -1,11 +1,12 @@
 # /Users/2021sam/apps/zyxe/freelancer_experience/models.py
 from django.db import models
 from django.contrib.auth.models import User
+from django.forms import ValidationError
 from django.utils import timezone
 from django.conf import settings
 
 class FreelancerProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Link experience to a user
     bio = models.TextField(blank=True)
     hourly_rate = models.DecimalField(max_digits=10, decimal_places=2)
     availability = models.BooleanField(default=True)
@@ -14,22 +15,12 @@ class FreelancerProfile(models.Model):
     def __str__(self):
         return self.user.username
 
-class FreelancerExperience(models.Model):
-    profile = models.ForeignKey(FreelancerProfile, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
-    company = models.CharField(max_length=100, blank=True)
-    start_date = models.DateField()
-    end_date = models.DateField(blank=True, null=True)
-    description = models.TextField(blank=True)
-
-    def __str__(self):
-        return self.title
-
 
 from django.db import models
 from django.utils import timezone
 import datetime
 from django.conf import settings
+# pip install django-phonenumber-field
 from phonenumber_field.modelfields import PhoneNumberField
 
 class FreelancerExperience(models.Model):
@@ -68,6 +59,7 @@ class FreelancerExperience(models.Model):
         return f'{self.title} {self.company} ({self.duration_days} days)'
 
     def clean(self):
+        # pass
         if self.date_end < self.date_start:
             raise ValidationError('End date cannot be before the start date')
 
