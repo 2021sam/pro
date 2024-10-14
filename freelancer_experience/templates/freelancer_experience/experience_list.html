@@ -17,7 +17,7 @@
 
     {% if request.user.is_authenticated and request.user == e.user %}
     <p>
-        <a href="{% url 'freelancer_experience:multi-step' step=0 %}?id={{ e.id }}">Edit</a>
+        <a href="{% url 'freelancer_experience:multi-step-edit' 0 e.id %}">Edit</a>
         <a href="{% url 'freelancer_experience:experience-delete' e.id %}">Delete</a>
     </p>
     {% endif %}
