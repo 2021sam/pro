@@ -14,13 +14,13 @@ class Home(View):
         return render(request, 'freelancer_experience/home.html', content)
 
 
-
 @method_decorator(login_required, name='dispatch')  # Ensure all methods require login
 class ExperienceList(View):
     def get(self, request):
         experience_list = FreelancerExperience.objects.filter(user=request.user)
         context = {'experience_list': experience_list}
         return render(request, 'freelancer_experience/experience_list.html', context)
+
 
 @method_decorator(login_required, name='dispatch')  # Ensure all methods require login
 class MultiStepFormView(View):
@@ -38,7 +38,12 @@ class MultiStepFormView(View):
         Handle the GET request, displaying the current step's form.
         """
         form_class = self.form_list[step]
-        form = form_class() if not isinstance(form_class, list) else form_class(queryset=FreelancerSkill.objects.none())
+        if step == 0:
+            form = form_class() if not isinstance(form_class, list) else form_class(queryset=FreelancerSkill.objects.none())
+        
+        if step == 1:
+            form = form_class(queryset=FreelancerSkill.objects.none())
+    
         return self.render_step(request, form, step)
 
     def post(self, request, step=0):

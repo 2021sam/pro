@@ -65,8 +65,6 @@ class FreelancerExperience(models.Model):
 
 
 
-
-
 class FreelancerSkill(models.Model):
     experience = models.ForeignKey(FreelancerExperience, on_delete=models.CASCADE)
     skill = models.CharField(max_length=100)
