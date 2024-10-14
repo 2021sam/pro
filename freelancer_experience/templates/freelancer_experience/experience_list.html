@@ -1,0 +1,25 @@
+<!-- /Users/2021sam/apps/zyxe/pro/freelancer_experience/templates/freelancer_experience/experience_list.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>My Experience</h1>
+<a href="{% url 'freelancer_experience:multi-step' step=0 %}">Add</a>
+
+{% for e in experience_list %}
+    <h2>Title: {{ e.title }}</h2>
+    <p>Company: {{ e.company }}</p>
+    <p>Company Web: <a href="{{ e.company_web }}">{{ e.company_web }}</a></p>
+    <p>Recruiter Web: <a href="{{ e.recruiter_web }}">{{ e.recruiter_web }}</a></p>
+    <p>Duration: {{ e.duration }}</p>
+    <p>Description: {{ e.description }}</p>
+
+    <small>Timestamp on {{ e.timestamp | date:"M d, Y" }} by {{ e.user | title }}</small>
+
+    {% if request.user.is_authenticated and request.user == e.user %}
+    <p>
+        <a href="{% url 'freelancer_experience:multi-step' step=0 %}?id={{ e.id }}">Edit</a>
+        <a href="{% url 'freelancer_experience:experience-delete' e.id %}">Delete</a>
+    </p>
+    {% endif %}
+{% endfor %}
+{% endblock content %}
