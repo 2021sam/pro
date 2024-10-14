@@ -30,16 +30,21 @@ from django.forms import modelformset_factory
 from .forms import FreelancerExperienceForm, FreelancerSkillForm
 from .models import FreelancerExperience, FreelancerSkill
 
-@method_decorator(login_required, name='dispatch')  # Ensure all methods require login
+from django.shortcuts import render, redirect
+from django.views import View
+from django.forms import formset_factory
+from .forms import FreelancerExperienceForm, FreelancerSkillFormSet
+from .models import FreelancerExperience, FreelancerSkill
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
+@method_decorator(login_required, name='dispatch')
 class MultiStepFormView(View):
-    # Use modelformset_factory for handling the skills model
-    form_list = [FreelancerExperienceForm, modelformset_factory(FreelancerSkill, form=FreelancerSkillForm, extra=1)]
-    step_titles = ["Experience", "Skills", "Manager Info", "Location Info"]
+    form_list = [FreelancerExperienceForm, FreelancerSkillFormSet]
+    step_titles = ["Experience", "Skills"]
     template_list = [
         'freelancer_experience/experience_form.html',
-        'freelancer_experience/skills_form.html',
-        'freelancer_experience/manager_form.html',
-        'freelancer_experience/location_form.html'
+        'freelancer_experience/skills_form.html'
     ]
 
     def get(self, request, step=0):
@@ -48,9 +53,9 @@ class MultiStepFormView(View):
         """
         form_class = self.form_list[step]
         if step == 0:
-            form = form_class()  # For FreelancerExperienceForm (standard form)
+            form = form_class()
         elif step == 1:
-            form = form_class(queryset=FreelancerSkill.objects.none())  # For FreelancerSkillForm (formset)
+            form = form_class(queryset=FreelancerSkill.objects.none())
         
         return self.render_step(request, form, step)
 
@@ -60,29 +65,28 @@ class MultiStepFormView(View):
         """
         form_class = self.form_list[step]
         if step == 0:
-            form = form_class(request.POST)  # FreelancerExperienceForm
+            form = form_class(request.POST)
         elif step == 1:
-            form = form_class(request.POST)  # FreelancerSkillForm formset
+            form = form_class(request.POST)
 
         if form.is_valid():
-            # Step 0: Save Experience form
+            # Save the form data
             if step == 0:
+                # Save the experience
                 experience = form.save(commit=False)
                 experience.user = request.user
                 experience.save()
-                request.session['experience_id'] = experience.id  # Save experience ID for later
-
-            # Step 1: Save Skills formset
+                request.session['experience_id'] = experience.id  # Save experience ID in session
             elif step == 1:
+                # Save the skills and link them to the experience
                 skills = form.save(commit=False)
-                experience_id = request.session['experience_id']
+                experience_id = request.session.get('experience_id')
                 experience = FreelancerExperience.objects.get(id=experience_id)
-
                 for skill in skills:
                     skill.experience = experience
                     skill.save()
 
-            # Move to the next step
+            # Move to the next step or finish
             if step + 1 < len(self.form_list):
                 return redirect('freelancer_experience:multi-step', step=step + 1)
             else:
@@ -99,7 +103,7 @@ class MultiStepFormView(View):
             'step': step,
             'total_steps': len(self.form_list),
             'step_title': self.step_titles[step],
-            'next_step': step + 1 if step + 1 < len(self.form_list) else None,
         }
+
         template = self.template_list[step]
         return render(request, template, context)
