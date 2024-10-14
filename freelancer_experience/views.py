@@ -26,6 +26,10 @@ from django.forms import modelformset_factory
 from .forms import FreelancerExperienceForm, FreelancerSkillForm
 from .models import FreelancerExperience, FreelancerSkill
 
+from django.forms import modelformset_factory
+from .forms import FreelancerExperienceForm, FreelancerSkillForm
+from .models import FreelancerExperience, FreelancerSkill
+
 @method_decorator(login_required, name='dispatch')  # Ensure all methods require login
 class MultiStepFormView(View):
     # Use modelformset_factory for handling the skills model
