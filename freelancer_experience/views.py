@@ -22,16 +22,21 @@ class ExperienceList(View):
         return render(request, 'freelancer_experience/experience_list.html', context)
 
 
+from django.forms import modelformset_factory
+from .forms import FreelancerExperienceForm, FreelancerSkillForm
+from .models import FreelancerExperience, FreelancerSkill
+
 @method_decorator(login_required, name='dispatch')  # Ensure all methods require login
 class MultiStepFormView(View):
-    form_list = [FreelancerExperienceForm, modelformset_factory(FreelancerSkillForm, extra=1)]  # List of forms
+    # Use modelformset_factory for handling the skills model
+    form_list = [FreelancerExperienceForm, modelformset_factory(FreelancerSkill, form=FreelancerSkillForm, extra=1)]
     step_titles = ["Experience", "Skills", "Manager Info", "Location Info"]
     template_list = [
         'freelancer_experience/experience_form.html',
         'freelancer_experience/skills_form.html',
         'freelancer_experience/manager_form.html',
         'freelancer_experience/location_form.html'
-    ]  # Corresponding templates for each form step
+    ]
 
     def get(self, request, step=0):
         """
@@ -39,9 +44,9 @@ class MultiStepFormView(View):
         """
         form_class = self.form_list[step]
         if step == 0:
-            form = form_class()
+            form = form_class()  # For FreelancerExperienceForm (standard form)
         elif step == 1:
-            form = form_class(queryset=FreelancerSkill.objects.none())
+            form = form_class(queryset=FreelancerSkill.objects.none())  # For FreelancerSkillForm (formset)
         
         return self.render_step(request, form, step)
 
@@ -50,37 +55,34 @@ class MultiStepFormView(View):
         Handle form submission and move to the next step.
         """
         form_class = self.form_list[step]
-
         if step == 0:
-            form = form_class(request.POST)
+            form = form_class(request.POST)  # FreelancerExperienceForm
         elif step == 1:
-            form = form_class(request.POST)  # Formset for skills
+            form = form_class(request.POST)  # FreelancerSkillForm formset
 
         if form.is_valid():
-            # Step 0: Saving Experience
+            # Step 0: Save Experience form
             if step == 0:
                 experience = form.save(commit=False)
                 experience.user = request.user
                 experience.save()
-                request.session['experience_id'] = experience.id  # Save ID in session for later use
+                request.session['experience_id'] = experience.id  # Save experience ID for later
 
-            # Step 1: Saving Skills Formset
+            # Step 1: Save Skills formset
             elif step == 1:
-                formset = form_class(request.POST)  # Handle formset specifically
-                if formset.is_valid():
-                    skills = formset.save(commit=False)
-                    experience_id = request.session['experience_id']
-                    experience = FreelancerExperience.objects.get(id=experience_id)
+                skills = form.save(commit=False)
+                experience_id = request.session['experience_id']
+                experience = FreelancerExperience.objects.get(id=experience_id)
 
-                    for skill in skills:
-                        skill.experience = experience
-                        skill.save()
+                for skill in skills:
+                    skill.experience = experience
+                    skill.save()
 
             # Move to the next step
             if step + 1 < len(self.form_list):
                 return redirect('freelancer_experience:multi-step', step=step + 1)
             else:
-                return redirect('freelancer_experience:experience-list')  # Final redirection after completing all steps
+                return redirect('freelancer_experience:experience-list')
 
         return self.render_step(request, form, step)
 
@@ -93,9 +95,7 @@ class MultiStepFormView(View):
             'step': step,
             'total_steps': len(self.form_list),
             'step_title': self.step_titles[step],
-            'next_step': step + 1 if step + 1 < len(self.form_list) else None,  # Pass the next step value
+            'next_step': step + 1 if step + 1 < len(self.form_list) else None,
         }
-
-        # Use a different template based on the current step
         template = self.template_list[step]
         return render(request, template, context)
