@@ -68,12 +68,14 @@ from django.utils.decorators import method_decorator
 
 @method_decorator(login_required, name='dispatch')
 class MultiStepFormView(View):
-    form_list = [FreelancerExperienceForm, modelformset_factory(FreelancerSkill, form=FreelancerSkillForm, extra=1)]  # List of forms/formsets
+    form_list = [FreelancerExperienceForm, modelformset_factory(FreelancerSkill, form=FreelancerSkillForm, extra=1, can_delete=True)]  # List of forms/formsets
     step_titles = ["Experience", "Skills"]
     template_list = [
         'freelancer_experience/experience_form.html',
         'freelancer_experience/skills_form.html'
     ]  # Templates for each step
+
+
 
     def get(self, request, step=0, experience_id=None):
         """
@@ -83,9 +85,14 @@ class MultiStepFormView(View):
 
         if step == 0:  # Experience form
             form = form_class(instance=FreelancerExperience.objects.get(pk=experience_id)) if experience_id else form_class()
+
         elif step == 1:  # Skills formset
             formset_class = form_class
-            form = formset_class(queryset=FreelancerSkill.objects.filter(experience_id=experience_id))
+            # For new experience (experience_id is None), pass an empty queryset
+            if experience_id is None:
+                form = formset_class(queryset=FreelancerSkill.objects.none())
+            else:
+                form = formset_class(queryset=FreelancerSkill.objects.filter(experience_id=experience_id))
 
         return self.render_step(request, form, step, experience_id)
 
@@ -94,12 +101,13 @@ class MultiStepFormView(View):
         Handle form submission and move to the next step.
         """
         form_class = self.form_list[step]
-        
+
         if step == 0:  # Experience form
             form = form_class(request.POST)
+
         elif step == 1:  # Skills formset
             formset_class = form_class
-            form = formset_class(request.POST, queryset=FreelancerSkill.objects.filter(experience_id=experience_id))
+            form = formset_class(request.POST, queryset=FreelancerSkill.objects.filter(experience_id=experience_id) if experience_id else FreelancerSkill.objects.none())
 
         if form.is_valid():
             if step == 0:  # Save the experience form
@@ -128,6 +136,7 @@ class MultiStepFormView(View):
         """
         Helper function to render the current step's form.
         """
+        print(f'form: {form}')
         context = {
             'formset': form if isinstance(form, type(self.form_list[1])) else None,  # Pass formset only for step 1
             'form': form if isinstance(form, FreelancerExperienceForm) else None,  # Pass the form for step 0
