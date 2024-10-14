@@ -101,6 +101,8 @@ class MultiStepFormView(View):
                     experience.user = request.user
                     experience.save()
                     request.session['experience_id'] = experience.id  # Save ID in session for later use
+                    experience_id = experience.id  # Update experience_id for future steps
+
             elif step == 1:
                 skills = form.save(commit=False)
                 for skill in skills:
@@ -109,11 +111,12 @@ class MultiStepFormView(View):
 
             # Move to the next step or finish
             if step + 1 < len(self.form_list):
-                return redirect('freelancer_experience:multi-step', step=step + 1, experience_id=experience_id)
+                return redirect('freelancer_experience:multi-step-edit', step=step + 1, experience_id=experience_id)
             else:
                 return redirect('freelancer_experience:experience-list')
 
         return self.render_step(request, form, step)
+
 
     def render_step(self, request, form, step):
         """
