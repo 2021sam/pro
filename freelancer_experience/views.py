@@ -112,8 +112,6 @@ class MultiStepFormView(View):
 
         print(f'step: {step}')
         print(f'form.isvalid(): {form.is_valid()}')
-        # print(f'formset.isvalid(): {formset.is_valid()}')
-
 
         # Handle formset separately for the skills step (step 1)
         if step == 1:
