@@ -58,12 +58,12 @@ class FreelancerSkillForm(forms.ModelForm):
 
 
 # Formset for Skill, using the custom SkillForm
-FreelancerSkillFormSet = modelformset_factory(
-    FreelancerSkill,
-    form=FreelancerSkillForm,
-    extra=1,  # Allows for an additional form initially
-    can_delete=True  # Allow users to delete skills from the formset
-)
+# FreelancerSkillFormSet = modelformset_factory(
+#     FreelancerSkill,
+#     form=FreelancerSkillForm,
+#     extra=1,  # Allows for an additional form initially
+#     can_delete=True  # Allow users to delete skills from the formset
+# )
 
 
 # class ExperienceFormSet(BaseInlineFormSet):

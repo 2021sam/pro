@@ -82,5 +82,5 @@ document.querySelector('form').addEventListener('submit', function (event) {
     }
 
     // Uncomment the line below to allow the form to submit after checking logs
-    // this.submit();
+    this.submit();
 });

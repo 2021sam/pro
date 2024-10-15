@@ -55,8 +55,6 @@ class ExperienceDeleteView(DeleteView):
 
 
 
-# /Users/2021sam/apps/zyxe/pro/freelancer_experience/views.py
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.forms import modelformset_factory
@@ -66,86 +64,98 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(login_required, name='dispatch')  # Ensure all methods require login
 class MultiStepFormView(View):
     form_list = [FreelancerExperienceForm, modelformset_factory(FreelancerSkill, form=FreelancerSkillForm, extra=1, can_delete=True)]  # List of forms/formsets
-    step_titles = ["Experience", "Skills"]
+    step_titles = ["Experience", "Skills"]  # Titles for each step
     template_list = [
         'freelancer_experience/experience_form.html',
-        'freelancer_experience/skills_form.html'
-    ]  # Templates for each step
-
-
+        'freelancer_experience/skills_form.html',
+    ]  # Corresponding templates for each step
 
     def get(self, request, step=0, experience_id=None):
         """
-        Handle the GET request, displaying the current step's form.
+        Handle the GET request to display the current step's form or formset.
         """
         form_class = self.form_list[step]
+        experience = None
+        formset = None
 
-        if step == 0:  # Experience form
-            form = form_class(instance=FreelancerExperience.objects.get(pk=experience_id)) if experience_id else form_class()
+        # If editing, fetch the existing experience
+        if experience_id:
+            experience = get_object_or_404(FreelancerExperience, pk=experience_id)
+            form = form_class(instance=experience) if step == 0 else form_class(queryset=FreelancerSkill.objects.filter(experience=experience))
+        else:
+            form = form_class() if step == 0 else form_class(queryset=FreelancerSkill.objects.none())
 
-        elif step == 1:  # Skills formset
-            formset_class = form_class
-            # For new experience (experience_id is None), pass an empty queryset
-            if experience_id is None:
-                form = formset_class(queryset=FreelancerSkill.objects.none())
-            else:
-                form = formset_class(queryset=FreelancerSkill.objects.filter(experience_id=experience_id))
+        # Handle formset separately for the skills step (step 1)
+        if step == 1:
+            formset = form
 
-        return self.render_step(request, form, step, experience_id)
+        return self.render_step(request, form, formset, step, experience_id)
 
     def post(self, request, step=0, experience_id=None):
         """
-        Handle form submission and move to the next step.
+        Handle the POST request, saving the data and progressing to the next step.
         """
+
         form_class = self.form_list[step]
+        experience = None
+        formset = None
 
-        if step == 0:  # Experience form
-            form = form_class(request.POST)
+        # If editing, fetch the existing experience
+        if experience_id:
+            experience = get_object_or_404(FreelancerExperience, pk=experience_id)
 
-        elif step == 1:  # Skills formset
-            formset_class = form_class
-            form = formset_class(request.POST, queryset=FreelancerSkill.objects.filter(experience_id=experience_id) if experience_id else FreelancerSkill.objects.none())
+        # Initialize the form or formset based on the step
+        form = form_class(request.POST, instance=experience) if step == 0 else form_class(request.POST)
 
-        if form.is_valid():
-            if step == 0:  # Save the experience form
+        print(f'step: {step}')
+        print(f'form.isvalid(): {form.is_valid()}')
+        # print(f'formset.isvalid(): {formset.is_valid()}')
+
+
+        # Handle formset separately for the skills step (step 1)
+        if step == 1:
+            formset = form
+
+        # Validate the form or formset
+        if form.is_valid() and (formset is None or formset.is_valid()):
+            if step == 0:
+                # Save the experience form
                 experience = form.save(commit=False)
                 experience.user = request.user
                 experience.save()
-                request.session['experience_id'] = experience.id
-                experience_id = experience.id  # Update the experience_id for the next steps
-
-            elif step == 1:  # Save the skills formset
+                request.session['experience_id'] = experience.id  # Save the experience ID in the session
+            elif step == 1:
+                # Save the skills formset
                 skills = form.save(commit=False)
                 for skill in skills:
-                    skill.experience_id = experience_id
+                    skill.experience_id = request.session['experience_id']
                     skill.save()
 
             # Move to the next step or finish
             if step + 1 < len(self.form_list):
-                return redirect('freelancer_experience:multi-step-edit', step=step + 1, experience_id=experience_id)
+                return redirect('freelancer_experience:multi-step-edit', step=step + 1, experience_id=experience.id)
             else:
-                return redirect('freelancer_experience:experience-list')  # Redirect to the list view
+                return redirect('freelancer_experience:experience-list')  # Redirect to the experience list after completion
 
-        # If form is not valid, re-render the same step with the form errors
-        return self.render_step(request, form, step, experience_id)
+        return self.render_step(request, form, formset, step, experience_id)
 
-    def render_step(self, request, form, step, experience_id):
+    def render_step(self, request, form, formset, step, experience_id):
         """
-        Helper function to render the current step's form.
+        Helper function to render the current step's form or formset.
         """
-        print(f'form: {form}')
         context = {
-            'formset': form if isinstance(form, type(self.form_list[1])) else None,  # Pass formset only for step 1
-            'form': form if isinstance(form, FreelancerExperienceForm) else None,  # Pass the form for step 0
+            'form': form,
+            'formset': formset,  # Pass the formset separately if applicable
             'step': step,
+            'experience_id': experience_id,  # Pass the experience ID if editing
             'total_steps': len(self.form_list),
             'step_title': self.step_titles[step],
-            'experience_id': experience_id  # Pass experience_id to the template
+            'next_step': step + 1 if step + 1 < len(self.form_list) else None,  # Pass the next step value
         }
 
-        # Use a different template based on the current step
+        # Use the appropriate template based on the current step
         template = self.template_list[step]
         return render(request, template, context)

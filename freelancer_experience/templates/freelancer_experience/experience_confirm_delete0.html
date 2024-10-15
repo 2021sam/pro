@@ -1,0 +1,16 @@
+<!-- /Users/2021sam/apps/zyxe/pro/freelancer_experience/templates/freelancer_experience/experience_confirm_delete.html -->
+{% extends 'base.html' %} 
+
+{% block content %}
+<h2>Delete Experience</h2>
+
+<form method="POST">
+  {% csrf_token %}
+  <p>Are you sure that you want to delete the post "{{experience.title}}" at {{ experience.company }}?</p>
+  <div>
+    <button type="submit">Yes, Delete</button>
+    <a href="{% url 'freelancer_experience:experience-list' %}">Cancel</a>
+  </div>
+</form>
+
+{% endblock content %}
