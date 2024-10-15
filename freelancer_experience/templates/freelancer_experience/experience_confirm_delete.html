@@ -4,7 +4,7 @@
 
 {% block content %}
     <h1>Delete Experience</h1>
-    <p>Are you sure you want to delete this experience: "{{ object.title }}"?</p>
+    <p>Are you sure you want to delete this experience: "{{ object.title }} at {{ experience.company }}"?</p>
 
     <form method="post">
         {% csrf_token %}
