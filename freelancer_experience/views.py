@@ -96,8 +96,6 @@ class MultiStepFormView(View):
         return self.render_step(request, form, formset, step, experience_id)
 
 
-
-
     def post_skills(self, request, formset):
         # Validate the formset
         # Save the skills formset
@@ -118,51 +116,32 @@ class MultiStepFormView(View):
         """
 
         form_class = self.form_list[step]
-        # experience_id = None
         experience = None
-        formset = None
 
         # If editing, fetch the existing experience
         if experience_id:
             experience = get_object_or_404(FreelancerExperience, pk=experience_id)
 
-        # Initialize the form or formset based on the step
-        form = form_class(request.POST, instance=experience) if step == 0 else form_class(request.POST)
         print(f'step: {step}')
-
-
-
-
-
-
-        # Validate the form or formset
-        # if form.is_valid() and (formset is None or formset.is_valid()):
-        if form.is_valid():
-            if step == 0:
+        if step == 0:
+            form = form_class(request.POST, instance=experience)
+            if form.is_valid():
                 # Save the experience form
                 experience = form.save(commit=False)
                 experience.user = request.user
                 experience.save()
                 request.session['experience_id'] = experience.id  # Save the experience ID in the session
-            elif step == 1:
-                formset = form
-                form = None
-                self.post_skills(request, formset)
-
-            # Move to the next step or finish
-            if step + 1 < len(self.form_list):
                 return redirect('freelancer_experience:multi-step-edit', step=step + 1, experience_id=experience.id)
-            else:
-                return redirect('freelancer_experience:experience-list')  # Redirect to the experience list after completion)
+            return self.render_step(request, form, None, step, experience_id)
 
         if step == 1:
-            formset = form
-            form = None
-            print(f'154 formset.isvalid(): {formset.is_valid()}')
-            if not formset.is_valid():
-                print("Form validation errors:", formset.errors)
+            # Initialize the form or formset based on the step
+            formset = form_class(request.POST)
+            if formset.is_valid():
+                self.post_skills(request, formset)
+                return redirect('freelancer_experience:experience-list')  # Redirect to the experience list after completion)
+            return self.render_step(request, None, formset, step, experience_id)
 
-        return self.render_step(request, form, formset, step, experience_id)
 
     def render_step(self, request, form, formset, step, experience_id):
         """
