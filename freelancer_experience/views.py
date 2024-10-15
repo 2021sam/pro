@@ -91,8 +91,26 @@ class MultiStepFormView(View):
         # Handle formset separately for the skills step (step 1)
         if step == 1:
             formset = form
+            form = None
 
         return self.render_step(request, form, formset, step, experience_id)
+
+
+
+
+    def post_skills(self, request, formset):
+        # Validate the formset
+        # Save the skills formset
+        skills = formset.save(commit=False)
+        for skill in skills:
+            skill.experience_id = request.session['experience_id']
+            skill.save()
+
+        # Handle deletions if any
+        for obj in formset.deleted_objects:
+            obj.delete()
+        formset.save()  # Ensure formset is saved
+
 
     def post(self, request, step=0, experience_id=None):
         """
@@ -100,6 +118,7 @@ class MultiStepFormView(View):
         """
 
         form_class = self.form_list[step]
+        # experience_id = None
         experience = None
         formset = None
 
@@ -109,19 +128,16 @@ class MultiStepFormView(View):
 
         # Initialize the form or formset based on the step
         form = form_class(request.POST, instance=experience) if step == 0 else form_class(request.POST)
-
         print(f'step: {step}')
-        # print(f'form.isvalid(): {form.is_valid()}')
-        # if not form.is_valid():
-        #     print("Form validation errors:", form.errors)
 
-        # Handle formset separately for the skills step (step 1)
-        if step == 1:
-            formset = form
+
+
+
 
 
         # Validate the form or formset
-        if form.is_valid() and (formset is None or formset.is_valid()):
+        # if form.is_valid() and (formset is None or formset.is_valid()):
+        if form.is_valid():
             if step == 0:
                 # Save the experience form
                 experience = form.save(commit=False)
@@ -129,27 +145,22 @@ class MultiStepFormView(View):
                 experience.save()
                 request.session['experience_id'] = experience.id  # Save the experience ID in the session
             elif step == 1:
-                # Save the skills formset
-                skills = form.save(commit=False)
-                for skill in skills:
-                    skill.experience_id = request.session['experience_id']
-                    skill.save()
+                formset = form
+                form = None
+                self.post_skills(request, formset)
 
             # Move to the next step or finish
             if step + 1 < len(self.form_list):
                 return redirect('freelancer_experience:multi-step-edit', step=step + 1, experience_id=experience.id)
             else:
-                return redirect('freelancer_experience:experience-list')  # Redirect to the experience list after completion
+                return redirect('freelancer_experience:experience-list')  # Redirect to the experience list after completion)
 
-
-        if step:
+        if step == 1:
+            formset = form
             form = None
-            print('***************** form = NOne')
-    
-        print(f'144 form.isvalid(): {formset.is_valid()}')
-        if not formset.is_valid():
-            print("Form validation errors:", formset.errors)
-        
+            print(f'154 formset.isvalid(): {formset.is_valid()}')
+            if not formset.is_valid():
+                print("Form validation errors:", formset.errors)
 
         return self.render_step(request, form, formset, step, experience_id)
 
