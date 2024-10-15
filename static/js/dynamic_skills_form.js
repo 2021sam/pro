@@ -62,11 +62,24 @@ document.getElementById('skill-form').addEventListener('input', function () {
 document.querySelector('form').addEventListener('submit', function (event) {
     event.preventDefault();  // Prevent form submission to view console logs
 
-    const lastRow = formsetBody.querySelector('.form-row:last-child');
+    // const lastRow = formsetBody.querySelector('.form-row:last-child');
     console.log('Form submission detected.');
 
-    // If the last row is not filled, clear its inputs so it's ignored
-    if (!isLastRowFilled()) {
+    const lastRow = formsetBody.querySelector('.form-row:last-child');
+    const skillInput = lastRow.querySelector('input[name$="-skill"]');
+    const yearInput = lastRow.querySelector('input[name$="-skill_years"]');
+    const monthInput = lastRow.querySelector('input[name$="-skill_months"]');
+
+    // // Log the values for debugging
+    console.log(`Checking last row: Skill: [${skillInput.value}], Years: ${yearInput.value}, Months: ${monthInput.value}`);
+    // if (skillInput.value.trim() == "")
+    // {
+    //     console.log(`Last Row: skill: ${skillInput}`);
+    //     alert("Please finish filling the last row.");
+    // }
+    // else
+    if (skillInput.value.trim() == "")
+    {
         console.log('Last row is empty. Clearing its values before submission.');
         lastRow.querySelectorAll('input').forEach(input => {
             console.log(`Clearing input: ${input.name}`);
@@ -77,8 +90,6 @@ document.querySelector('form').addEventListener('submit', function (event) {
         const currentFormCount = parseInt(totalFormsInput.value);
         totalFormsInput.value = currentFormCount - 1;
         console.log(`Decremented form count. New form count: ${totalFormsInput.value}`);
-    } else {
-        console.log('Last row is filled. Proceeding with form submission.');
     }
 
     // Uncomment the line below to allow the form to submit after checking logs

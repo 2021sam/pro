@@ -111,11 +111,14 @@ class MultiStepFormView(View):
         form = form_class(request.POST, instance=experience) if step == 0 else form_class(request.POST)
 
         print(f'step: {step}')
-        print(f'form.isvalid(): {form.is_valid()}')
+        # print(f'form.isvalid(): {form.is_valid()}')
+        # if not form.is_valid():
+        #     print("Form validation errors:", form.errors)
 
         # Handle formset separately for the skills step (step 1)
         if step == 1:
             formset = form
+
 
         # Validate the form or formset
         if form.is_valid() and (formset is None or formset.is_valid()):
@@ -137,6 +140,16 @@ class MultiStepFormView(View):
                 return redirect('freelancer_experience:multi-step-edit', step=step + 1, experience_id=experience.id)
             else:
                 return redirect('freelancer_experience:experience-list')  # Redirect to the experience list after completion
+
+
+        if step:
+            form = None
+            print('***************** form = NOne')
+    
+        print(f'144 form.isvalid(): {formset.is_valid()}')
+        if not formset.is_valid():
+            print("Form validation errors:", formset.errors)
+        
 
         return self.render_step(request, form, formset, step, experience_id)
 

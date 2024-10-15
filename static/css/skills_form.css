@@ -1,4 +1,6 @@
+/* /Users/2021sam/apps/zyxe/pro/static/css/skills_form.css */
 /* Overall form styling */
+
 .form-group {
     margin-bottom: 2px;
 }
@@ -90,4 +92,18 @@ table {
 /* Minimal padding for the form */
 .form-container {
     padding: 10px;
+}
+
+/* .error-message {
+    color: red;
+    margin-top: 5px;
+    font-size: 0.9em;
+} */
+
+
+form .error-message {
+    color: red;
+    font-weight: bold;
+    font-size: 14px;
+    display: block; /* Ensure it is visible */
 }

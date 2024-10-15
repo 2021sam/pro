@@ -8,20 +8,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add/Edit Experience with Skills</title>
     <link rel="stylesheet" href="{% static 'css/global.css' %}">
-    <link rel="stylesheet" href="{% static 'css/add_edit_experience_with_skills.css' %}">
+    <link rel="stylesheet" href="{% static 'css/skills_form.css' %}">
+    <link rel="stylesheet" href="{% static 'css/validation.css' %}">
+    
 </head>
 <body>
     <h1>Step {{ step }}: Add Skills</h1>
 
     <h1>{% if experience_id %}Edit Experience{% else %}Add Experience{% endif %}</h1>
-    <h2>Version 1</h2>  <!-- Update this for versioning control -->
+    <h2>Version 4</h2>  <!-- Update this for versioning control -->
+
+
+ 
+
 
     <div class="form-container">
-        <form method="POST" novalidate id="skill-form">
+        <form method="POST" id="skill-form" novalidate>
             {% csrf_token %}
         
             <h3>Skills</h3>
-            {{ formset.management_form }}  <!-- This is required to manage the formset -->
+
+
+             {{ formset.management_form }}  <!-- This is required to manage the formset -->
             <div class="header-row">
                 <div class="header-skill">Skill</div>
                 <div class="header-group">
@@ -39,7 +47,16 @@
                         {{ form.skill }}
                         {% if form.skill.errors %}
                             <div class="error-message">{{ form.skill.errors }}</div>
+                            <div class="error-message">{{ form.skill_years.errors }}</div>
                         {% endif %}
+
+                        <!-- Display non-field errors (formset-level validation errors) -->
+                        {% if form.non_field_errors %}
+                        <div class="error-message">
+                            {{ form.non_field_errors }}
+                        </div>
+                        {% endif %}
+                        
                     </div>
                     <div class="years-months-delete-container">
                         <input type="number" class="year-input" min="0" max="10" value="{{ form.skill_years.value|default:0 }}" name="{{ form.prefix }}-skill_years">
