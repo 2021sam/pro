@@ -16,8 +16,8 @@ function addNewFormRow() {
             <input type="text" name="form-${formCount}-skill" class="textinput textInput form-control" maxlength="100" id="id_form-${formCount}-skill">
         </div>
         <div class="years-months-delete-container">
-            <input type="number" name="form-${formCount}-skill_years" class="year-input" min="0" max="10" id="id_form-${formCount}-skill_years">
-            <input type="number" name="form-${formCount}-skill_months" class="month-input" min="0" max="11" id="id_form-${formCount}-skill_months">
+            <input type="number" name="form-${formCount}-skill_years" class="year-input" min="0" max="10" value="0" id="id_form-${formCount}-skill_years">
+            <input type="number" name="form-${formCount}-skill_months" class="month-input" min="0" max="11" value="0" id="id_form-${formCount}-skill_months">
             <div class="delete-checkbox">
                 <input type="checkbox" name="form-${formCount}-DELETE" id="id_form-${formCount}-DELETE">
             </div>

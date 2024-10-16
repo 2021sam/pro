@@ -30,22 +30,10 @@
                             <p>
                                 <a href="{% url 'pro_profile:profile-edit' %}">Profile</a>
                                 <a href="{% url 'education' %}">Education</a>
-                                <a href="{% url 'pro_experience:pro-experience-home' %}">Experience</a>
+                                <a href="{% url 'freelancer_experience:home' %}">Experience</a>
                             </p>
                         </li>
                     {% endif %}
-                    
-                    {% if user.settings.role == 'freelancer' %}
-                    <li>
-                        <p>
-                            <h3>Freelancer</h3>
-                            <a href="{% url 'freelancer_experience:home' %}">Experience</a>
-                        </p>
-                    </li>
-                {% endif %}
-                
-
-
 
                     <!-- Check for Employer role -->
                     {% if user.settings.role == 'recruiter' %}
