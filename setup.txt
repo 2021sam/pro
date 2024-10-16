@@ -179,3 +179,10 @@ python manage.py makemigrations freelancer_experience
 python manage.py migrate
 
 python manage.py createsuperuser
+
+pbcopy < .env       Get this file from private vault
+navigate to this applications root directory
+touch .env
+pbpaste > .env
+
+python manage.py runserver
