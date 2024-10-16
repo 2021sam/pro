@@ -1,4 +1,5 @@
-# production.py
+# /Users/2021sam/apps/zyxe/pro/pro/settings/production.py
+
 from .settings import *
 
 DEBUG = True

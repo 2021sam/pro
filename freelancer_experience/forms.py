@@ -9,12 +9,6 @@ class FreelancerExperienceForm(forms.ModelForm):
         model = FreelancerExperience
         fields = ['title', 'company', 'date_start', 'date_end', 'description']
 
-# class FreelancerSkillForm(forms.ModelForm):
-#     class Meta:
-#         model = FreelancerSkill
-#         fields = ['skill', 'skill_years', 'skill_months']
-
-
 class FreelancerSkillForm(forms.ModelForm):
     # skill_years = forms.IntegerField(required=False, initial=0)
     # skill_months = forms.IntegerField(required=False, initial=0)
