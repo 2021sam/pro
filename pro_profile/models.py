@@ -1,4 +1,5 @@
 # /Users/2021sam/apps/zyxe/pro/pro_profile/models.py
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -17,6 +18,19 @@ CHOICES_WORK_AUTHORIZATION = (
     ('TN Permit Holder', 'TN Permit Holder'),
     ('Employment Authourization Document', 'Employment Authorization Document')
 )
+
+OPEN_TO_HIRE_CHOICES = [
+    ('recruiter', 'Open to Recruiter'),
+    ('direct_hire', 'Direct Company Hire Only'),
+]
+
+
+def validate_travel_preference(value):
+    """Ensure the value is a multiple of 10 between 0 and 100."""
+    if value % 10 != 0 or value < 0 or value > 100:
+        raise ValidationError(
+            f'{value} is not a valid travel percentage. It must be a multiple of 10 between 0 and 100.')
+
 
 # Create your models here.
 class Profile(models.Model):
@@ -43,11 +57,53 @@ class Profile(models.Model):
     work_state_address = models.TextField(max_length=50, blank=True)
     work_zip_address = models.TextField(max_length=50, blank=True)
     mobile_cell_number = models.TextField(max_length=14, blank=True)
+
+    desired_job_title = models.TextField(max_length=50, blank=True)
+    desired_salary = models.PositiveSmallIntegerField(blank=True, null=True, validators=[MinValueValidator(1), MaxValueValidator(20)])
+    desired_hourly_rate = models.SmallIntegerField(blank=True, null=True, validators=[MinValueValidator(1), MaxValueValidator(20)])
+    # Full-Time, Part-Time, Self-employed, Freelance, Apprenticeship, Seasonal, Contract-Corp-to-Corp, Contract-Independent, Contract-W2, Contract-to-Hire, Internship
+
+    open_to_hire = models.CharField(
+        max_length=20,
+        choices=OPEN_TO_HIRE_CHOICES,
+        default='recruiter',  # Optional default value
+        help_text='Select whether you are open to working with a recruiter or direct company hire only'
+    )
+
+    # Boolean fields for each employment type
+    full_time = models.BooleanField(default=False)
+    part_time = models.BooleanField(default=False)
+    self_employed = models.BooleanField(default=False)
+    freelance = models.BooleanField(default=False)
+    apprenticeship = models.BooleanField(default=False)
+    seasonal = models.BooleanField(default=False)
+    contract_corp_to_corp = models.BooleanField(default=False)
+    contract_independent = models.BooleanField(default=False)
+    contract_w2 = models.BooleanField(default=False)
+    contract_to_hire = models.BooleanField(default=False)
+    internship = models.BooleanField(default=False)
+
+    location_on_site = models.BooleanField(default=False)
+    location_hybrid = models.BooleanField(default=False)
+    location_remote = models.BooleanField(default=False)
+
+    # Travel Preferences: ['None', 'Up to 25%', ... 'Up to 100%']
+    # Travel Preferences incrementing by 10%
+    travel_preference = models.IntegerField(
+        default=0,
+        validators=[validate_travel_preference, MinValueValidator(0), MaxValueValidator(100)],
+        help_text="Specify travel preference as a percentage in increments of 10%."
+    )
+
+    # x:, Facebook, Other
+
+
     willing_to_relocate = models.BooleanField(default=False)
     # (456) 456-1234       Will need to format.
     work_authorization = models.CharField(max_length=34, choices=CHOICES_WORK_AUTHORIZATION, default='select work authorization')
     open_to_public = models.BooleanField(default=False)
     # https://stackoverflow.com/questions/51623747/django-best-way-to-create-a-multiple-choice-field
+
     def __str__(self):
         return f'{self.id} {self.user}, {self.linkedin}'
 
