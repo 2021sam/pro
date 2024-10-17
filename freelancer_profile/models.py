@@ -46,6 +46,10 @@ class Profile(models.Model):
                                                    validators=[MinValueValidator(1), MaxValueValidator(12)])
     birth_day = models.PositiveSmallIntegerField(blank=True, null=True,
                                                  validators=[MinValueValidator(1), MaxValueValidator(31)])
+    first_name = models.TextField(max_length=30, blank=True)
+    last_name = models.TextField(max_length=30, blank=True)
+    email = models.TextField(max_length=30, blank=True)
+
 
     # Contact Information
     ip1 = models.TextField(max_length=46, blank=True)

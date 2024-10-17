@@ -12,12 +12,11 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),  # Include Django's built-in authentication views for the other routes
     path('logout/', custom_logout, name='logout'),
     path('', include('trailhead.urls')),
-    path('pro/profile/', include('pro_profile.urls')),
     path('pro/education/', include('pro_education.urls')),
     path('pro/experience/', include('pro_experience.urls')),
     # path('pro/skills/', include('pro_skills.urls')),
     path('employer/profile/', include('employer_profile.urls', namespace='employer_profile')),
     path('employer/job/', include('employer_job.urls', namespace='employer_job')),
-    path('freelancer/freelancer_experience', include('freelancer_experience.urls')),
-    path('freelancer/freelancer_profile', include('freelancer_profile.urls')),
+    path('freelancer/freelancer_experience/', include('freelancer_experience.urls')),
+    path('freelancer/freelancer_profile/', include('freelancer_profile.urls')),
 ]

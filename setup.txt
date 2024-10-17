@@ -171,11 +171,11 @@ python manage.py makemigrations authenticate
 python manage.py makemigrations employer_profile
 python manage.py makemigrations employer_job
 python manage.py makemigrations employer_skill
-python manage.py makemigrations pro_profile
 python manage.py makemigrations pro_education
 python manage.py makemigrations pro_experience
 python manage.py makemigrations pro_skills
 python manage.py makemigrations freelancer_experience
+python manage.py makemigrations freelancer_profile
 python manage.py migrate
 
 python manage.py createsuperuser

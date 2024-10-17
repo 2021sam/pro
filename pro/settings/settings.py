@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'employer_profile',
     'employer_job',
     'employer_skill',
-    'pro_profile',
     'pro_education',
     'pro_experience',
     'pro_skills',
