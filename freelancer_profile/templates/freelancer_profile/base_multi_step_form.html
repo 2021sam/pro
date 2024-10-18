@@ -37,6 +37,20 @@
             {% csrf_token %}
             {{ form.as_p }}
 
+            <!-- Add a hidden input for profile_id -->
+            <input type="hidden" name="profile_id" value="{{ profile_id }}">
+            <button type="submit" class="btn btn-primary">
+                {% if step == total_steps|add:-1 %}
+                    <i class="fa fa-check"></i> Submit
+                {% else %}
+                    <i class="fa fa-arrow-right"></i> Next
+                {% endif %}
+            </button>
+
+
+
+
+
             <!-- Navigation Buttons -->
             <div>
                 {% if step > 0 %}
