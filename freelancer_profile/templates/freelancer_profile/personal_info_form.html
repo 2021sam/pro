@@ -1,38 +1,14 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends 'freelancer_profile/base_multi_step_form.html' %}
 
-{% block content %}
-<div class="container">
-    <h2>{{ step_title }}</h2>
-    
-    <form method="POST" action="{% url 'freelancer_profile:multi-step-edit' step=step profile_id=profile_id %}">
-        {% csrf_token %}
-        
-        <!-- Display form fields -->
-        <div class="form-group">
-            {{ form.as_p }}
-        </div>
+{% block extra_head %}
+    <style>
+        .personal-info { background-color: #f9f9f9; padding: 20px; }
+    </style>
+{% endblock %}
 
-        <!-- Hidden field to pass profile_id -->
-        <input type="hidden" name="profile_id" value="{{ profile_id }}">
-
-        <!-- Navigation buttons -->
-        <div class="form-navigation">
-            <!-- Back button for previous step (only show if not on the first step) -->
-            {% if step > 0 %}
-            <a href="{% url 'freelancer_profile:multi-step-edit' step=step|add:-1 profile_id=profile_id %}" class="btn btn-secondary">Back</a>
-            {% endif %}
-            
-            <!-- Next button to go to the next step -->
-            <button type="submit" class="btn btn-primary">Next</button>
-        </div>
-        
-        <!-- Display progress for multi-step form -->
-        <div class="progress mt-3">
-            <div class="progress-bar" role="progressbar" style="width: {{ step|add:1|divisibleby:total_steps|floatformat:2 }}%;" aria-valuenow="{{ step|add:1 }}" aria-valuemin="1" aria-valuemax="{{ total_steps }}">
-                Step {{ step|add:1 }} of {{ total_steps }}
-            </div>
-        </div>
-    </form>
-</div>
+{% block form_content %}
+    <div class="personal-info">
+        <p>Customize your personal info section here if needed.</p>
+        {{ form.as_p }}
+    </div>
 {% endblock %}

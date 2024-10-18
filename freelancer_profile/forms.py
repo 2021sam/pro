@@ -34,8 +34,8 @@ class PersonalInfoForm(forms.ModelForm):
         Custom validation for email field, if needed.
         """
         email = self.cleaned_data.get('email')
-        if not email.endswith('@example.com'):
-            raise forms.ValidationError("Please use your example.com email.")
+        # if not email.endswith('@example.com'):
+        #     raise forms.ValidationError("Please use your example.com email.")
         return email
 
 
