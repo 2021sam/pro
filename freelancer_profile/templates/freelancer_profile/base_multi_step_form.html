@@ -11,12 +11,21 @@
         .form-container { width: 80%; margin: 0 auto; }
         .form-title { text-align: center; margin-bottom: 20px; }
         .step-counter { text-align: center; margin-bottom: 10px; font-weight: bold; }
+        .custom-section { text-align: center; margin: 20px 0; font-style: italic; color: gray; }
     </style>
 </head>
 <body>
     {% block content %}
     <div class="form-container">
         <h1 class="form-title">{{ step_title }}</h1>
+
+        <!-- Customizable Section for Additional Information -->
+        <div class="custom-section">
+            {% block custom_section %}
+            <!-- Default message if no custom content is provided -->
+            Customize this section if needed.
+            {% endblock custom_section %}
+        </div>
 
         <!-- Step Counter -->
         <div class="step-counter">
