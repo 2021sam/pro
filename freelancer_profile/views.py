@@ -43,6 +43,7 @@ class ProfileMultiStepFormView(View):
         form_class = self.form_list[step]
         # profile = None
         profile_id = profile.id
+        print(f'profile_id: {profile_id}')
 
         # If editing, fetch the existing profile
         if profile_id:

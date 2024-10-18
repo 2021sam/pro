@@ -119,7 +119,7 @@ class Profile(models.Model):
     open_to_public = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.id} {self.user}, {self.linkedin}'
+        return f'ID: {self.id}, USER_ID: {self.user.id}, USER: {self.user}'
 
 
 # Signal Handlers
