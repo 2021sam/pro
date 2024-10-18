@@ -5,5 +5,5 @@ from . import views
 app_name = 'freelancer_profile'
 
 urlpatterns = [
-    path('multi-step/<int:step>/<int:profile_id>/', views.ProfileMultiStepFormView.as_view(), name='multi-step-edit'),
+    path('multi-step/<int:step>/', views.ProfileMultiStepFormView.as_view(), name='multi-step-edit'),
 ]

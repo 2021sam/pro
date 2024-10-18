@@ -27,12 +27,17 @@ class ProfileMultiStepFormView(View):
         'freelancer_profile/travel_relocation_form.html',
     ]  # Corresponding templates for each step
 
-    def get(self, request, step=0, profile_id=None):
+
+
+
+
+
+    def get(self, request, step=0):
         """
         Handle the GET request to display the current step's form.
         """
-        queryset = Profile.objects.filter(user=request.user)
-        print(queryset)
+        # queryset = Profile.objects.filter(user=request.user)
+        # print(queryset)
         profile, created = Profile.objects.get_or_create(user=request.user)
         print(f'profile: {profile}')
         print(f'created: {created}')
@@ -41,7 +46,6 @@ class ProfileMultiStepFormView(View):
             print("Profile created for the user.")
 
         form_class = self.form_list[step]
-        # profile = None
         profile_id = profile.id
         print(f'profile_id: {profile_id}')
 
@@ -54,20 +58,18 @@ class ProfileMultiStepFormView(View):
 
         return self.render_step(request, form, step, profile_id)
 
-    def post(self, request, step=0, profile_id=None):
+    def post(self, request, step=0):
         """
         Handle the POST request, saving the data and progressing to the next step.
         """
         print(f'ProfileMultiStepFormView: step: {step}')
-        print(f'ProfileMultiStepFormView: profile_id: {profile_id}')
+        # print(f'ProfileMultiStepFormView: profile_id: {profile_id}')
+
+        # Fetch or create the Profile based on the current user
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        print(f'profile: {profile}')
+
         form_class = self.form_list[step]
-        profile = None
-
-        # If editing, fetch the existing profile
-        if profile_id:
-            profile = get_object_or_404(Profile, pk=profile_id, user=request.user)
-            print(f'profile: {profile}')
-
         form = form_class(request.POST, instance=profile)
 
         if form.is_valid():
@@ -82,10 +84,10 @@ class ProfileMultiStepFormView(View):
                 return redirect('freelancer_profile:profile_detail', profile_id=profile.id)
 
             # Otherwise, proceed to the next step
-            return redirect('freelancer_profile:multi-step-edit', step=step + 1, profile_id=profile.id)
+            return redirect('freelancer_profile:multi-step-edit', step=step + 1)
 
         # If the form is invalid, re-render the current step
-        return self.render_step(request, form, step, profile_id)
+        return self.render_step(request, form, step, profile.id)
 
     def render_step(self, request, form, step, profile_id):
         """

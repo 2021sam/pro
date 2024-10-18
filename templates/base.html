@@ -28,7 +28,7 @@
                     {% if user.settings.role == 'freelancer' %}
                         <li>
                             <p>
-                                 <a href="{% url 'freelancer_profile:multi-step-edit' 0 user.id %}">Freelancer Profile</a>
+                                <a href="{% url 'freelancer_profile:multi-step-edit' 0 %}">Freelancer Profile</a>
                                 <a href="{% url 'education' %}">Education</a>
                                 <a href="{% url 'freelancer_experience:home' %}">Experience</a>
                             </p>
