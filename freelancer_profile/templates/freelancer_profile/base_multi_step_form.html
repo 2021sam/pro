@@ -7,11 +7,17 @@
     <style>
         .form-container { width: 80%; margin: 0 auto; }
         .form-title { text-align: center; margin-bottom: 20px; }
+        .step-counter { text-align: center; margin-bottom: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="form-container">
         <h1 class="form-title">{{ step_title }}</h1>
+
+        <!-- Step Counter -->
+        <div class="step-counter">
+            Step {{ step|add:1 }} of {{ total_steps }}
+        </div>
 
         <!-- Form content -->
         <form method="POST" action="">
@@ -24,7 +30,7 @@
                     <button type="submit" formaction="{% url 'freelancer_profile:multi-step-edit' step=step|add:'-1' profile_id=profile_id %}">Previous</button>
                 {% endif %}
 
-                <button type="submit">Next</button>
+                <button type="submit">{% if step == total_steps|add:-1 %}Submit{% else %}Next{% endif %}</button>
             </div>
         </form>
     </div>
