@@ -2,6 +2,109 @@
 from django import forms
 from .models import Profile
 
+class PersonalInfoForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = [
+            'first_name',
+            'last_name',
+            'email',
+            'phone_number',
+            'date_of_birth',
+        ]
+
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
+            'date_of_birth': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+        }
+
+        labels = {
+            'first_name': 'First Name',
+            'last_name': 'Last Name',
+            'email': 'Email',
+            'phone_number': 'Phone Number',
+            'date_of_birth': 'Date of Birth',
+        }
+
+    def clean_email(self):
+        """
+        Custom validation for email field, if needed.
+        """
+        email = self.cleaned_data.get('email')
+        if not email.endswith('@example.com'):
+            raise forms.ValidationError("Please use your example.com email.")
+        return email
+
+
+
+
+
+
+
+
+
+from django import forms
+from .models import Profile
+
+class EmploymentTypeForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = [
+            'full_time',
+            'part_time',
+            'contract',
+            'internship',
+            'temporary',
+        ]
+
+        widgets = {
+            'full_time': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'part_time': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'contract': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'internship': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'temporary': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+
+        labels = {
+            'full_time': 'Full-time',
+            'part_time': 'Part-time',
+            'contract': 'Contract',
+            'internship': 'Internship',
+            'temporary': 'Temporary',
+        }
+
+
+# class EmploymentTypeForm(forms.ModelForm):
+#     class Meta:
+#         model = Profile
+#         fields = [
+#             'full_time', 'part_time', 'self_employed', 'freelance', 'apprenticeship', 'seasonal',
+#             'contract_corp_to_corp', 'contract_independent', 'contract_w2', 'contract_to_hire', 'internship'
+#         ]
+#         labels = {
+#             'full_time': 'Full-Time',
+#             'part_time': 'Part-Time',
+#             'self_employed': 'Self-Employed',
+#             'freelance': 'Freelance',
+#             'apprenticeship': 'Apprenticeship',
+#             'seasonal': 'Seasonal',
+#             'contract_corp_to_corp': 'Contract Corp-to-Corp',
+#             'contract_independent': 'Contract Independent',
+#             'contract_w2': 'Contract W2',
+#             'contract_to_hire': 'Contract-to-Hire',
+#             'internship': 'Internship'
+#         }
+
+
+
+
+
+
+
+
 class EmploymentPreferencesForm(forms.ModelForm):
     class Meta:
         model = Profile
@@ -81,39 +184,6 @@ class EmploymentPreferencesForm(forms.ModelForm):
 
 
 
-
-from django import forms
-from django.core.validators import MaxValueValidator, MinValueValidator
-from .models import Profile
-
-class PersonalInfoForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ['first_name', 'last_name', 'email', 'birth_date']
-        widgets = {
-            'birth_date': forms.DateInput(attrs={'type': 'date'})
-        }
-
-class EmploymentTypeForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = [
-            'full_time', 'part_time', 'self_employed', 'freelance', 'apprenticeship', 'seasonal',
-            'contract_corp_to_corp', 'contract_independent', 'contract_w2', 'contract_to_hire', 'internship'
-        ]
-        labels = {
-            'full_time': 'Full-Time',
-            'part_time': 'Part-Time',
-            'self_employed': 'Self-Employed',
-            'freelance': 'Freelance',
-            'apprenticeship': 'Apprenticeship',
-            'seasonal': 'Seasonal',
-            'contract_corp_to_corp': 'Contract Corp-to-Corp',
-            'contract_independent': 'Contract Independent',
-            'contract_w2': 'Contract W2',
-            'contract_to_hire': 'Contract-to-Hire',
-            'internship': 'Internship'
-        }
 
 class LocationPreferencesForm(forms.ModelForm):
     class Meta:

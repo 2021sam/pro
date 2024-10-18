@@ -3,15 +3,15 @@ from .models import Profile
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'birth_date', 'desired_job_title', 'desired_salary', 'desired_hourly_rate')
+    list_display = ('user', 'date_of_birth', 'desired_job_title', 'desired_salary', 'desired_hourly_rate')
     search_fields = ('user__username', 'desired_job_title', 'company')
-    list_filter = ('birth_date', 'desired_salary', 'desired_hourly_rate')
+    list_filter = ('date_of_birth', 'desired_salary', 'desired_hourly_rate')
     ordering = ('user',)
 
     # You can customize the form layout or fieldsets here if needed
     fieldsets = (
         (None, {
-            'fields': ('user', 'birth_date', 'desired_job_title', 'desired_salary', 'desired_hourly_rate')
+            'fields': ('user', 'date_of_birth', 'desired_job_title', 'desired_salary', 'desired_hourly_rate')
         }),
         ('Contact Information', {
             'fields': ('mobile_cell_number', 'linkedin', 'portfolio', 'company', 'company_web_site')

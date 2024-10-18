@@ -57,12 +57,15 @@ class ProfileMultiStepFormView(View):
         """
         Handle the POST request, saving the data and progressing to the next step.
         """
+        print(f'ProfileMultiStepFormView: step: {step}')
+        print(f'ProfileMultiStepFormView: profile_id: {profile_id}')
         form_class = self.form_list[step]
         profile = None
 
         # If editing, fetch the existing profile
         if profile_id:
             profile = get_object_or_404(Profile, pk=profile_id, user=request.user)
+            print(f'profile: {profile}')
 
         form = form_class(request.POST, instance=profile)
 

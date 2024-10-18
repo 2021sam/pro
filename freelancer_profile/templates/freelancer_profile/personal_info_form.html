@@ -1,122 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employment Preferences</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1 class="mb-4">Employment Preferences</h1>
-        <form method="POST" action="">
-            {% csrf_token %}
+{% extends "base.html" %}
+{% load static %}
 
-            <!-- Employment Type Preferences -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h3>Employment Type Preferences</h3>
-                </div>
-                <div class="card-body">
-                    <div class="form-check">
-                        {{ form.full_time.label_tag }}
-                        {{ form.full_time }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.part_time.label_tag }}
-                        {{ form.part_time }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.self_employed.label_tag }}
-                        {{ form.self_employed }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.freelance.label_tag }}
-                        {{ form.freelance }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.apprenticeship.label_tag }}
-                        {{ form.apprenticeship }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.seasonal.label_tag }}
-                        {{ form.seasonal }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.contract_corp_to_corp.label_tag }}
-                        {{ form.contract_corp_to_corp }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.contract_independent.label_tag }}
-                        {{ form.contract_independent }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.contract_w2.label_tag }}
-                        {{ form.contract_w2 }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.contract_to_hire.label_tag }}
-                        {{ form.contract_to_hire }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.internship.label_tag }}
-                        {{ form.internship }}
-                    </div>
-                </div>
+{% block content %}
+<div class="container">
+    <h2>{{ step_title }}</h2>
+    
+    <form method="POST" action="{% url 'freelancer_profile:multi-step-edit' step=step profile_id=profile_id %}">
+        {% csrf_token %}
+        
+        <!-- Display form fields -->
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+
+        <!-- Hidden field to pass profile_id -->
+        <input type="hidden" name="profile_id" value="{{ profile_id }}">
+
+        <!-- Navigation buttons -->
+        <div class="form-navigation">
+            <!-- Back button for previous step (only show if not on the first step) -->
+            {% if step > 0 %}
+            <a href="{% url 'freelancer_profile:multi-step-edit' step=step|add:-1 profile_id=profile_id %}" class="btn btn-secondary">Back</a>
+            {% endif %}
+            
+            <!-- Next button to go to the next step -->
+            <button type="submit" class="btn btn-primary">Next</button>
+        </div>
+        
+        <!-- Display progress for multi-step form -->
+        <div class="progress mt-3">
+            <div class="progress-bar" role="progressbar" style="width: {{ step|add:1|divisibleby:total_steps|floatformat:2 }}%;" aria-valuenow="{{ step|add:1 }}" aria-valuemin="1" aria-valuemax="{{ total_steps }}">
+                Step {{ step|add:1 }} of {{ total_steps }}
             </div>
-
-            <!-- Location Preferences -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h3>Location Preferences</h3>
-                </div>
-                <div class="card-body">
-                    <div class="form-check">
-                        {{ form.location_on_site.label_tag }}
-                        {{ form.location_on_site }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.location_hybrid.label_tag }}
-                        {{ form.location_hybrid }}
-                    </div>
-                    <div class="form-check">
-                        {{ form.location_remote.label_tag }}
-                        {{ form.location_remote }}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Travel Preference -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h3>Travel Preference</h3>
-                </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        {{ form.travel_preference.label_tag }}
-                        {{ form.travel_preference }}
-                        <small class="form-text text-muted">{{ form.travel_preference.help_text }}</small>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Willing to Relocate -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h3>Willing to Relocate</h3>
-                </div>
-                <div class="card-body">
-                    <div class="form-check">
-                        {{ form.willing_to_relocate.label_tag }}
-                        {{ form.willing_to_relocate }}
-                    </div>
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Submit Preferences</button>
-        </form>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+        </div>
+    </form>
+</div>
+{% endblock %}

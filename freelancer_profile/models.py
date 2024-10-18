@@ -40,8 +40,8 @@ class Profile(models.Model):
     # Basic Information
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(default=timezone.now)
-    birth_date = models.DateField(null=True, blank=True,
-                                  help_text='Please use the following format: <em>YYYY-MM-DD</em>.')
+    date_of_birth = models.DateField(null=True, blank=True, help_text='Please use the following format: <em>YYYY-MM-DD</em>.')
+    # birth_date = models.DateField(null=True, blank=True, help_text='Please use the following format: <em>YYYY-MM-DD</em>.')
     birth_month = models.PositiveSmallIntegerField(blank=True, null=True,
                                                    validators=[MinValueValidator(1), MaxValueValidator(12)])
     birth_day = models.PositiveSmallIntegerField(blank=True, null=True,
@@ -49,7 +49,7 @@ class Profile(models.Model):
     first_name = models.TextField(max_length=30, blank=True)
     last_name = models.TextField(max_length=30, blank=True)
     email = models.TextField(max_length=30, blank=True)
-
+    phone_number = models.TextField(max_length=14, blank=True)
 
     # Contact Information
     ip1 = models.TextField(max_length=46, blank=True)
@@ -86,6 +86,8 @@ class Profile(models.Model):
         help_text='Select whether you are open to working with a recruiter or direct company hire only'
     )
 
+    temporary = models.BooleanField(default=False)
+    contract = models.BooleanField(default=False)
     # Employment Type Preferences (Boolean Fields)
     full_time = models.BooleanField(default=False)
     part_time = models.BooleanField(default=False)

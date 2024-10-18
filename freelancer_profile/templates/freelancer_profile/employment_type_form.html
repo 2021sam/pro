@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ step_title }}</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-check">
+            <input type="checkbox" id="{{ form.full_time.id_for_label }}" name="{{ form.full_time.name }}" class="form-check-input" {% if form.full_time.value %}checked{% endif %}>
+            <label class="form-check-label" for="{{ form.full_time.id_for_label }}">{{ form.full_time.label }}</label>
+            {{ form.full_time.errors }}
+        </div>
+
+        <div class="form-check">
+            <input type="checkbox" id="{{ form.part_time.id_for_label }}" name="{{ form.part_time.name }}" class="form-check-input" {% if form.part_time.value %}checked{% endif %}>
+            <label class="form-check-label" for="{{ form.part_time.id_for_label }}">{{ form.part_time.label }}</label>
+            {{ form.part_time.errors }}
+        </div>
+
+        <div class="form-check">
+            <input type="checkbox" id="{{ form.contract.id_for_label }}" name="{{ form.contract.name }}" class="form-check-input" {% if form.contract.value %}checked{% endif %}>
+            <label class="form-check-label" for="{{ form.contract.id_for_label }}">{{ form.contract.label }}</label>
+            {{ form.contract.errors }}
+        </div>
+
+        <div class="form-check">
+            <input type="checkbox" id="{{ form.internship.id_for_label }}" name="{{ form.internship.name }}" class="form-check-input" {% if form.internship.value %}checked{% endif %}>
+            <label class="form-check-label" for="{{ form.internship.id_for_label }}">{{ form.internship.label }}</label>
+            {{ form.internship.errors }}
+        </div>
+
+        <div class="form-check">
+            <input type="checkbox" id="{{ form.temporary.id_for_label }}" name="{{ form.temporary.name }}" class="form-check-input" {% if form.temporary.value %}checked{% endif %}>
+            <label class="form-check-label" for="{{ form.temporary.id_for_label }}">{{ form.temporary.label }}</label>
+            {{ form.temporary.errors }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Next</button>
+    </form>
+</div>
+{% endblock %}
