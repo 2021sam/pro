@@ -39,16 +39,6 @@ class PersonalInfoForm(forms.ModelForm):
         return email
 
 
-
-
-
-
-
-
-
-from django import forms
-from .models import Profile
-
 class EmploymentTypeForm(forms.ModelForm):
     class Meta:
         model = Profile
@@ -97,10 +87,6 @@ class EmploymentTypeForm(forms.ModelForm):
 #             'contract_to_hire': 'Contract-to-Hire',
 #             'internship': 'Internship'
 #         }
-
-
-
-
 
 
 
@@ -180,9 +166,6 @@ class EmploymentPreferencesForm(forms.ModelForm):
             'willing_to_relocate': 'Willing to Relocate',
             'travel_preference': 'Travel Preference',
         }
-
-
-
 
 
 class LocationPreferencesForm(forms.ModelForm):

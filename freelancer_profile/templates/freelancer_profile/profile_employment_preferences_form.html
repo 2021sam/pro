@@ -1,31 +1,21 @@
+<!-- /Users/2021sam/apps/zyxe/pro/freelancer_profile/templates/freelancer_profile/profile_employment_preferences_form.htmlß -->
 {% extends 'freelancer_profile/base_multi_step_form.html' %}
 
-{% block title %}
-    Employment Preferences - Step {{ step }} of {{ total_steps }}
+{% block extra_head %}
+    <style>
+        .personal-info { background-color: #f9f9f9; padding: 20px; }
+    </style>
 {% endblock %}
 
-{% block content %}
-    <div class="container">
-        <h2>{{ step_title }}</h2>
 
-        <form method="post" novalidate>
-            {% csrf_token %}
-            {{ form.as_p }}
+{% block custom_section %}
+    <p>Customize your employment preferences. Please make sure all fields are accurate.</p>
+{% endblock custom_section %}
 
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">
-                    {% if step == total_steps|add:-1 %}Submit{% else %}Next{% endif %}
-                </button>
-            </div>
-        </form>
 
-        <div>
-            <p>Step {{ step + 1 }} of {{ total_steps }}:</p>
-            <ul>
-                {% for title in step_titles %}
-                    <li {% if forloop.counter0 == step %}class="active"{% endif %}>{{ title }}</li>
-                {% endfor %}
-            </ul>
-        </div>
+{% block form_content %}
+    <div class="personal-info">
+        <p>Customize your personal info section here if needed.</p>
+        {{ form.as_p }}
     </div>
 {% endblock %}
