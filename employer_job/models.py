@@ -9,6 +9,18 @@ class EmployerJob(models.Model):
     timestamp = models.DateTimeField(default=timezone.now)
     title = models.CharField(max_length=30)
     description = models.CharField(max_length=50)
+    job_street_address = models.TextField(max_length=30, blank=True)
+    job_city = models.TextField(max_length=30, blank=True)
+    job_state = models.TextField(max_length=30, blank=True)
+    job_zip_code = models.TextField(max_length=30, blank=True)
+
+    # Location Preferences
+    location_on_site = models.BooleanField(default=False)
+    location_hybrid = models.BooleanField(default=False)
+    location_remote = models.BooleanField(default=False)
+    # commute_limit_miles = models.PositiveSmallIntegerField(default=50)
+    # commute_limit_minutes = models.PositiveSmallIntegerField(default=120)
+
 
     def __str__(self):
         return f'{self.title} {self.description}'

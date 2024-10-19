@@ -166,6 +166,7 @@ pip install django
 pip install python-dotenv
 pip install django-phonenumber-field
 pip install phonenumbers
+pip install geopy
 
 python manage.py makemigrations authenticate
 python manage.py makemigrations employer_profile

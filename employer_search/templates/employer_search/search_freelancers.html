@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Freelancers</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>Search Freelancers</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_recruiter_zip_code">Job Zip Code</label>
+                {{ form.recruiter_zip_code }}
+                <small class="form-text text-muted">Enter the recruiter's job zip code.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="id_commute_limit_miles">Commute Limit (Miles)</label>
+                {{ form.commute_limit_miles }}
+                <small class="form-text text-muted">Enter the maximum distance a freelancer can commute.</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
+        <!-- Display search results here -->
+        {% if freelancers %}
+            <h3>Search Results</h3>
+            <ul>
+                {% for freelancer in freelancers %}
+                    <li>{{ freelancer.first_name }} {{ freelancer.last_name }} - {{ freelancer.residential_zip_address }}</li>
+                {% empty %}
+                    <p>No freelancers found matching your criteria.</p>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>
