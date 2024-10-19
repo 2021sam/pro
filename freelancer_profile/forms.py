@@ -11,6 +11,10 @@ class PersonalInfoForm(forms.ModelForm):
             'email',
             'phone_number',
             'date_of_birth',
+            'residential_street_address',
+            'residential_city_address',
+            'residential_state_address',
+            'residential_zip_address'
         ]
 
         widgets = {
@@ -19,6 +23,10 @@ class PersonalInfoForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
             'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
             'date_of_birth': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'residential_street_address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Street'}),
+            'residential_city_address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City'}),
+            'residential_state_address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'State'}),
+            'residential_zip_address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Zip'}),
         }
 
         labels = {

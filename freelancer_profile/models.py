@@ -86,20 +86,21 @@ class Profile(models.Model):
         help_text='Select whether you are open to working with a recruiter or direct company hire only'
     )
 
-    temporary = models.BooleanField(default=False)
-    contract = models.BooleanField(default=False)
     # Employment Type Preferences (Boolean Fields)
+    temporary = models.BooleanField(default=False)
+    permanent = models.BooleanField(default=False)
+    contract = models.BooleanField(default=False)
     full_time = models.BooleanField(default=False)
     part_time = models.BooleanField(default=False)
     self_employed = models.BooleanField(default=False)
     freelance = models.BooleanField(default=False)
     apprenticeship = models.BooleanField(default=False)
+    internship = models.BooleanField(default=False)
     seasonal = models.BooleanField(default=False)
     contract_corp_to_corp = models.BooleanField(default=False)
     contract_independent = models.BooleanField(default=False)
     contract_w2 = models.BooleanField(default=False)
     contract_to_hire = models.BooleanField(default=False)
-    internship = models.BooleanField(default=False)
 
     # Location Preferences
     location_on_site = models.BooleanField(default=False)
