@@ -106,6 +106,8 @@ class Profile(models.Model):
     location_on_site = models.BooleanField(default=False)
     location_hybrid = models.BooleanField(default=False)
     location_remote = models.BooleanField(default=False)
+    commute_limit_miles = models.PositiveSmallIntegerField(default=50)
+    commute_limit_minutes = models.PositiveSmallIntegerField(default=120)
 
     # Travel Preference
     travel_preference = models.IntegerField(

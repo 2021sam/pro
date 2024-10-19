@@ -14,7 +14,9 @@ class PersonalInfoForm(forms.ModelForm):
             'residential_street_address',
             'residential_city_address',
             'residential_state_address',
-            'residential_zip_address'
+            'residential_zip_address',
+            'work_authorization',  # Add this field
+            'open_to_public',      # Add this field
         ]
 
         widgets = {
@@ -27,6 +29,8 @@ class PersonalInfoForm(forms.ModelForm):
             'residential_city_address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City'}),
             'residential_state_address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'State'}),
             'residential_zip_address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Zip'}),
+            'work_authorization': forms.Select(attrs={'class': 'form-control'}),  # Dropdown for work authorization
+            'open_to_public': forms.CheckboxInput(attrs={'class': 'form-check-input'}),  # Checkbox for public access
         }
 
         labels = {
@@ -35,7 +39,10 @@ class PersonalInfoForm(forms.ModelForm):
             'email': 'Email',
             'phone_number': 'Phone Number',
             'date_of_birth': 'Date of Birth',
+            'work_authorization': 'Work Authorization',  # Label for work authorization
+            'open_to_public': 'Open to Public',          # Label for public access checkbox
         }
+
 
     def clean_email(self):
         """
@@ -47,55 +54,32 @@ class PersonalInfoForm(forms.ModelForm):
         return email
 
 
-class EmploymentTypeForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = [
-            'full_time',
-            'part_time',
-            'contract',
-            'internship',
-            'temporary',
-        ]
-
-        widgets = {
-            'full_time': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'part_time': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'contract': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'internship': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'temporary': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-        }
-
-        labels = {
-            'full_time': 'Full-time',
-            'part_time': 'Part-time',
-            'contract': 'Contract',
-            'internship': 'Internship',
-            'temporary': 'Temporary',
-        }
-
-
 # class EmploymentTypeForm(forms.ModelForm):
 #     class Meta:
 #         model = Profile
 #         fields = [
-#             'full_time', 'part_time', 'self_employed', 'freelance', 'apprenticeship', 'seasonal',
-#             'contract_corp_to_corp', 'contract_independent', 'contract_w2', 'contract_to_hire', 'internship'
+#             'full_time',
+#             'part_time',
+#             'contract',
+#             'internship',
+#             'temporary',
 #         ]
-#         labels = {
-#             'full_time': 'Full-Time',
-#             'part_time': 'Part-Time',
-#             'self_employed': 'Self-Employed',
-#             'freelance': 'Freelance',
-#             'apprenticeship': 'Apprenticeship',
-#             'seasonal': 'Seasonal',
-#             'contract_corp_to_corp': 'Contract Corp-to-Corp',
-#             'contract_independent': 'Contract Independent',
-#             'contract_w2': 'Contract W2',
-#             'contract_to_hire': 'Contract-to-Hire',
-#             'internship': 'Internship'
+
+#         widgets = {
+#             'full_time': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+#             'part_time': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+#             'contract': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+#             'internship': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+#             'temporary': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
 #         }
 
+#         labels = {
+#             'full_time': 'Full-time',
+#             'part_time': 'Part-time',
+#             'contract': 'Contract',
+#             'internship': 'Internship',
+#             'temporary': 'Temporary',
+#         }
 
 
 
@@ -115,17 +99,9 @@ class EmploymentPreferencesForm(forms.ModelForm):
             'contract_w2',
             'contract_to_hire',
             'internship',
-
-            # Location Preferences
-            'location_on_site',
-            'location_hybrid',
-            'location_remote',
-
-            # Travel Preference
-            'travel_preference',
-
-            # Willing to Relocate
-            'willing_to_relocate',
+            'temporary',
+            'permanent',
+            'contract',
         ]
         widgets = {
             # Checkbox widgets for boolean fields
@@ -140,21 +116,9 @@ class EmploymentPreferencesForm(forms.ModelForm):
             'contract_w2': forms.CheckboxInput(),
             'contract_to_hire': forms.CheckboxInput(),
             'internship': forms.CheckboxInput(),
-
-            'location_on_site': forms.CheckboxInput(),
-            'location_hybrid': forms.CheckboxInput(),
-            'location_remote': forms.CheckboxInput(),
-
-            'willing_to_relocate': forms.CheckboxInput(),
-
-            # Travel preference as a number input with step increments of 10%
-            'travel_preference': forms.NumberInput(attrs={
-                'min': 0,
-                'max': 100,
-                'step': 10,
-                'class': 'travel-preference-field',
-                'help_text': 'Specify travel preference as a percentage in increments of 10%.'
-            }),
+            'temporary': forms.CheckboxInput(),
+            'permanent': forms.CheckboxInput(),
+            'contract': forms.CheckboxInput(),
         }
         labels = {
             'full_time': 'Full-Time',
@@ -168,18 +132,16 @@ class EmploymentPreferencesForm(forms.ModelForm):
             'contract_w2': 'Contract W2',
             'contract_to_hire': 'Contract-to-Hire',
             'internship': 'Internship',
-            'location_on_site': 'On-Site',
-            'location_hybrid': 'Hybrid',
-            'location_remote': 'Remote',
-            'willing_to_relocate': 'Willing to Relocate',
-            'travel_preference': 'Travel Preference',
+            'temporary': 'Temporary',
+            'permanent': 'Permanent',
+            'contract': 'Contract',
         }
 
 
 class LocationPreferencesForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['location_on_site', 'location_remote', 'location_hybrid']
+        fields = ['location_on_site', 'location_remote', 'location_hybrid', 'commute_limit_miles', 'commute_limit_minutes']
         labels = {
             'location_on_site': 'On-Site',
             'location_remote': 'Remote',
