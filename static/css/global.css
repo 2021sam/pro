@@ -140,3 +140,24 @@ form label {
 .text-danger {
     color: red;
 }
+
+
+
+
+
+/* Link Button Styling */
+.btn-link {
+    display: inline-block;
+    background-color: #35424a;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-link:hover {
+    background-color: #6d7781;
+}

@@ -81,7 +81,7 @@ class ProfileMultiStepFormView(View):
             # If on the last step, redirect to profile detail view or dashboard
             if step == len(self.form_list) - 1:
                 print('*********************** end ')
-                return redirect('freelancer_profile:profile_detail', profile_id=profile.id)
+                return redirect('home')
 
             # Otherwise, proceed to the next step
             return redirect('freelancer_profile:multi-step-edit', step=step + 1)

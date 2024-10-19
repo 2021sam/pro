@@ -43,10 +43,10 @@
             <!-- Navigation Buttons -->
             <div>
                 {% if step > 0 %}
-                    <a href="{% url 'freelancer_profile:multi-step-edit' step|add:'-1' %}" class="btn btn-secondary">Previous</a>
+                <button type="button" class="btn-link" onclick="window.location.href='{% url 'freelancer_profile:multi-step-edit' step|add:'-1' %}'">Previous</button>
                 {% endif %}
 
-                <button type="submit">{% if step == total_steps|add:-1 %}Submit{% else %}Next{% endif %}</button>
+                <button type="submit" class="btn-link">{% if step == total_steps|add:-1 %}Submit{% else %}Next{% endif %}</button>
             </div>
         </form>
     </div>
