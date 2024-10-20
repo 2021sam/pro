@@ -22,7 +22,8 @@ class SearchFreelancerTestCase(TestCase):
             'commute_limit': 5
         })
         
-        print(f"Response content (no freelancers found): {response.content.decode()}")
+        print(f"Status code (no freelancers found): {response.status_code}")
+        print(f"Response content (no freelancers found): {response.content.decode()}")  # Print full response content
         
         # Check if the response contains 'No matching freelancers found'
         self.assertContains(response, 'No matching freelancers found')
@@ -34,7 +35,8 @@ class SearchFreelancerTestCase(TestCase):
             'commute_limit': 10
         })
         
-        print(f"Response content (freelancer found): {response.content.decode()}")
+        print(f"Status code (freelancer found): {response.status_code}")
+        print(f"Response content (freelancer found): {response.content.decode()}")  # Print full response content
         
         # Check if the response contains the freelancer's username
         self.assertContains(response, 'freelancer')
