@@ -5,57 +5,96 @@ from geopy.distance import geodesic  # For calculating distances between zip cod
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-# from django.shortcuts import render
-from django.db.models import Q
-# from .models import FreelancerProfile
+
+
+# employer_search/views.py
+
+from django.shortcuts import render
+from freelancer_profile.models import FreelancerProfile
 
 def search_freelancers(request):
-    # Get the search parameters from the request
-    job_title = request.GET.get('job_title', '')
-    work_authorization = request.GET.get('work_authorization', '')
-    location_preference = request.GET.get('location_preference', '')
-    commute_limit_miles = request.GET.get('commute_limit_miles', '')
-    
-    # Print out the values to debug
-    print(f"Job title search: {job_title}")
-    print(f"Work authorization search: {work_authorization}")
-    print(f"Location preference search: {location_preference}")
-    print(f"Commute limit miles search: {commute_limit_miles}")
-    
-    # Create a Q object for searching based on parameters
-    query = Q()
-    
-    if job_title:
-        query &= Q(desired_job_title__icontains=job_title)
-        print(f"Job title filter applied: {query}")
-    
-    if work_authorization:
-        query &= Q(work_authorization=work_authorization)
-        print(f"Work authorization filter applied: {query}")
-    
-    if location_preference:
-        query &= Q(location_preference=location_preference)
-        print(f"Location preference filter applied: {query}")
-    
-    if commute_limit_miles:
-        try:
-            commute_limit_miles = int(commute_limit_miles)
-            query &= Q(commute_limit_miles__lte=commute_limit_miles)
-            print(f"Commute limit filter applied: {query}")
-        except ValueError:
-            print(f"Invalid commute limit miles: {commute_limit_miles}")
-    
-    # Print the final query to check if it's correct
-    print(f"Final Query: {query}")
-    
-    # Filter the FreelancerProfile model based on the query
-    freelancers = FreelancerProfile.objects.filter(query)
-    
-    # Print the count of matching freelancers to see if any were found
-    print(f"Freelancers found: {freelancers.count()}")
+    freelancers = FreelancerProfile.objects.all()  # Replace with your actual filtering logic
+    return render(request, 'employer_search/search_results.html', {
+        'freelancers': freelancers
+    })
 
-    # Render the search results page
-    return render(request, 'employer_search/search_freelancers.html', {'freelancers': freelancers})
+
+
+
+# employer_search/views.py
+
+# from django.shortcuts import render
+# from freelancer_profile.models import FreelancerProfile
+
+# def search_freelancers(request):
+#     freelancers = FreelancerProfile.objects.all()  # Modify this query to match your search logic
+    
+#     # If you want to filter freelancers, you can add filtering here
+#     # if some_filter_condition:
+#     #     freelancers = freelancers.filter(...)
+
+#     # Pass the freelancers to the template, or an empty list if none found
+#     return render(request, 'employer_search/search_results.html', {
+#         'freelancers': freelancers
+#     })
+
+
+
+
+
+
+
+# # from django.shortcuts import render
+# from django.db.models import Q
+# # from .models import FreelancerProfile
+
+# def search_freelancers(request):
+#     # Get the search parameters from the request
+#     job_title = request.GET.get('job_title', '')
+#     work_authorization = request.GET.get('work_authorization', '')
+#     location_preference = request.GET.get('location_preference', '')
+#     commute_limit_miles = request.GET.get('commute_limit_miles', '')
+    
+#     # Print out the values to debug
+#     print(f"Job title search: {job_title}")
+#     print(f"Work authorization search: {work_authorization}")
+#     print(f"Location preference search: {location_preference}")
+#     print(f"Commute limit miles search: {commute_limit_miles}")
+    
+#     # Create a Q object for searching based on parameters
+#     query = Q()
+    
+#     if job_title:
+#         query &= Q(desired_job_title__icontains=job_title)
+#         print(f"Job title filter applied: {query}")
+    
+#     if work_authorization:
+#         query &= Q(work_authorization=work_authorization)
+#         print(f"Work authorization filter applied: {query}")
+    
+#     if location_preference:
+#         query &= Q(location_preference=location_preference)
+#         print(f"Location preference filter applied: {query}")
+    
+#     if commute_limit_miles:
+#         try:
+#             commute_limit_miles = int(commute_limit_miles)
+#             query &= Q(commute_limit_miles__lte=commute_limit_miles)
+#             print(f"Commute limit filter applied: {query}")
+#         except ValueError:
+#             print(f"Invalid commute limit miles: {commute_limit_miles}")
+    
+#     # Print the final query to check if it's correct
+#     print(f"Final Query: {query}")
+    
+#     # Filter the FreelancerProfile model based on the query
+#     freelancers = FreelancerProfile.objects.filter(query)
+    
+#     # Print the count of matching freelancers to see if any were found
+#     print(f"Freelancers found: {freelancers.count()}")
+
+#     # Render the search results page
+#     return render(request, 'employer_search/search_freelancers.html', {'freelancers': freelancers})
 
 
 def search_results(request):
