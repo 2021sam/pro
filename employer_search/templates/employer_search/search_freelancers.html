@@ -7,7 +7,6 @@
 {% block content %}
     <h1>Search Freelancers</h1>
 
-    <!-- Your search form and results here -->
     <form method="GET" action="{% url 'employer_search:search_freelancers' %}">
         <label for="zip_code">Enter Job Zip Code:</label>
         <input type="text" id="zip_code" name="zip_code" required>

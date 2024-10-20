@@ -13,13 +13,56 @@ from django.urls import reverse
 
 from django.shortcuts import render
 
-def search_freelancers(request):
-    # Assume this returns an empty or populated queryset based on the search
-    freelancers = []  # or Freelancer.objects.filter(...) based on search criteria
+from django.shortcuts import render
+from freelancer_profile.models import FreelancerProfile
+from geopy.distance import geodesic
 
-    return render(request, 'employer_search/search_results.html', {
-        'freelancers': freelancers  # Ensure this key exists
+
+def search_freelancers(request):
+    freelancers = []
+    recruiter_zip_code = request.GET.get('zip_code')
+    commute_limit = request.GET.get('commute_limit')
+
+    if recruiter_zip_code and commute_limit:
+        # Get the recruiter's coordinates
+        recruiter_location = get_coordinates_from_zip(recruiter_zip_code)
+
+        # Retrieve all freelancer profiles
+        all_freelancers = FreelancerProfile.objects.all()
+
+        for freelancer in all_freelancers:
+            freelancer_location = get_coordinates_from_zip(freelancer.work_zip_address)
+            if freelancer_location:
+                # Calculate distance
+                distance = geodesic(recruiter_location, freelancer_location).miles
+                if distance <= int(commute_limit):
+                    freelancers.append(freelancer)
+
+    return render(request, 'employer_search/search_freelancers.html', {
+        'freelancers': freelancers,
     })
+
+
+def get_coordinates_from_zip(zip_code):
+    """
+    Placeholder for getting coordinates (latitude, longitude) from zip code.
+    You can implement this using a real service like Google Maps API or GeoPy.
+    """
+    zip_code_coordinates = {
+        '90210': (34.0901, -118.4065),  # Example: Beverly Hills
+        '10001': (40.7128, -74.0060),  # Example: New York City
+        # Add more zip codes as needed
+    }
+    return zip_code_coordinates.get(zip_code)
+
+
+# def search_freelancers(request):
+#     # Assume this returns an empty or populated queryset based on the search
+#     freelancers = []  # or Freelancer.objects.filter(...) based on search criteria
+#
+#     return render(request, 'employer_search/search_results.html', {
+#         'freelancers': freelancers  # Ensure this key exists
+#     })
 
 
 
@@ -144,20 +187,20 @@ def search_results(request):
     return render(request, 'employer_search/search_results.html', context)
 
 
-# Utility function to get coordinates from a zip code (use an appropriate API or database)
-def get_coordinates_from_zip(zip_code):
-    """
-    Placeholder for getting coordinates (latitude, longitude) from zip code.
-    You can implement this using a real service like Google Maps API or GeoPy.
-    """
-    # Example response for a valid zip code lookup
-    zip_code_coordinates = {
-        '90210': (34.0901, -118.4065),  # Example: Beverly Hills
-        '10001': (40.7128, -74.0060),   # Example: New York City
-        # Add more zip codes as needed
-    }
-
-    return zip_code_coordinates.get(zip_code)
+# # Utility function to get coordinates from a zip code (use an appropriate API or database)
+# def get_coordinates_from_zip(zip_code):
+#     """
+#     Placeholder for getting coordinates (latitude, longitude) from zip code.
+#     You can implement this using a real service like Google Maps API or GeoPy.
+#     """
+#     # Example response for a valid zip code lookup
+#     zip_code_coordinates = {
+#         '90210': (34.0901, -118.4065),  # Example: Beverly Hills
+#         '10001': (40.7128, -74.0060),   # Example: New York City
+#         # Add more zip codes as needed
+#     }
+#
+#     return zip_code_coordinates.get(zip_code)
 
 
 
