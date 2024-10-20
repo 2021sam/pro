@@ -102,3 +102,36 @@ def get_coordinates_from_zip(zip_code):
     }
 
     return zip_code_coordinates.get(zip_code)
+
+
+
+
+
+from django.shortcuts import get_object_or_404
+from freelancer_profile.models import FreelancerProfile
+from employer_job.models import EmployerJob
+
+def search_freelancers_by_job(request, job_id):
+    # Get the employer job posting
+    employer_job = get_object_or_404(EmployerJob, id=job_id)
+    
+    # Print statements to debug the search criteria
+    print(f"Employer Job Title: {employer_job.title}")
+    print(f"Employer Job Location: {employer_job.job_zip_code}")
+    print(f"Commute Limit: {employer_job.commute_limit_miles}")
+
+    # Construct query to find freelancers that match the job posting details
+    freelancers = FreelancerProfile.objects.filter(
+        desired_job_title__icontains=employer_job.title,
+        work_zip_address=employer_job.job_zip_code,
+        commute_limit_miles__gte=employer_job.commute_limit_miles
+        # Add additional filters for employment type, location, etc.
+    )
+    
+    # Print debugging info for the search
+    print(f"Freelancers found: {freelancers.count()}")
+    
+    return render(request, 'employer_search/search_freelancers.html', {
+        'freelancers': freelancers,
+        'employer_job': employer_job
+    })

@@ -12,6 +12,7 @@
 		<p>
 			<a href="{% url 'employer_job:job-edit' e.id %}">Edit</a> 
 			<a href="{% url 'employer_job:job-delete' e.id%}">Delete</a>
+			<a href="{% url 'employer_search:search_freelancers' %}?job_id={{ e.id }}">Search for Matching Freelancers</a>
 		</p>
 		{% endif %}
 		
