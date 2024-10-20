@@ -5,21 +5,57 @@ from geopy.distance import geodesic  # For calculating distances between zip cod
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
+# from django.shortcuts import render
+from django.db.models import Q
+# from .models import FreelancerProfile
+
 def search_freelancers(request):
-    """ View to handle recruiter search form input (job zip code and commute limit) """
-    if request.method == 'POST':
-        form = FreelancerSearchForm(request.POST)
-        if form.is_valid():
-            # Get recruiter inputs
-            recruiter_zip_code = form.cleaned_data['recruiter_zip_code']
-            commute_limit_miles = form.cleaned_data['commute_limit_miles']
+    # Get the search parameters from the request
+    job_title = request.GET.get('job_title', '')
+    work_authorization = request.GET.get('work_authorization', '')
+    location_preference = request.GET.get('location_preference', '')
+    commute_limit_miles = request.GET.get('commute_limit_miles', '')
+    
+    # Print out the values to debug
+    print(f"Job title search: {job_title}")
+    print(f"Work authorization search: {work_authorization}")
+    print(f"Location preference search: {location_preference}")
+    print(f"Commute limit miles search: {commute_limit_miles}")
+    
+    # Create a Q object for searching based on parameters
+    query = Q()
+    
+    if job_title:
+        query &= Q(desired_job_title__icontains=job_title)
+        print(f"Job title filter applied: {query}")
+    
+    if work_authorization:
+        query &= Q(work_authorization=work_authorization)
+        print(f"Work authorization filter applied: {query}")
+    
+    if location_preference:
+        query &= Q(location_preference=location_preference)
+        print(f"Location preference filter applied: {query}")
+    
+    if commute_limit_miles:
+        try:
+            commute_limit_miles = int(commute_limit_miles)
+            query &= Q(commute_limit_miles__lte=commute_limit_miles)
+            print(f"Commute limit filter applied: {query}")
+        except ValueError:
+            print(f"Invalid commute limit miles: {commute_limit_miles}")
+    
+    # Print the final query to check if it's correct
+    print(f"Final Query: {query}")
+    
+    # Filter the FreelancerProfile model based on the query
+    freelancers = FreelancerProfile.objects.filter(query)
+    
+    # Print the count of matching freelancers to see if any were found
+    print(f"Freelancers found: {freelancers.count()}")
 
-            # Redirect to results page with inputs as GET parameters
-            return HttpResponseRedirect(reverse('employer_search:search_results') + f'?zip={recruiter_zip_code}&miles={commute_limit_miles}')
-    else:
-        form = FreelancerSearchForm()
-
-    return render(request, 'employer_search/search_freelancers.html', {'form': form})
+    # Render the search results page
+    return render(request, 'employer_search/search_freelancers.html', {'freelancers': freelancers})
 
 
 def search_results(request):
