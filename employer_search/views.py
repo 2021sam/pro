@@ -7,16 +7,33 @@ from django.urls import reverse
 
 
 
-# employer_search/views.py
+
+
+
 
 from django.shortcuts import render
-from freelancer_profile.models import FreelancerProfile
 
 def search_freelancers(request):
-    freelancers = FreelancerProfile.objects.all()  # Replace with your actual filtering logic
+    # Assume this returns an empty or populated queryset based on the search
+    freelancers = []  # or Freelancer.objects.filter(...) based on search criteria
+
     return render(request, 'employer_search/search_results.html', {
-        'freelancers': freelancers
+        'freelancers': freelancers  # Ensure this key exists
     })
+
+
+
+
+# # employer_search/views.py
+
+# from django.shortcuts import render
+# from freelancer_profile.models import FreelancerProfile
+
+# def search_freelancers(request):
+#     freelancers = FreelancerProfile.objects.all()  # Replace with your actual filtering logic
+#     return render(request, 'employer_search/search_results.html', {
+#         'freelancers': freelancers
+#     })
 
 
 
