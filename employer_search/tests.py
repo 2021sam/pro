@@ -1,8 +1,14 @@
 from django.test import TestCase
 from django.urls import reverse
-from freelancer_profile.models import Freelancer  # Make sure the correct model is imported
+from authenticate.models import CustomUser  # Import your CustomUser model
+from freelancer_profile.models import FreelancerProfile
 
 class SearchFreelancerTestCase(TestCase):
+
+    def setUp(self):
+        # Create a mock freelancer using CustomUser
+        self.user = CustomUser.objects.create_user(username='freelancer1', password='password123')
+        self.freelancer_profile = FreelancerProfile.objects.create(user=self.user)
 
     def test_no_freelancers_found(self):
         # Ensure no freelancers are created
@@ -11,8 +17,7 @@ class SearchFreelancerTestCase(TestCase):
         self.assertContains(response, 'No matching freelancers found')
 
     def test_search_freelancers_within_range(self):
-        # Create a mock freelancer to test the search functionality
-        freelancer = Freelancer.objects.create(username='freelancer1')  # Adjust fields as per your model
+        # Test the search functionality when a freelancer exists
         response = self.client.get(reverse('employer_search:search_freelancers'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, freelancer.username)  # Check for freelancer in response
+        self.assertContains(response, self.user.username)  # Check for freelancer username in response
