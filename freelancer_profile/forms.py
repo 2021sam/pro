@@ -1,10 +1,10 @@
 # /Users/2021sam/apps/zyxe/pro/freelancer_profile/forms.py
 from django import forms
-from .models import Profile
+from .models import FreelancerProfile
 
 class PersonalInfoForm(forms.ModelForm):
     class Meta:
-        model = Profile
+        model = FreelancerProfile
         fields = [
             'first_name',
             'last_name',
@@ -85,7 +85,7 @@ class PersonalInfoForm(forms.ModelForm):
 
 class EmploymentPreferencesForm(forms.ModelForm):
     class Meta:
-        model = Profile
+        model = FreelancerProfile
         fields = [
             # Employment Type Preferences
             'full_time',
@@ -140,7 +140,7 @@ class EmploymentPreferencesForm(forms.ModelForm):
 
 class LocationPreferencesForm(forms.ModelForm):
     class Meta:
-        model = Profile
+        model = FreelancerProfile
         fields = ['location_on_site', 'location_remote', 'location_hybrid', 'commute_limit_miles', 'commute_limit_minutes']
         labels = {
             'location_on_site': 'On-Site',
@@ -150,7 +150,7 @@ class LocationPreferencesForm(forms.ModelForm):
 
 class TravelRelocationForm(forms.ModelForm):
     class Meta:
-        model = Profile
+        model = FreelancerProfile
         fields = ['travel_preference', 'willing_to_relocate']
         widgets = {
             'travel_preference': forms.NumberInput(attrs={'min': 0, 'max': 100, 'step': 10}),

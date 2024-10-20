@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import Profile
+from .models import FreelancerProfile
 
-@admin.register(Profile)
+@admin.register(FreelancerProfile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user_id', 'user', 'date_of_birth', 'desired_job_title', 'desired_salary', 'desired_hourly_rate')
     search_fields = ('user__username', 'desired_job_title')

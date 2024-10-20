@@ -36,9 +36,9 @@ def validate_travel_preference(value):
 
 
 # Profile Model
-class Profile(models.Model):
+class FreelancerProfile(models.Model):
     # Basic Information
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='freelancer_profile')
     timestamp = models.DateTimeField(default=timezone.now)
     date_of_birth = models.DateField(null=True, blank=True, help_text='Please use the following format: <em>YYYY-MM-DD</em>.')
     # birth_date = models.DateField(null=True, blank=True, help_text='Please use the following format: <em>YYYY-MM-DD</em>.')
@@ -129,7 +129,7 @@ class Profile(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)
+        FreelancerProfile.objects.create(user=instance)
 
 
 @receiver(post_save, sender=User)

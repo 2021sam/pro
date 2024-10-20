@@ -9,10 +9,10 @@ class EmployerJob(models.Model):
     timestamp = models.DateTimeField(default=timezone.now)
     title = models.CharField(max_length=30)
     description = models.CharField(max_length=50)
-    job_street_address = models.TextField(max_length=30, blank=True)
-    job_city = models.TextField(max_length=30, blank=True)
-    job_state = models.TextField(max_length=30, blank=True)
-    job_zip_code = models.TextField(max_length=30, blank=True)
+    job_street_address = models.CharField(max_length=30, blank=True)
+    job_city = models.CharField(max_length=30, blank=True)
+    job_state = models.CharField(max_length=30, blank=True)
+    job_zip_code = models.CharField(max_length=30, blank=True)
 
     # Location Preferences
     location_on_site = models.BooleanField(default=False)

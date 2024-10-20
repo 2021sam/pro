@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.core.exceptions import ValidationError
 
-from .models import Profile
+from .models import FreelancerProfile
 from .forms import PersonalInfoForm, EmploymentPreferencesForm, LocationPreferencesForm, TravelRelocationForm
 
 
@@ -28,17 +28,13 @@ class ProfileMultiStepFormView(View):
     ]  # Corresponding templates for each step
 
 
-
-
-
-
     def get(self, request, step=0):
         """
         Handle the GET request to display the current step's form.
         """
         # queryset = Profile.objects.filter(user=request.user)
         # print(queryset)
-        profile, created = Profile.objects.get_or_create(user=request.user)
+        profile, created = FreelancerProfile.objects.get_or_create(user=request.user)
         print(f'profile: {profile}')
         print(f'created: {created}')
 
@@ -51,7 +47,7 @@ class ProfileMultiStepFormView(View):
 
         # If editing, fetch the existing profile
         if profile_id:
-            profile = get_object_or_404(Profile, pk=profile_id, user=request.user)
+            profile = get_object_or_404(FreelancerProfile, pk=profile_id, user=request.user)
             form = form_class(instance=profile)
         else:
             form = form_class()
@@ -66,7 +62,7 @@ class ProfileMultiStepFormView(View):
         # print(f'ProfileMultiStepFormView: profile_id: {profile_id}')
 
         # Fetch or create the Profile based on the current user
-        profile, created = Profile.objects.get_or_create(user=request.user)
+        profile, created = FreelancerProfile.objects.get_or_create(user=request.user)
         print(f'profile: {profile}')
 
         form_class = self.form_list[step]
@@ -113,7 +109,6 @@ class ProfileDetailView(View):
     View to display the profile details after the user completes the multi-step form.
     """
     def get(self, request, profile_id):
-        profile = get_object_or_404(Profile, pk=profile_id, user=request.user)
+        profile = get_object_or_404(FreelancerProfile, pk=profile_id, user=request.user)
         context = {'profile': profile}
         return render(request, 'freelancer_profile/profile_detail.html', context)
-

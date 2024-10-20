@@ -1,42 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Freelancers</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <div class="container">
-        <h2>Search Freelancers</h2>
-        <form method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="id_recruiter_zip_code">Job Zip Code</label>
-                {{ form.recruiter_zip_code }}
-                <small class="form-text text-muted">Enter the recruiter's job zip code.</small>
-            </div>
+{% extends 'base.html' %}
 
-            <div class="form-group">
-                <label for="id_commute_limit_miles">Commute Limit (Miles)</label>
-                {{ form.commute_limit_miles }}
-                <small class="form-text text-muted">Enter the maximum distance a freelancer can commute.</small>
-            </div>
+{% block title %}
+    Search Freelancers
+{% endblock %}
 
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
+{% block content %}
+    <h1>Search Freelancers</h1>
 
-        <!-- Display search results here -->
-        {% if freelancers %}
-            <h3>Search Results</h3>
-            <ul>
-                {% for freelancer in freelancers %}
-                    <li>{{ freelancer.first_name }} {{ freelancer.last_name }} - {{ freelancer.residential_zip_address }}</li>
-                {% empty %}
-                    <p>No freelancers found matching your criteria.</p>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </div>
-</body>
-</html>
+    <!-- Your search form and results here -->
+    <form method="GET" action="{% url 'employer_search:search_freelancers' %}">
+        <label for="zip_code">Enter Job Zip Code:</label>
+        <input type="text" id="zip_code" name="zip_code" required>
+
+        <label for="commute_limit">Commute Limit (miles):</label>
+        <input type="number" id="commute_limit" name="commute_limit" min="0" required>
+
+        <button type="submit">Search</button>
+    </form>
+
+    {% if freelancers %}
+        <h2>Freelancers Found:</h2>
+        <ul>
+            {% for freelancer in freelancers %}
+                <li>{{ freelancer.first_name }} {{ freelancer.last_name }} - {{ freelancer.work_zip_address }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No freelancers found within the specified commute limit.</p>
+    {% endif %}
+{% endblock %}

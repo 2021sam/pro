@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .forms import FreelancerSearchForm  # Assuming a form for entering job zip code and commute limit
-from freelancer_profile.models import Profile
+from freelancer_profile.models import FreelancerProfile
 from geopy.distance import geodesic  # For calculating distances between zip codes  pip install geopy
 from django.http import HttpResponseRedirect
 from django.urls import reverse

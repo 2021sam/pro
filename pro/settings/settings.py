@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     'pro_skills',
     'phonenumbers',
     'freelancer_experience',
-    'freelancer_profile'
+    'freelancer_profile',
+    'employer_search'
 ]
 
 MIDDLEWARE = [
