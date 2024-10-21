@@ -2,7 +2,6 @@ from django.test import TestCase
 from django.urls import reverse
 from unittest.mock import patch
 
-
 class SearchFreelancerTestCase(TestCase):
     @patch('employer_search.views.get_coordinates_from_zip')
     def test_search_freelancers(self, mock_get_coordinates):
@@ -21,31 +20,18 @@ class SearchFreelancerTestCase(TestCase):
         # Ensure the freelancers list is empty as we are not checking the DB
         self.assertContains(response, "No freelancers found within the specified commute limit.")
 
-# from django.test import TestCase
-# from django.urls import reverse
-# from authenticate.models import CustomUser  # Import your CustomUser model
-# from freelancer_profile.models import FreelancerProfile
-#
-# class SearchFreelancerTestCase(TestCase):
-#
-#     def setUp(self):
-#         # Create a mock freelancer using CustomUser
-#         self.user = CustomUser.objects.create_user(username='freelancer1', password='password123')
-#         self.freelancer_profile = FreelancerProfile.objects.create(user=self.user)
-#
-#     def test_no_freelancers_found(self):
-#         # Ensure no freelancers are created other than the one in setUp
-#         response = self.client.get(reverse('employer_search:search_freelancers'))
-#         self.assertEqual(response.status_code, 200)
-#         self.assertContains(response, 'No matching freelancers found')
-#
-#     def test_search_freelancers_within_range(self):
-#         # Test the search functionality when a freelancer exists
-#         response = self.client.get(reverse('employer_search:search_freelancers'))
-#
-#         # Debug: Print the response content to check why the freelancer is not found
-#         print(response.content.decode())  # This will output the raw HTML response
-#
-#         # Check if the user is in the context or response
-#         self.assertEqual(response.status_code, 200)
-#         self.assertContains(response, self.user.username)  # Check for freelancer username in response
+    def test_search_freelancers_page_loads(self):
+        response = self.client.get(reverse('employer_search:search_freelancers'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '<h1>Search Freelancers</h1>')
+        self.assertContains(response, 'Enter Job Zip Code')
+        self.assertContains(response, 'Commute Limit (miles)')
+        self.assertContains(response, '<button type="submit">Search</button>')
+
+    def test_search_form_submission(self):
+        response = self.client.get(reverse('employer_search:search_freelancers'), {
+            'zip_code': '90210',  # Example ZIP code
+            'commute_limit': '50'  # Example commute limit
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'No freelancers found within the specified commute limit.')
