@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from unittest.mock import patch
+from freelancer_profile.models import FreelancerProfile
 
 class SearchFreelancerTestCase(TestCase):
     @patch('employer_search.views.get_coordinates_from_zip')
@@ -35,3 +36,25 @@ class SearchFreelancerTestCase(TestCase):
         })
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'No freelancers found within the specified commute limit.')
+
+
+    from freelancer_profile.models import FreelancerProfile
+
+    def test_search_finds_matching_freelancer(self):
+        # Create a test freelancer in the database
+        FreelancerProfile.objects.create(
+            first_name='John',
+            last_name='Doe',
+            work_zip_address='90210',
+            commute_limit_miles=50
+        )
+
+        # Simulate a search that matches the freelancer's criteria
+        response = self.client.get(reverse('employer_search:search_freelancers'), {
+            'zip_code': '90210',
+            'commute_limit': '50'
+        })
+
+        # Check if the freelancer is found in the search results
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'John Doe')  # Check if freelancer is in the response
