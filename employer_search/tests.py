@@ -3,6 +3,13 @@ from django.urls import reverse
 from unittest.mock import patch
 from freelancer_profile.models import FreelancerProfile
 
+from django.contrib.auth import get_user_model
+from freelancer_profile.models import FreelancerProfile
+from django.urls import reverse
+
+
+
+
 class SearchFreelancerTestCase(TestCase):
     @patch('employer_search.views.get_coordinates_from_zip')
     def test_search_freelancers(self, mock_get_coordinates):
@@ -38,23 +45,92 @@ class SearchFreelancerTestCase(TestCase):
         self.assertContains(response, 'No freelancers found within the specified commute limit.')
 
 
+
+
     from freelancer_profile.models import FreelancerProfile
 
+    # def test_search_finds_matching_freelancer(self):
+    #     # Create a test freelancer in the database
+    #     FreelancerProfile.objects.create(
+    #         first_name='John',
+    #         last_name='Doe',
+    #         work_zip_address='90210',
+    #         commute_limit_miles=50
+    #     )
+    #
+    #     # Simulate a search that matches the freelancer's criteria
+    #     response = self.client.get(reverse('employer_search:search_freelancers'), {
+    #         'zip_code': '90210',
+    #         'commute_limit': '50'
+    #     })
+    #
+    #     # Check if the freelancer is found in the search results
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertContains(response, 'John Doe')  # Check if freelancer is in the response
+
+
+# from django.contrib.auth import get_user_model
+# from freelancer_profile.models import FreelancerProfile
+
+
+    # def test_search_finds_matching_freelancer(self):
+    #     # Create a test user
+    #     User = get_user_model()
+    #     user = User.objects.create_user(
+    #         username='johndoe',
+    #         password='password123',
+    #         email='johndoe@example.com'
+    #     )
+    #
+    #     # Create a test freelancer profile and link it to the user
+    #     FreelancerProfile.objects.create(
+    #         user=user,
+    #         first_name='John',
+    #         last_name='Doe',
+    #         work_zip_address='90210',
+    #         commute_limit_miles=50
+    #     )
+    #
+    #     # Simulate a search that matches the freelancer's criteria
+    #     response = self.client.get(reverse('employer_search:search_freelancers'), {
+    #         'zip_code': '90210',
+    #         'commute_limit': '50'
+    #     })
+    #
+    #     # Check if the freelancer is found in the search results
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertContains(response, 'John Doe')  # Check if freelancer is in the response
+
+
+# from django.contrib.auth import get_user_model
+# from freelancer_profile.models import FreelancerProfile
+# from django.urls import reverse
+
+
     def test_search_finds_matching_freelancer(self):
-        # Create a test freelancer in the database
+        # Create a test user (CustomUser)
+        User = get_user_model()
+        user = User.objects.create_user(
+            username='johndoe',
+            password='password123',
+            email='johndoe@example.com'
+        )
+
+        # Create a FreelancerProfile linked to the test user
         FreelancerProfile.objects.create(
+            user=user,  # Link to CustomUser instance
             first_name='John',
             last_name='Doe',
             work_zip_address='90210',
             commute_limit_miles=50
         )
 
-        # Simulate a search that matches the freelancer's criteria
+        # Simulate a search for freelancers
         response = self.client.get(reverse('employer_search:search_freelancers'), {
             'zip_code': '90210',
             'commute_limit': '50'
         })
 
-        # Check if the freelancer is found in the search results
+        # Ensure the freelancer appears in the search results
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'John Doe')  # Check if freelancer is in the response
+        self.assertContains(response, 'John Doe')  # Verifies the freelancer is in the result
