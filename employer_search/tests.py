@@ -9,7 +9,7 @@ from django.urls import reverse
 
 
 
-
+#   Success
 class SearchFreelancerTestCase(TestCase):
     @patch('employer_search.views.get_coordinates_from_zip')
     def test_search_freelancers(self, mock_get_coordinates):
@@ -102,11 +102,7 @@ class SearchFreelancerTestCase(TestCase):
     #     self.assertContains(response, 'John Doe')  # Check if freelancer is in the response
 
 
-# from django.contrib.auth import get_user_model
-# from freelancer_profile.models import FreelancerProfile
-# from django.urls import reverse
-
-
+    #   success
     def test_search_finds_matching_freelancer(self):
         # Create a test user (CustomUser)
         User = get_user_model()
@@ -134,3 +130,72 @@ class SearchFreelancerTestCase(TestCase):
         # Ensure the freelancer appears in the search results
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'John Doe')  # Verifies the freelancer is in the result
+
+
+
+
+
+
+
+# employer_search/tests.py
+
+from django.test import TestCase
+from django.urls import reverse
+from freelancer_profile.models import FreelancerProfile
+from django.contrib.auth import get_user_model
+
+class CommuteFilterTestCase(TestCase):
+
+    def setUp(self):
+        # Create a user and freelancer profiles with different zip codes
+        user1 = get_user_model().objects.create(username='freelancer1', password='password1')
+        user2 = get_user_model().objects.create(username='freelancer2', password='password2')
+        user3 = get_user_model().objects.create(username='freelancer3', password='password3')
+
+        # Freelancer within range
+        self.freelancer1 = FreelancerProfile.objects.create(
+            user=user1,
+            first_name='John',
+            last_name='Doe',
+            work_zip_address='90210',  # Beverly Hills
+        )
+
+        # Freelancer slightly out of range
+        self.freelancer2 = FreelancerProfile.objects.create(
+            user=user2,
+            first_name='Jane',
+            last_name='Doe',
+            work_zip_address='90001',  # Los Angeles
+        )
+
+        # Freelancer far out of range
+        self.freelancer3 = FreelancerProfile.objects.create(
+            user=user3,
+            first_name='Sam',
+            last_name='Smith',
+            work_zip_address='10001',  # New York
+        )
+
+    def test_commute_filter_within_range(self):
+        # Test a commute limit that only includes the freelancer within range
+        response = self.client.get(reverse('employer_search:search_freelancers'), {
+            'zip_code': '90210',  # Job zip code (Beverly Hills)
+            'commute_limit': 10  # 10 miles commute limit
+        })
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'John Doe')  # Freelancer within range should be found
+        self.assertNotContains(response, 'Jane Doe')  # Freelancer out of range shouldn't be found
+        self.assertNotContains(response, 'Sam Smith')  # Freelancer far out of range shouldn't be found
+
+    def test_commute_filter_out_of_range(self):
+        # Test a commute limit that excludes both freelancers
+        response = self.client.get(reverse('employer_search:search_freelancers'), {
+            'zip_code': '90210',
+            'commute_limit': 5  # 5 miles commute limit, tighter range
+        })
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'John Doe')
+        self.assertNotContains(response, 'Jane Doe')
+        self.assertNotContains(response, 'Sam Smith')
