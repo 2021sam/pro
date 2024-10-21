@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from freelancer_profile.models import FreelancerProfile
 from geopy.distance import geodesic
+from geopy.geocoders import Nominatim
 
 User = get_user_model()
 
@@ -13,8 +14,7 @@ class FreelancerProfileSearchTest(TestCase):
         )
         self.freelancer_within_range = FreelancerProfile.objects.create(
             user=self.user_within_range,
-            residential_zip_code='94506',
-            # Add other necessary fields with appropriate values
+            residential_zip_code='94506',  # Danville, CA
         )
 
         self.user_out_of_range = User.objects.create_user(
@@ -22,37 +22,71 @@ class FreelancerProfileSearchTest(TestCase):
         )
         self.freelancer_out_of_range = FreelancerProfile.objects.create(
             user=self.user_out_of_range,
-            residential_zip_code='94507',  # This zip code is out of range
-            # Add other necessary fields with appropriate values
+            residential_zip_code='94507',  # Alamo, CA
         )
 
         self.user_no_profile = User.objects.create_user(
             username='user_no_profile', password='password'
         )
 
-    def test_search_freelancers_within_range(self):
-        # Simulate a search for freelancers within a specific zip code range
-        employer_location = (37.8219, -121.9996)  # 94506 coordinates
-        freelancer_location = (37.7864, -121.9816)  # 94526 coordinates
+        # Geolocator for converting zip codes to lat/lon
+        self.geolocator = Nominatim(user_agent="geo_test")
 
+    def get_coordinates_from_zip(self, zip_code):
+        """Utility function to get latitude and longitude from a zip code."""
+        location = self.geolocator.geocode(zip_code)
+        return (location.latitude, location.longitude) if location else (None, None)
+
+    def test_search_freelancers_within_range(self):
+        employer_zip_code = '94506'
+        freelancer_zip_code = self.freelancer_within_range.residential_zip_code
+
+        # Get the coordinates from zip codes
+        employer_location = self.get_coordinates_from_zip(employer_zip_code)
+        freelancer_location = self.get_coordinates_from_zip(freelancer_zip_code)
+
+        # Ensure coordinates are valid
+        self.assertIsNotNone(employer_location[0], "Employer location not found.")
+        self.assertIsNotNone(freelancer_location[0], "Freelancer location not found.")
+
+        # Calculate the geodesic distance
         distance = geodesic(employer_location, freelancer_location).miles
 
-        # Check if the distance is within the specified commute limit (e.g., 5 miles)
-        self.assertTrue(distance <= 5)  # Adjust as necessary for your test criteria
+        # The distance should be within a 5-mile commute range
+        self.assertTrue(distance <= 5, f"Expected distance <= 5 miles, got {distance}")
 
     def test_search_freelancers_out_of_zip_code_range(self):
-        employer_location = (37.8219, -121.9996)  # 94506 coordinates
-        freelancer_location = (37.8456, -122.0312)  # 94507 coordinates
+        employer_zip_code = '94506'
+        freelancer_zip_code = self.freelancer_out_of_range.residential_zip_code
 
+        # Get the coordinates from zip codes
+        employer_location = self.get_coordinates_from_zip(employer_zip_code)
+        freelancer_location = self.get_coordinates_from_zip(freelancer_zip_code)
+
+        # Ensure coordinates are valid
+        self.assertIsNotNone(employer_location[0], "Employer location not found.")
+        self.assertIsNotNone(freelancer_location[0], "Freelancer location not found.")
+
+        # Calculate the geodesic distance
         distance = geodesic(employer_location, freelancer_location).miles
 
-        # Check if the distance is greater than the specified commute limit (e.g., 5 miles)
-        self.assertTrue(distance > 5)  # Adjust as necessary for your test criteria
+        # Adjust the commute limit to check if it's outside a 5-mile range
+        self.assertTrue(distance > 5, f"Expected distance > 5 miles, got {distance}")
 
     def test_search_freelancers_no_results(self):
-        # Simulate a search that returns no results
-        employer_location = (37.8219, -121.9996)  # 94506 coordinates
-        freelancer_location = (37.0000, -121.0000)  # Out of range coordinates
+        employer_zip_code = '94506'
+        freelancer_zip_code = '99999'  # A zip code far away
 
+        # Get the coordinates from zip codes
+        employer_location = self.get_coordinates_from_zip(employer_zip_code)
+        freelancer_location = self.get_coordinates_from_zip(freelancer_zip_code)
+
+        # Ensure coordinates are valid
+        self.assertIsNotNone(employer_location[0], "Employer location not found.")
+        self.assertIsNotNone(freelancer_location[0], "Freelancer location not found.")
+
+        # Calculate the geodesic distance
         distance = geodesic(employer_location, freelancer_location).miles
-        self.assertEqual(distance, 0)  # No freelancers should be found
+
+        # The distance should be significantly higher than any reasonable commute range
+        self.assertTrue(distance > 50, f"Expected no match for distance {distance} miles")
