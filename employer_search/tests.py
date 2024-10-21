@@ -1,3 +1,24 @@
+
+# Approach:
+#
+#     Use a library like geopy.geocoders to convert the zip codes to latitudes and longitudes.
+#     Once you have the coordinates, you can calculate the distance using geodesic.
+
+# Key Improvements:
+#
+#     get_coordinates_from_zip: This utility function uses geopy.geocoders.Nominatim to convert zip codes to geographic coordinates dynamically.
+#     Realistic testing: No need to hard-code lat/long values. The test will fetch real geographic data based on the zip codes.
+#     Flexible assertions: The test results are based on real distances between zip codes.
+#
+# Important Notes:
+#
+#     The Nominatim geolocator relies on an external API, so internet access is required during testing.
+#     Ensure you have the geopy library installed (pip install geopy).
+#
+# Try running this updated test suite, and it should now accurately test the distance based on zip codes!
+
+
+
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from freelancer_profile.models import FreelancerProfile
@@ -51,6 +72,7 @@ class FreelancerProfileSearchTest(TestCase):
 
         # Calculate the geodesic distance
         distance = geodesic(employer_location, freelancer_location).miles
+        print(f'test_search_freelancers_within_range: distance: {distance}')
 
         # The distance should be within a 5-mile commute range
         self.assertTrue(distance <= 5, f"Expected distance <= 5 miles, got {distance}")
@@ -69,6 +91,7 @@ class FreelancerProfileSearchTest(TestCase):
 
         # Calculate the geodesic distance
         distance = geodesic(employer_location, freelancer_location).miles
+        print(f'test_search_freelancers_out_of_zip_code_range: distance: {distance}')
 
         # Adjust the commute limit to check if it's outside a 5-mile range
         self.assertTrue(distance > 5, f"Expected distance > 5 miles, got {distance}")
@@ -87,6 +110,7 @@ class FreelancerProfileSearchTest(TestCase):
 
         # Calculate the geodesic distance
         distance = geodesic(employer_location, freelancer_location).miles
+        print(f'test_search_freelancers_no_results: distance: {distance}')
 
         # The distance should be significantly higher than any reasonable commute range
         self.assertTrue(distance > 50, f"Expected no match for distance {distance} miles")
