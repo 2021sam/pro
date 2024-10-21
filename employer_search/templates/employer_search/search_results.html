@@ -1,0 +1,15 @@
+<!-- employer_search/templates/employer_search/search_results.html -->
+<main>
+    <h1>Search Freelancers</h1>
+
+    {% if freelancers %}
+        <h2>Freelancers Found:</h2>
+        <ul>
+            {% for freelancer in freelancers %}
+                <li>{{ freelancer.username }}</li>  <!-- Replace with correct fields -->
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No matching freelancers found</p>  <!-- Ensure this message is here -->
+    {% endif %}
+</main>
