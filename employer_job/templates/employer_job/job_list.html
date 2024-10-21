@@ -1,3 +1,4 @@
+{#/Users/2021sam/apps/zyxe/pro/employer_job/templates/employer_job/job_list.html#}
 {% extends 'base.html' %}
 	
 {% block content %}
@@ -12,7 +13,8 @@
 		<p>
 			<a href="{% url 'employer_job:job-edit' e.id %}">Edit</a> 
 			<a href="{% url 'employer_job:job-delete' e.id%}">Delete</a>
-			<a href="{% url 'employer_search:search_freelancers' %}?job_id={{ e.id }}">Search for Matching Freelancers</a>
+			<a href="{% url 'employer_search:search_freelancers_by_job' e.id %}">Search for Matching Freelancers</a>
+
 		</p>
 		{% endif %}
 		
