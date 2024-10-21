@@ -1,12 +1,10 @@
 # employer_search/tests.py
-# This only tests for matching zip codes
 
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from freelancer_profile.models import FreelancerProfile
 
 User = get_user_model()
-
 
 class FreelancerProfileSearchTest(TestCase):
     def setUp(self):
@@ -16,8 +14,8 @@ class FreelancerProfileSearchTest(TestCase):
         )
         self.freelancer_within_range = FreelancerProfile.objects.create(
             user=self.user_within_range,
-            residential_zip_code='12345',
-            work_zip_code='12345',
+            residential_zip_code='94506',
+            work_zip_code='94506',
             # Add other necessary fields with appropriate values
         )
 
@@ -26,8 +24,8 @@ class FreelancerProfileSearchTest(TestCase):
         )
         self.freelancer_out_of_range = FreelancerProfile.objects.create(
             user=self.user_out_of_range,
-            residential_zip_code='99999',
-            work_zip_code='99999',
+            residential_zip_code='94507',
+            work_zip_code='94507',
             # Add other necessary fields with appropriate values
         )
 
@@ -38,7 +36,7 @@ class FreelancerProfileSearchTest(TestCase):
     def test_search_freelancers_within_range(self):
         # Simulate a search for freelancers within a specific zip code range
         results = FreelancerProfile.objects.filter(
-            residential_zip_code='12345'  # Simulating a search criteria
+            residential_zip_code='94506'  # Simulating a search criteria
         )
         self.assertIn(self.freelancer_within_range, results)
         self.assertNotIn(self.freelancer_out_of_range, results)
@@ -46,7 +44,7 @@ class FreelancerProfileSearchTest(TestCase):
     def test_search_freelancers_out_of_zip_code_range(self):
         # Simulate a search for freelancers who are out of the specified range
         results = FreelancerProfile.objects.filter(
-            residential_zip_code='99999'  # Simulating a search criteria
+            residential_zip_code='94507'  # Simulating a search criteria
         )
         self.assertIn(self.freelancer_out_of_range, results)
         self.assertNotIn(self.freelancer_within_range, results)
@@ -57,4 +55,3 @@ class FreelancerProfileSearchTest(TestCase):
             residential_zip_code='00000'  # Simulating a search criteria with no match
         )
         self.assertEqual(results.count(), 0)
-
