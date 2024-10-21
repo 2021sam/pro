@@ -1,4 +1,3 @@
-{#/Users/2021sam/apps/zyxe/pro/employer_search/templates/employer_search/search_freelancers.html#}
 {% extends 'base.html' %}
 
 {% block title %}
@@ -6,17 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Search Freelancers</h1>
-
-    <form method="GET" action="{% url 'employer_search:search_freelancers_by_job' %}">
-        <label for="zip_code">Enter Job Zip Code:</label>
-        <input type="text" id="zip_code" name="zip_code" required>
-
-        <label for="commute_limit">Commute Limit (miles):</label>
-        <input type="number" id="commute_limit" name="commute_limit" min="0" required>
-
-        <button type="submit">Search</button>
-    </form>
+    <h1>Freelancer Search Results</h1>
 
     {% if freelancers %}
         <h2>Freelancers Found:</h2>
