@@ -61,15 +61,15 @@ class FreelancerProfile(models.Model):
     portfolio = models.TextField(max_length=50, blank=True)
 
     # Residential and Work Address
-    residential_street_address = models.TextField(max_length=50, blank=True)
-    residential_city_address = models.TextField(max_length=50, blank=True)
-    residential_state_address = models.TextField(max_length=50, blank=True)
-    residential_zip_address = models.TextField(max_length=50, blank=True)
+    residential_street = models.CharField(max_length=50, blank=True)
+    residential_city = models.CharField(max_length=50, blank=True)
+    residential_state = models.CharField(max_length=50, blank=True)
+    residential_zip_code = models.CharField(max_length=50, blank=True)  # Updated field name
 
-    work_street_address = models.TextField(max_length=50, blank=True)
-    work_city_address = models.TextField(max_length=50, blank=True)
-    work_state_address = models.TextField(max_length=50, blank=True)
-    work_zip_address = models.TextField(max_length=50, blank=True)
+    work_street = models.CharField(max_length=50, blank=True)
+    work_city = models.CharField(max_length=50, blank=True)
+    work_state = models.CharField(max_length=50, blank=True)
+    work_zip_code = models.CharField(max_length=50, blank=True)  # Updated field name
 
     # Employment Preferences
     desired_job_title = models.TextField(max_length=50, blank=True)

@@ -180,50 +180,106 @@ class SearchFreelancerTestCase(TestCase):
 
 
 
+# from django.test import TestCase
+# from django.contrib.auth import get_user_model
+# from django.urls import reverse
+# from employer_job.models import EmployerJob
+#
+# from freelancer_profile.models import FreelancerProfile
+#
+# class CommuteFilterTestCase(TestCase):
+#     def setUp(self):
+#         # Create users with unique emails to avoid IntegrityError
+#         user1 = get_user_model().objects.create_user(
+#             username='freelancer1',
+#             email='freelancer1@example.com',
+#             password='password1'
+#         )
+#         user2 = get_user_model().objects.create_user(
+#             username='freelancer2',
+#             email='freelancer2@example.com',
+#             password='password2'
+#         )
+#
+#         # Create freelancer profiles for the users
+#         FreelancerProfile.objects.create(user=user1, zip_code='10001', commute_limit=10)
+#         FreelancerProfile.objects.create(user=user2, zip_code='10002', commute_limit=5)
+#
+#         # Create job listings
+#         Job.objects.create(title='Job 1', zip_code='10001', commute_limit=15)
+#         Job.objects.create(title='Job 2', zip_code='10003', commute_limit=5)
+#
+#     def test_commute_filter_within_range(self):
+#         # Simulate accessing the job listing page
+#         self.client.login(username='freelancer1', password='password1')
+#         response = self.client.get(reverse('job_listing'))
+#
+#         # Check that the correct freelancers are listed
+#         self.assertContains(response, 'freelancer1')
+#         self.assertNotContains(response, 'freelancer2')
+#
+#     def test_commute_filter_out_of_range(self):
+#         # Simulate accessing the job listing page
+#         self.client.login(username='freelancer2', password='password2')
+#         response = self.client.get(reverse('job_listing'))
+#
+#         # Check that the correct freelancers are listed
+#         self.assertContains(response, 'freelancer2')
+#         self.assertNotContains(response, 'freelancer1')
+#
+
+
 from django.test import TestCase
-from django.contrib.auth import get_user_model
 from django.urls import reverse
-from employer_job.models import EmployerJob
-
 from freelancer_profile.models import FreelancerProfile
+from django.contrib.auth import get_user_model
 
-class CommuteFilterTestCase(TestCase):
+User = get_user_model()
+
+
+class FreelancerProfileSearchTest(TestCase):
+
     def setUp(self):
-        # Create users with unique emails to avoid IntegrityError
-        user1 = get_user_model().objects.create_user(
-            username='freelancer1',
-            email='freelancer1@example.com',
-            password='password1'
-        )
-        user2 = get_user_model().objects.create_user(
-            username='freelancer2',
-            email='freelancer2@example.com',
-            password='password2'
+        # Create users and profiles for testing
+        self.user1 = User.objects.create_user(username='user1', password='password123')
+        self.profile1 = FreelancerProfile.objects.create(
+            user=self.user1,
+            residential_zip_code='12345',
+            work_zip_code='12345',
+            # Add other fields as necessary
         )
 
-        # Create freelancer profiles for the users
-        FreelancerProfile.objects.create(user=user1, zip_code='10001', commute_limit=10)
-        FreelancerProfile.objects.create(user=user2, zip_code='10002', commute_limit=5)
+        self.user2 = User.objects.create_user(username='user2', password='password123')
+        self.profile2 = FreelancerProfile.objects.create(
+            user=self.user2,
+            residential_zip_code='67890',
+            work_zip_code='67890',
+            # Add other fields as necessary
+        )
 
-        # Create job listings
-        Job.objects.create(title='Job 1', zip_code='10001', commute_limit=15)
-        Job.objects.create(title='Job 2', zip_code='10003', commute_limit=5)
+    def test_search_freelancers_within_zip_code_range(self):
+        # Assuming you have a view that searches freelancers based on zip codes
+        response = self.client.get(reverse('search_freelancers'), {'zip_code': '12345', 'range': 10})
+        self.assertEqual(response.status_code, 200)
 
-    def test_commute_filter_within_range(self):
-        # Simulate accessing the job listing page
-        self.client.login(username='freelancer1', password='password1')
-        response = self.client.get(reverse('job_listing'))
+        # Check that user1 is in the response
+        self.assertContains(response, self.user1.username)
+        # Check that user2 is NOT in the response
+        self.assertNotContains(response, self.user2.username)
 
-        # Check that the correct freelancers are listed
-        self.assertContains(response, 'freelancer1')
-        self.assertNotContains(response, 'freelancer2')
+    def test_search_freelancers_out_of_zip_code_range(self):
+        # Assuming you have a view that searches freelancers based on zip codes
+        response = self.client.get(reverse('search_freelancers'), {'zip_code': '12345', 'range': 10})
+        self.assertEqual(response.status_code, 200)
 
-    def test_commute_filter_out_of_range(self):
-        # Simulate accessing the job listing page
-        self.client.login(username='freelancer2', password='password2')
-        response = self.client.get(reverse('job_listing'))
+        # Check that user1 is in the response
+        self.assertContains(response, self.user1.username)
+        # Check that user2 is NOT in the response
+        self.assertNotContains(response, self.user2.username)
 
-        # Check that the correct freelancers are listed
-        self.assertContains(response, 'freelancer2')
-        self.assertNotContains(response, 'freelancer1')
+    def test_search_freelancers_no_results(self):
+        response = self.client.get(reverse('search_freelancers'), {'zip_code': '99999', 'range': 10})
+        self.assertEqual(response.status_code, 200)
+        # Check that no freelancers are returned
+        self.assertContains(response, 'No freelancers found.')
 

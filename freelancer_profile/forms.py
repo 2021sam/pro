@@ -11,10 +11,10 @@ class PersonalInfoForm(forms.ModelForm):
             'email',
             'phone_number',
             'date_of_birth',
-            'residential_street_address',
-            'residential_city_address',
-            'residential_state_address',
-            'residential_zip_address',
+            'residential_street',
+            'residential_city',
+            'residential_state',
+            'residential_zip_code',
             'work_authorization',  # Add this field
             'open_to_public',      # Add this field
         ]
@@ -25,10 +25,10 @@ class PersonalInfoForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
             'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
             'date_of_birth': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'residential_street_address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Street'}),
-            'residential_city_address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City'}),
-            'residential_state_address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'State'}),
-            'residential_zip_address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Zip'}),
+            'residential_street': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Street'}),
+            'residential_city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City'}),
+            'residential_state': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'State'}),
+            'residential_zip_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Zip'}),
             'work_authorization': forms.Select(attrs={'class': 'form-control'}),  # Dropdown for work authorization
             'open_to_public': forms.CheckboxInput(attrs={'class': 'form-check-input'}),  # Checkbox for public access
         }
@@ -52,35 +52,6 @@ class PersonalInfoForm(forms.ModelForm):
         # if not email.endswith('@example.com'):
         #     raise forms.ValidationError("Please use your example.com email.")
         return email
-
-
-# class EmploymentTypeForm(forms.ModelForm):
-#     class Meta:
-#         model = Profile
-#         fields = [
-#             'full_time',
-#             'part_time',
-#             'contract',
-#             'internship',
-#             'temporary',
-#         ]
-
-#         widgets = {
-#             'full_time': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-#             'part_time': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-#             'contract': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-#             'internship': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-#             'temporary': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-#         }
-
-#         labels = {
-#             'full_time': 'Full-time',
-#             'part_time': 'Part-time',
-#             'contract': 'Contract',
-#             'internship': 'Internship',
-#             'temporary': 'Temporary',
-#         }
-
 
 
 class EmploymentPreferencesForm(forms.ModelForm):
