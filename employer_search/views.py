@@ -22,6 +22,7 @@ def search_freelancers_by_job(request, job_id):
 
     # Get all freelancers
     all_freelancers = FreelancerProfile.objects.all()
+    print(f'all_freelancers: {all_freelancers}')
 
     # List to store freelancers who match search criteria
     matching_freelancers = []
@@ -32,6 +33,7 @@ def search_freelancers_by_job(request, job_id):
         if freelancer_location:
             # Calculate the distance between employer job location and freelancer location
             distance = geodesic(recruiter_location, freelancer_location).miles
+            print(f'distance: {distance}')
 
             # Check if the freelancer is within the commute limit and if job titles match
             if distance <= employer_job.commute_limit_miles and employer_job.title.lower() in freelancer.desired_job_title.lower():

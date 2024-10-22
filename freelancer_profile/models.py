@@ -46,19 +46,19 @@ class FreelancerProfile(models.Model):
                                                    validators=[MinValueValidator(1), MaxValueValidator(12)])
     birth_day = models.PositiveSmallIntegerField(blank=True, null=True,
                                                  validators=[MinValueValidator(1), MaxValueValidator(31)])
-    first_name = models.TextField(max_length=30, blank=True)
-    last_name = models.TextField(max_length=30, blank=True)
-    email = models.TextField(max_length=30, blank=True)
-    phone_number = models.TextField(max_length=14, blank=True)
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
+    email = models.CharField(max_length=30, blank=True)
+    phone_number = models.CharField(max_length=14, blank=True)
 
     # Contact Information
-    ip1 = models.TextField(max_length=46, blank=True)
-    ip2 = models.TextField(max_length=46, blank=True)
-    mac1 = models.TextField(max_length=50, blank=True)
-    mac2 = models.TextField(max_length=50, blank=True)
-    mobile_cell_number = models.TextField(max_length=14, blank=True)
-    linkedin = models.TextField(max_length=50, blank=True)
-    portfolio = models.TextField(max_length=50, blank=True)
+    ip1 = models.CharField(max_length=46, blank=True)
+    ip2 = models.CharField(max_length=46, blank=True)
+    mac1 = models.CharField(max_length=50, blank=True)
+    mac2 = models.CharField(max_length=50, blank=True)
+    mobile_cell_number = models.CharField(max_length=14, blank=True)
+    linkedin = models.CharField(max_length=50, blank=True)
+    portfolio = models.CharField(max_length=50, blank=True)
 
     # Residential and Work Address
     residential_street = models.CharField(max_length=50, blank=True)
@@ -72,7 +72,7 @@ class FreelancerProfile(models.Model):
     work_zip_code = models.CharField(max_length=50, blank=True)  # Updated field name
 
     # Employment Preferences
-    desired_job_title = models.TextField(max_length=50, blank=True)
+    desired_job_title = models.CharField(max_length=50, blank=True)
     desired_salary = models.PositiveSmallIntegerField(blank=True, null=True,
                                                       validators=[MinValueValidator(1), MaxValueValidator(20)])
     desired_hourly_rate = models.SmallIntegerField(blank=True, null=True,
