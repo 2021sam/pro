@@ -133,3 +133,13 @@ class TravelRelocationForm(forms.ModelForm):
             'travel_preference': 'Travel Preference (%)',
             'willing_to_relocate': 'Willing to Relocate'
         }
+
+
+class DesiredTitleForm(forms.ModelForm):
+    class Meta:
+        model = FreelancerProfile
+        fields = [
+            'desired_job_title',
+            'desired_salary',
+            'desired_hourly_rate'
+            ]

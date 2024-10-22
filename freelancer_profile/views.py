@@ -8,7 +8,8 @@ from django.urls import reverse_lazy
 from django.core.exceptions import ValidationError
 
 from .models import FreelancerProfile
-from .forms import PersonalInfoForm, EmploymentPreferencesForm, LocationPreferencesForm, TravelRelocationForm
+from .forms import PersonalInfoForm, EmploymentPreferencesForm, LocationPreferencesForm, TravelRelocationForm, \
+    DesiredTitleForm
 
 
 @method_decorator(login_required, name='dispatch')  # Ensure all methods require login
@@ -17,14 +18,16 @@ class ProfileMultiStepFormView(View):
         PersonalInfoForm,
         EmploymentPreferencesForm,
         LocationPreferencesForm,
-        TravelRelocationForm
+        TravelRelocationForm,
+        DesiredTitleForm
     ]  # List of forms for each step
-    step_titles = ["Personal Information", "Employment Preferences", "Location Preferences", "Travel & Relocation"]  # Titles for each step
+    step_titles = ["Personal Information", "Employment Preferences", "Location Preferences", "Travel & Relocation", "Desired Job Title"]  # Titles for each step
     template_list = [
         'freelancer_profile/personal_info_form.html',
         'freelancer_profile/employment_preferences_form.html',
         'freelancer_profile/location_preferences_form.html',
         'freelancer_profile/travel_relocation_form.html',
+        'freelancer_profile/desired_job_title_form.html',
     ]  # Corresponding templates for each step
 
 

@@ -1,0 +1,21 @@
+
+{% extends 'freelancer_profile/base_multi_step_form.html' %}
+
+{% block extra_head %}
+    <style>
+        .personal-info { background-color: #f9f9f9; padding: 20px; }
+    </style>
+{% endblock %}
+
+
+{% block custom_section %}
+    <p>Reach for your career goals !  Please make sure all fields are accurate.</p>
+{% endblock custom_section %}
+
+
+{% block form_content %}
+    <div class="personal-info">
+        <p>Aim high</p>
+        {{ form.as_p }}
+    </div>
+{% endblock %}

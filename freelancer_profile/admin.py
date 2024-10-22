@@ -17,7 +17,7 @@ class ProfileAdmin(admin.ModelAdmin):
             'fields': ('mobile_cell_number', 'linkedin', 'portfolio')
         }),
         ('Location Preferences', {
-            'fields': ('residential_street_address', 'residential_city_address', 'residential_state_address', 'residential_zip_address')
+            'fields': ('residential_street', 'residential_city', 'residential_state', 'residential_zip_code')
         }),
         ('Travel Preferences', {
             'fields': ('travel_preference', 'willing_to_relocate')
