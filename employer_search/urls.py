@@ -7,10 +7,19 @@ from . import views
 
 app_name = 'employer_search'
 
-urlpatterns = [
-    # Search for freelancers by job
-    path('search/<int:job_id>/', views.search_freelancers_by_job, name='search_freelancers_by_job'),
+from .views import SearchFreelancersByJobView
 
-    # View freelancer profile detail
-    path('freelancer/<int:id>/', views.freelancer_profile_detail, name='freelancer_profile_detail'),
+urlpatterns = [
+    path('freelancer/search/<int:job_id>/', SearchFreelancersByJobView.as_view(), name='search_freelancers_by_job'),
 ]
+
+
+
+
+# urlpatterns = [
+#     # Search for freelancers by job
+#     path('search/<int:job_id>/', views.search_freelancers_by_job, name='search_freelancers_by_job'),
+#
+#     # View freelancer profile detail
+#     path('freelancer/<int:id>/', views.freelancer_profile_detail, name='freelancer_profile_detail'),
+# ]

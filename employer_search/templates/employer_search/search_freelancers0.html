@@ -1,0 +1,47 @@
+{#/Users/2021sam/apps/zyxe/pro/employer_search/templates/employer_search/search_freelancers.html#}
+
+
+<!-- employer_search/templates/employer_search/search_freelancers.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}
+    Freelancers Matching {{ employer_job.title }}
+{% endblock title %}
+
+{% block content %}
+    <h1>Freelancers Matching: {{ employer_job.title }}</h1>
+
+    <p><strong>Location:</strong> {{ employer_job.job_city }}, {{ employer_job.job_state }} ({{ employer_job.job_zip_code }})</p>
+    <p><strong>Commute Limit:</strong> {{ employer_job.commute_limit_miles }} miles</p>
+
+    <!-- If there are matching freelancers, display the list -->
+    {% if freelancers %}
+        <table border="1" cellspacing="0" cellpadding="5">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Desired Job Title</th>
+                    <th>Zip Code</th>
+                    <th>Commute Limit</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for freelancer in freelancers %}
+                <tr>
+                    <td>{{ freelancer.full_name }}</td>
+                    <td>{{ freelancer.desired_job_title }}</td>
+                    <td>{{ freelancer.residential_zip_code }}</td>
+                    <td>{{ freelancer.commute_limit_miles }} miles</td>
+                    <td>
+                        <a href="{% url 'freelancer_profile_detail' freelancer.id %}">View Details</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No freelancers found matching the job criteria.</p>
+    {% endif %}
+{% endblock content %}

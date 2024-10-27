@@ -1,34 +1,19 @@
-{#/Users/2021sam/apps/zyxe/pro/employer_search/templates/employer_search/search_freelancers.html#}
 {% extends 'base.html' %}
 
-{% block title %}
-    Search Freelancers
-{% endblock %}
-
 {% block content %}
-<div class="container mt-5">
-    <h2>Matching Freelancers for Job: {{ employer_job.title }}</h2>
-    <p>Location: {{ employer_job.job_zip_code }} | Commute Limit: {{ employer_job.commute_limit_miles }} miles</p>
+<h1>Freelancers Matching Job: {{ job_title }}</h1>
 
-    {% if freelancers %}
-        <h3>Found {{ freelancers|length }} Matching Freelancers</h3>
-        <div class="list-group">
-            {% for freelancer in freelancers %}
-                <div class="list-group-item">
-                    <h5>{{ freelancer.first_name }} {{ freelancer.last_name }}</h5>
-                    <p><strong>Email:</strong> {{ freelancer.email }}</p>
-                    <p><strong>Desired Job Title:</strong> {{ freelancer.desired_job_title }}</p>
-                    <p><strong>Skills:</strong> {{ freelancer.skills.all|join:", " }}</p>  <!-- Assuming you have a many-to-many relationship for skills -->
+<ul>
+  {% for freelancer in freelancers %}
+    <li>{{ freelancer.first_name }} {{ freelancer.last_name }} - {{ freelancer.desired_job_title }} - {{ freelancer.residential_zip_code }}</li>
+  {% empty %}
+    <li>No matching freelancers found.</li>
+  {% endfor %}
+</ul>
 
-                    <div class="d-flex justify-content-between">
-                        <a href="{% url 'freelancer_profile_detail' freelancer.id %}" class="btn btn-info">View Profile</a>
-                        <a href="mailto:{{ freelancer.email }}" class="btn btn-primary">Send Email</a>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <h4>No matching freelancers found.</h4>
-    {% endif %}
-</div>
+<p>Job Details:</p>
+<p>{{ job_title }}</p>
+<p>{{ job_zip_code }}</p>
+<p>{{ job_description }}</p>
+
 {% endblock %}
