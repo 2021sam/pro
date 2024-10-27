@@ -1,9 +1,7 @@
 # /Users/2021sam/apps/zyxe/pro/employer_job/models.py
 from django.db import models
 from django.utils import timezone
-from django.conf import settings
 from datetime import timedelta
-
 
 class EmployerJob(models.Model):
     STATUS_CHOICES = [
@@ -22,12 +20,14 @@ class EmployerJob(models.Model):
     job_state = models.CharField(max_length=30, blank=True)
     job_zip_code = models.CharField(max_length=30, blank=True)
 
-    # New fields
+    # Status and Dates
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='open')
     start_date = models.DateField(null=True, blank=True)
     number_of_openings = models.PositiveIntegerField(default=1)
-    job_post_date = models.DateField(default=timezone.now)  # Renamed from job_open_date
-    job_close_date = models.DateField(null=True, blank=True)  # Optional
+
+    # Allow user to set these on creation, but prevent changes later
+    job_post_date = models.DateField(default=timezone.now)
+    job_close_date = models.DateField(null=True, blank=True)
 
     # Location Preferences
     location_on_site = models.BooleanField(default=False)
@@ -36,21 +36,29 @@ class EmployerJob(models.Model):
     commute_limit_miles = models.PositiveSmallIntegerField(default=50)
     commute_limit_minutes = models.PositiveSmallIntegerField(default=120)
 
+    def save(self, *args, **kwargs):
+        """
+        Ensure that job_post_date and job_close_date are set only once during job creation.
+        They cannot be changed once the job has been created.
+        """
+        # If the job is being updated (i.e., not the first save), prevent changes to post and close dates
+        if self.pk:  # This means the job already exists
+            original = EmployerJob.objects.get(pk=self.pk)
+            self.job_post_date = original.job_post_date
+            self.job_close_date = original.job_close_date
+
+        # If no job_close_date is provided, default to 30 days after post date on creation
+        if not self.job_close_date:
+            self.job_close_date = self.job_post_date + timedelta(days=30)
+
+        super().save(*args, **kwargs)
+
     def days_remaining_until_closed(self):
         """
         Calculates the number of days remaining until the job is closed.
-        Example assumes the job remains open for 30 days from the post date.
         """
-        closing_date = self.job_post_date + timedelta(days=30)
-        remaining_days = (closing_date - timezone.now().date()).days
+        remaining_days = (self.job_close_date - timezone.now().date()).days
         return remaining_days if remaining_days > 0 else 0
 
-    def number_of_applicants(self):
-        """
-        Counts the number of applicants who applied to this job.
-        Assumes a JobApplication model exists that tracks applications.
-        """
-        return self.jobapplication_set.count()
-
     def __str__(self):
-        return f'{self.title} - {self.description} ({self.status})'
+        return f'{self.title} - {self.status} | {self.number_of_openings} openings | Posted: {self.job_post_date}'
