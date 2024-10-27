@@ -2,6 +2,7 @@
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta
+from django.conf import settings
 
 class EmployerJob(models.Model):
     STATUS_CHOICES = [
