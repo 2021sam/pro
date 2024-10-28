@@ -115,3 +115,39 @@ class ProfileDetailView(View):
         profile = get_object_or_404(FreelancerProfile, pk=profile_id, user=request.user)
         context = {'profile': profile}
         return render(request, 'freelancer_profile/profile_detail.html', context)
+
+
+
+# # freelancer_profile/views.py
+# from django.views.generic import DetailView
+# from .models import FreelancerProfile
+#
+# class FreelancerDetailView(DetailView):
+#     model = FreelancerProfile
+#     template_name = 'freelancer_profile/freelancer_profile_detail.html'  # Adjust the path if necessary
+
+
+
+# # employer_search/views.py
+#
+# from django.views import View
+# from django.shortcuts import render, get_object_or_404
+# from freelancer_profile.models import FreelancerProfile
+#
+# class FreelancerDetailView(View):
+#     def get(self, request, id):
+#         freelancer = get_object_or_404(FreelancerProfile, id=id)
+#         return render(request, 'freelancer_profile/freelancer_profile_detail.html', {
+#             'freelancer': freelancer,
+#         })
+
+
+
+
+from django.views.generic import DetailView
+from freelancer_profile.models import FreelancerProfile
+
+class FreelancerDetailView(DetailView):
+    model = FreelancerProfile
+    template_name = 'freelancer_profile/freelancer_profile_detail.html'
+    context_object_name = 'freelancer'

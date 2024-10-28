@@ -18,6 +18,6 @@ urlpatterns = [
     path('employer/profile/', include('employer_profile.urls', namespace='employer_profile')),
     path('employer/job/', include('employer_job.urls', namespace='employer_job')),
     path('freelancer/freelancer_experience/', include('freelancer_experience.urls')),
-    path('freelancer/freelancer_profile/', include('freelancer_profile.urls')),
+    path('freelancer/freelancer_profile/', include('freelancer_profile.urls', namespace='freelancer_profile')),
     path('employer/search/', include('employer_search.urls', namespace='employer_search'))
 ]

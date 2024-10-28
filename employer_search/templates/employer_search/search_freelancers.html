@@ -1,19 +1,25 @@
+<!-- templates/employer_search/search_freelancers.html -->
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Freelancers Matching Job: {{ job_title }}</h1>
+    <h1>Freelancers Matching Your Job Posting</h1>
 
-<ul>
-  {% for freelancer in freelancers %}
-    <li>{{ freelancer.first_name }} {{ freelancer.last_name }} - {{ freelancer.desired_job_title }} - {{ freelancer.residential_zip_code }}</li>
-  {% empty %}
-    <li>No matching freelancers found.</li>
-  {% endfor %}
-</ul>
+    {% if freelancers %}
+        <ul>
+            {% for freelancer in freelancers %}
+                <li>
+                    <a href="{% url 'freelancer_profile:freelancer_detail' freelancer.id %}">
+                        {{ freelancer.first_name }} {{ freelancer.last_name }}
+                    </a>
+                    <!-- Optional: Display additional information about the freelancer -->
+                    <span> - Desired Job Title: {{ freelancer.desired_job_title }}</span>
+                    <span> - Location: {{ freelancer.residential_zip_code }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No freelancers found that match your search criteria.</p>
+    {% endif %}
 
-<p>Job Details:</p>
-<p>{{ job_title }}</p>
-<p>{{ job_zip_code }}</p>
-<p>{{ job_description }}</p>
-
+    <a href="{% url 'employer_job:job' %}">Back to Job Posting</a> <!-- Adjust link as necessary -->
 {% endblock %}

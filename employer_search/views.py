@@ -1,12 +1,11 @@
 # /Users/2021sam/apps/zyxe/pro/employer_search/views.py
-
-from django.views.generic import ListView
-from django.shortcuts import get_object_or_404
-from geopy.distance import geodesic
-from freelancer_profile.models import FreelancerProfile
-from employer_job.models import EmployerJob
-
-
+#
+# from django.views.generic import ListView
+# from django.shortcuts import get_object_or_404
+# from geopy.distance import geodesic
+# from freelancer_profile.models import FreelancerProfile
+# from employer_job.models import EmployerJob
+#
 
 from django.views import View
 from django.shortcuts import render, get_object_or_404
@@ -79,6 +78,36 @@ class SearchFreelancersByJobView(View):
 
 
 
+
+# # employer_search/views.py
+#
+# from django.views import View
+# from django.shortcuts import render, get_object_or_404
+# from freelancer_profile.models import FreelancerProfile
+#
+# class FreelancerDetailView(View):
+#     template_name = 'freelancer_profile/detail.html'
+#
+#     def get(self, request, id):
+#         freelancer = get_object_or_404(FreelancerProfile, id=id)
+#         return render(request, self.template_name, {'freelancer': freelancer})
+
+
+#
+#
+#
+# # employer_search/views.py
+#
+# from django.views import View
+# from django.shortcuts import render, get_object_or_404
+# from freelancer_profile.models import FreelancerProfile
+#
+# class FreelancerDetailView(View):
+#     def get(self, request, id):
+#         freelancer = get_object_or_404(FreelancerProfile, id=id)
+#         return render(request, 'employer_search/freelancer_detail.html', {
+#             'freelancer': freelancer,
+#         })
 
 
 
