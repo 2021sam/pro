@@ -1,11 +1,5 @@
 # /Users/2021sam/apps/zyxe/pro/employer_search/views.py
-#
-# from django.views.generic import ListView
-# from django.shortcuts import get_object_or_404
-# from geopy.distance import geodesic
-# from freelancer_profile.models import FreelancerProfile
-# from employer_job.models import EmployerJob
-#
+
 
 from django.views import View
 from django.shortcuts import render, get_object_or_404
@@ -70,44 +64,6 @@ class SearchFreelancersByJobView(View):
             'employer_job': employer_job,
         })
 
-
-
-
-
-
-
-
-
-
-# # employer_search/views.py
-#
-# from django.views import View
-# from django.shortcuts import render, get_object_or_404
-# from freelancer_profile.models import FreelancerProfile
-#
-# class FreelancerDetailView(View):
-#     template_name = 'freelancer_profile/detail.html'
-#
-#     def get(self, request, id):
-#         freelancer = get_object_or_404(FreelancerProfile, id=id)
-#         return render(request, self.template_name, {'freelancer': freelancer})
-
-
-#
-#
-#
-# # employer_search/views.py
-#
-# from django.views import View
-# from django.shortcuts import render, get_object_or_404
-# from freelancer_profile.models import FreelancerProfile
-#
-# class FreelancerDetailView(View):
-#     def get(self, request, id):
-#         freelancer = get_object_or_404(FreelancerProfile, id=id)
-#         return render(request, 'employer_search/freelancer_detail.html', {
-#             'freelancer': freelancer,
-#         })
 
 
 
@@ -183,51 +139,6 @@ class SearchFreelancersByJobView(View):
 #     })
 #
 #
-# def get_coordinates_from_zip(zip_code):
-#     """
-#     Utility function to get latitude and longitude from a zip code.
-#     Returns (None, None) if the zip code cannot be geocoded.
-#     """
-#     try:
-#         location = geolocator.geocode(zip_code)
-#         if location:
-#             return (location.latitude, location.longitude)
-#         else:
-#             print(f"Geocoding failed for zip code: {zip_code}")
-#             return (None, None)
-#     except Exception as e:
-#         print(f"Error occurred during geocoding: {e}")
-#         return (None, None)
-#
-#
-#
-#
-#
-#
-#
-# from django.shortcuts import render, get_object_or_404
-# from freelancer_profile.models import FreelancerProfile
-#
-# def freelancer_profile_detail(request, id):
-#     """
-#     Display detailed information about a specific freelancer.
-#     """
-#     # Retrieve the freelancer profile by the provided ID
-#     freelancer = get_object_or_404(FreelancerProfile, id=id)
-#
-#     # Render a template with freelancer details
-#     return render(request, 'employer_search/freelancer_profile_detail.html', {
-#         'freelancer': freelancer
-#     })
-
-
-
-
-
-
-
-
-
 
 
 """
