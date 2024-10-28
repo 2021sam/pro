@@ -117,20 +117,50 @@ class ProfileDetailView(View):
         return render(request, 'freelancer_profile/profile_detail.html', context)
 
 
-# views.py
-from django.views.generic import DetailView
+# # views.py
+# from django.views.generic import DetailView
+# from .models import FreelancerProfile
+# from pro_education.models import Education
+# from freelancer_experience.models import FreelancerExperience, FreelancerSkill
+#
+# class FreelancerDetailView(DetailView):
+#     model = FreelancerProfile
+#     template_name = 'freelancer_profile/freelancer_profile_detail.html'
+#     context_object_name = 'freelancer'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['education'] = Education.objects.filter(freelancer=self.object)
+#         context['experience'] = FreelancerExperience.objects.filter(freelancer=self.object)
+#         context['skills'] = FreelancerSkill.objects.filter(freelancer=self.object)
+#         return context
+
+
+# /Users/2021sam/apps/zyxe/pro/freelancer_profile/views.py
+from django.shortcuts import render, get_object_or_404
 from .models import FreelancerProfile
 from pro_education.models import Education
 from freelancer_experience.models import FreelancerExperience, FreelancerSkill
 
-class FreelancerDetailView(DetailView):
-    model = FreelancerProfile
-    template_name = 'freelancer_profile/freelancer_profile_detail.html'
-    context_object_name = 'freelancer'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['education'] = Education.objects.filter(freelancer=self.object)
-        context['experience'] = FreelancerExperience.objects.filter(freelancer=self.object)
-        context['skills'] = FreelancerSkill.objects.filter(freelancer=self.object)
-        return context
+class FreelancerDetailView(View):
+    def get(self, request, pk):
+        # Get the freelancer's profile
+        freelancer = get_object_or_404(FreelancerProfile, pk=pk)
+
+        # Get freelancer's education records
+        education = Education.objects.filter(user=freelancer.user)
+
+        # Get freelancer's experience and related skills
+        experiences = FreelancerExperience.objects.filter(user=freelancer.user)
+        skills = FreelancerSkill.objects.filter(experience__user=freelancer.user)
+
+        # Context to pass to the template
+        context = {
+            'freelancer': freelancer,
+            'education': education,
+            'experiences': experiences,
+            'skills': skills,
+        }
+
+        return render(request, 'freelancer_profile/freelancer_profile_detail.html', context)

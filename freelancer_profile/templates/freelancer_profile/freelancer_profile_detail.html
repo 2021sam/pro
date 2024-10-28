@@ -1,49 +1,40 @@
 <!-- /Users/2021sam/apps/zyxe/pro/freelancer_profile/templates/freelancer_profile/freelancer_profile_detail.html -->
+<!-- templates/freelancer_profile/freelancer_profile_detail.html -->
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Freelancer Profile: {{ freelancer.full_name }}</h1>
+    <h1>Freelancer Profile: {{ freelancer.user.username }}</h1>
 
-    <!-- Freelancer Basic Information -->
-    <p><strong>Desired Job Title:</strong> {{ freelancer.desired_job_title }}</p>
-    <p><strong>Residential Zip Code:</strong> {{ freelancer.residential_zip_code }}</p>
-    <p><strong>Commute Limit (miles):</strong> {{ freelancer.commute_limit_miles }}</p>
+    <h2>Bio</h2>
+    <p>{{ freelancer.bio }}</p>
 
-    <!-- Skills Section -->
-    <h2>Skills</h2>
-    <ul>
-        {% for skill in skills %}
-            <li>{{ skill.name }} - {{ skill.years_of_experience }} years</li>
-        {% empty %}
-            <li>No skills listed.</li>
-        {% endfor %}
-    </ul>
+    <h2>Desired Job Title</h2>
+    <p>{{ freelancer.desired_job_title }}</p>
 
-    <!-- Education Section -->
+    <h2>Residential Zip Code</h2>
+    <p>{{ freelancer.residential_zip_code }}</p>
+
+    <h2>Commute Limit</h2>
+    <p>{{ freelancer.commute_limit_miles }} miles</p>
+
     <h2>Education</h2>
     <ul>
         {% for edu in education %}
-            <li>
-                <strong>{{ edu.degree }} in {{ edu.field_of_study }}</strong>
-                from {{ edu.institution }} ({{ edu.start_year }} - {{ edu.end_year }})
-            </li>
-        {% empty %}
-            <li>No education information available.</li>
+            <li>{{ edu.degree_type }} in {{ edu.major }} from {{ edu.school_name }} (Graduated: {{ edu.year_graduated }})</li>
         {% endfor %}
     </ul>
 
-    <!-- Experience Section -->
-    <h2>Work Experience</h2>
+    <h2>Experience</h2>
     <ul>
-        {% for exp in experience %}
-            <li>
-                <strong>{{ exp.job_title }} at {{ exp.company_name }}</strong>
-                ({{ exp.start_date }} - {{ exp.end_date|default:"Present" }})
-                <p>{{ exp.description }}</p>
-            </li>
-        {% empty %}
-            <li>No work experience listed.</li>
+        {% for experience in experiences %}
+            <li>{{ experience.title }} at {{ experience.company }} ({{ experience.date_start }} - {{ experience.date_end }})</li>
         {% endfor %}
     </ul>
 
+    <h2>Skills</h2>
+    <ul>
+        {% for skill in skills %}
+            <li>{{ skill.skill }} - {{ skill.skill_years }} years, {{ skill.skill_months }} months</li>
+        {% endfor %}
+    </ul>
 {% endblock %}
