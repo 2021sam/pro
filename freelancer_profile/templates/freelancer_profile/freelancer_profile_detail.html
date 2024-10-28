@@ -4,11 +4,46 @@
 {% block content %}
     <h1>Freelancer Profile: {{ freelancer.full_name }}</h1>
 
+    <!-- Freelancer Basic Information -->
     <p><strong>Desired Job Title:</strong> {{ freelancer.desired_job_title }}</p>
     <p><strong>Residential Zip Code:</strong> {{ freelancer.residential_zip_code }}</p>
     <p><strong>Commute Limit (miles):</strong> {{ freelancer.commute_limit_miles }}</p>
-    <p><strong>Skills:</strong> {{ freelancer.skills }}</p>
-    <p><strong>Years of Experience:</strong> {{ freelancer.years_of_experience }}</p>
 
-    <!-- Add more fields as needed -->
+    <!-- Skills Section -->
+    <h2>Skills</h2>
+    <ul>
+        {% for skill in skills %}
+            <li>{{ skill.name }} - {{ skill.years_of_experience }} years</li>
+        {% empty %}
+            <li>No skills listed.</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Education Section -->
+    <h2>Education</h2>
+    <ul>
+        {% for edu in education %}
+            <li>
+                <strong>{{ edu.degree }} in {{ edu.field_of_study }}</strong>
+                from {{ edu.institution }} ({{ edu.start_year }} - {{ edu.end_year }})
+            </li>
+        {% empty %}
+            <li>No education information available.</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Experience Section -->
+    <h2>Work Experience</h2>
+    <ul>
+        {% for exp in experience %}
+            <li>
+                <strong>{{ exp.job_title }} at {{ exp.company_name }}</strong>
+                ({{ exp.start_date }} - {{ exp.end_date|default:"Present" }})
+                <p>{{ exp.description }}</p>
+            </li>
+        {% empty %}
+            <li>No work experience listed.</li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}

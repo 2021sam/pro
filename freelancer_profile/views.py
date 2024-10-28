@@ -117,37 +117,20 @@ class ProfileDetailView(View):
         return render(request, 'freelancer_profile/profile_detail.html', context)
 
 
-
-# # freelancer_profile/views.py
-# from django.views.generic import DetailView
-# from .models import FreelancerProfile
-#
-# class FreelancerDetailView(DetailView):
-#     model = FreelancerProfile
-#     template_name = 'freelancer_profile/freelancer_profile_detail.html'  # Adjust the path if necessary
-
-
-
-# # employer_search/views.py
-#
-# from django.views import View
-# from django.shortcuts import render, get_object_or_404
-# from freelancer_profile.models import FreelancerProfile
-#
-# class FreelancerDetailView(View):
-#     def get(self, request, id):
-#         freelancer = get_object_or_404(FreelancerProfile, id=id)
-#         return render(request, 'freelancer_profile/freelancer_profile_detail.html', {
-#             'freelancer': freelancer,
-#         })
-
-
-
-
+# views.py
 from django.views.generic import DetailView
-from freelancer_profile.models import FreelancerProfile
+from .models import FreelancerProfile
+from pro_education.models import Education
+from freelancer_experience.models import FreelancerExperience, FreelancerSkill
 
 class FreelancerDetailView(DetailView):
     model = FreelancerProfile
     template_name = 'freelancer_profile/freelancer_profile_detail.html'
     context_object_name = 'freelancer'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['education'] = Education.objects.filter(freelancer=self.object)
+        context['experience'] = FreelancerExperience.objects.filter(freelancer=self.object)
+        context['skills'] = FreelancerSkill.objects.filter(freelancer=self.object)
+        return context
