@@ -3,7 +3,7 @@ document.querySelectorAll('.decision-form').forEach(form => {
   form.addEventListener('submit', function(event) {
     event.preventDefault();  // Prevent the default form submission
 
-    const jobId = this.querySelector('input[name="job_id"]').value;  // Assuming you have a hidden input for job_id
+    const jobId = this.querySelector('input[name="job_id"]').value;  // Fetch job ID from the hidden input
     const freelancerId = this.querySelector('input[name="freelancer_id"]').value;
     const decision = this.querySelector('button[type="submit"]').value;
 
@@ -18,8 +18,13 @@ document.querySelectorAll('.decision-form').forEach(form => {
     })
     .then(response => response.json())
     .then(data => {
+      // Check the response from the server
       if (data.status === 'success') {
-        alert('Decision updated successfully');
+        // Provide user feedback without redirecting
+        alert(data.message); // Show success message
+        // Optionally, you can update the UI here to reflect the decision
+      } else {
+        alert('Failed to record decision. Please try again.'); // Handle failure
       }
     })
     .catch(error => {
@@ -49,7 +54,13 @@ document.querySelectorAll('.rating-input').forEach(input => {
     .then(data => {
       if (data.status === 'success') {
         alert('Rating updated successfully');
+      } else {
+        alert('Failed to update rating. Please try again.');
       }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred while updating the rating.');
     });
   });
 });
