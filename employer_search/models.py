@@ -1,4 +1,5 @@
 # /Users/2021sam/apps/zyxe/pro/employer_search/models.py
+
 from django.db import models
 from freelancer_profile.models import FreelancerProfile
 from employer_job.models import EmployerJob
