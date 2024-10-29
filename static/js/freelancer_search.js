@@ -2,37 +2,42 @@
 
 // Handling the decision button clicks
 document.querySelectorAll('.decision-form').forEach(form => {
-  form.addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the default form submission
+    form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
 
-    const jobId = this.querySelector('input[name="job_id"]').value; // Assuming you have this in your form
-    const freelancerId = this.querySelector('input[name="freelancer_id"]').value;
-    const decision = this.querySelector('button[type="submit"]').value; // Get the decision from the button
+        const jobId = this.querySelector('input[name="job_id"]').value; // Ensure job_id is included
+        const freelancerId = this.querySelector('input[name="freelancer_id"]').value;
+        const decision = this.querySelector('button[name="decision"]:hover')?.value; // Get the value of the button being hovered over
 
-    // Send AJAX POST request to update the decision
-    fetch(`/employer/search/update-decision/${jobId}/${freelancerId}/`, {
-      method: 'POST',
-      headers: {
-        'X-CSRFToken': '{{ csrf_token }}', // Make sure CSRF token is included
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: `decision=${decision}`
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.status === 'success') {
-        alert('Decision updated successfully');
-        // Optionally, redirect or refresh the page here if needed
-        window.location.href = `/employer/search/search/${jobId}/`; // Redirect to the search page
-      } else {
-        alert('Error: ' + data.message);
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('Error: ' + error);
+        // Send AJAX POST request to update the decision
+        fetch(`/employer/search/update-decision/${jobId}/${freelancerId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `decision=${decision}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert('Decision updated successfully');
+
+                // Toggle button color
+                const button = this.querySelector(`button[value="${decision}"]`);
+                if (button.style.backgroundColor === 'green') {
+                    button.style.backgroundColor = ''; // Reset to default color
+                } else {
+                    button.style.backgroundColor = 'green'; // Set to green
+                }
+            } else {
+                alert(`Error: ${data.message}`);
+            }
+        })
+        .catch(error => {
+            alert('Error: ' + error.message);
+        });
     });
-  });
 });
 
 
