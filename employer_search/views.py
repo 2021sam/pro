@@ -168,22 +168,27 @@ from freelancer_profile.models import FreelancerProfile
 from .models import EmployerDecision
 
 
+
+
+
+
+# /Users/2021sam/apps/zyxe/pro/employer_search/views.py
+
+from django.http import JsonResponse
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
+@method_decorator(csrf_exempt, name='dispatch')  # CSRF exemption if necessary
 class UpdateEmployerDecisionView(View):
-    def post(self, request, freelancer_id, job_id):
-        action = request.POST.get('action')
+    def post(self, request, job_id, freelancer_id):
+        decision = request.POST.get('decision')
 
-        # Get or create the decision record
-        freelancer = FreelancerProfile.objects.get(id=freelancer_id)
-        decision, created = EmployerDecision.objects.get_or_create(freelancer=freelancer, job_id=job_id)
+        # Logic to handle the decision here
+        # For example, save the decision to the database
 
-        if action == 'interested':
-            decision.interested = True
-            decision.rejected = False
-        elif action == 'rejected':
-            decision.rejected = True
-            decision.interested = False
-        else:
-            return JsonResponse({'success': False, 'error': 'Invalid action'})
-
-        decision.save()
-        return JsonResponse({'success': True})
+        # Assuming the decision was processed successfully
+        return JsonResponse({
+            'status': 'success',
+            'message': f'Decision recorded: {decision}'
+        })
