@@ -19,3 +19,14 @@ class FreelancerSearchForm(forms.Form):
         if len(zip_code) != 5 or not zip_code.isdigit():
             raise forms.ValidationError("Please enter a valid 5-digit zip code.")
         return zip_code
+
+
+
+
+from django import forms
+from .models import EmployerDecision
+
+class EmployerDecisionForm(forms.ModelForm):
+    class Meta:
+        model = EmployerDecision
+        fields = ['decision', 'rating', 'feedback']

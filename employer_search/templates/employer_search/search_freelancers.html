@@ -1,25 +1,49 @@
 <!-- templates/employer_search/search_freelancers.html -->
 {% extends 'base.html' %}
 
+{% block title %}
+    Freelancer Search Results
+{% endblock %}
+
 {% block content %}
-    <h1>Freelancers Matching Your Job Posting</h1>
+    <h2>Search Results for Job: {{ employer_job.title }}</h2>
 
-    {% if freelancers %}
-        <ul>
+    <form method="post" action="">
+        {% csrf_token %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Freelancer</th>
+                    <th>Matching Skills</th>
+                    <th>Commute Distance</th>
+                    <th>Decision</th>
+                    <th>Rating</th>
+                    <th>Feedback</th>
+                </tr>
+            </thead>
+            <tbody>
             {% for freelancer in freelancers %}
-                <li>
-                    <a href="{% url 'freelancer_profile:freelancer_detail' freelancer.id %}">
-                        {{ freelancer.first_name }} {{ freelancer.last_name }}
-                    </a>
-                    <!-- Optional: Display additional information about the freelancer -->
-                    <span> - Desired Job Title: {{ freelancer.desired_job_title }}</span>
-                    <span> - Location: {{ freelancer.residential_zip_code }}</span>
-                </li>
+                <tr>
+                    <td>{{ freelancer.first_name }} {{ freelancer.last_name }}</td>
+                    <td><!-- Add skill comparison logic here --></td>
+                    <td><!-- Show commute distance here --></td>
+                    <td>
+                        <select name="decision_{{ freelancer.id }}">
+                            <option value="interested">Interested</option>
+                            <option value="reject">Reject</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" name="rating_{{ freelancer.id }}" min="1" max="10" placeholder="Rate 1-10">
+                    </td>
+                    <td>
+                        <textarea name="feedback_{{ freelancer.id }}" placeholder="Provide feedback"></textarea>
+                    </td>
+                </tr>
             {% endfor %}
-        </ul>
-    {% else %}
-        <p>No freelancers found that match your search criteria.</p>
-    {% endif %}
+            </tbody>
+        </table>
 
-    <a href="{% url 'employer_job:job' %}">Back to Job Posting</a> <!-- Adjust link as necessary -->
+        <button type="submit">Submit Decisions</button>
+    </form>
 {% endblock %}
