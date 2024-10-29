@@ -114,6 +114,25 @@ class SearchFreelancersByJobView(View):
             'employer_job': employer_job,
         })
 
+
+
+    def post(self, request, job_id):
+        # Get the freelancer ID and the decision (Interested or Reject)
+        freelancer_id = request.POST.get('freelancer_id')
+        decision = request.POST.get('decision')
+
+        # Logic to handle the decision (e.g., save to the database)
+        # Here you would implement your EmployerDecision model logic
+        # For example, you might do something like this:
+        # EmployerDecision.objects.create(employer_job_id=job_id, freelancer_id=freelancer_id, decision=decision)
+
+        # Return a JSON response indicating success
+        return JsonResponse({'status': 'success', 'message': f'Decision recorded: {decision}'})
+
+
+
+
+
 # /Users/2021sam/apps/zyxe/pro/employer_search/views.py
 
 from django.http import JsonResponse

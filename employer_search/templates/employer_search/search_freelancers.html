@@ -6,44 +6,88 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Search Results for Job: {{ employer_job.title }}</h2>
+  <h1>Freelancers matching "{{ employer_job.title }}"</h1>
 
-    <form method="post" action="">
-        {% csrf_token %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Freelancer</th>
-                    <th>Matching Skills</th>
-                    <th>Commute Distance</th>
-                    <th>Decision</th>
-                    <th>Rating</th>
-                    <th>Feedback</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for freelancer in freelancers %}
-                <tr>
-                    <td>{{ freelancer.first_name }} {{ freelancer.last_name }}</td>
-                    <td><!-- Add skill comparison logic here --></td>
-                    <td><!-- Show commute distance here --></td>
-                    <td>
-                        <select name="decision_{{ freelancer.id }}">
-                            <option value="interested">Interested</option>
-                            <option value="reject">Reject</option>
-                        </select>
-                    </td>
-                    <td>
-                        <input type="number" name="rating_{{ freelancer.id }}" min="1" max="10" placeholder="Rate 1-10">
-                    </td>
-                    <td>
-                        <textarea name="feedback_{{ freelancer.id }}" placeholder="Provide feedback"></textarea>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Skills</th>
+        <th>Actions</th>
+        <th>Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for freelancer in freelancers %}
+        <tr>
+          <td>{{ freelancer.first_name }} {{ freelancer.last_name }}</td>
+          <td>{{ freelancer.matched_skills }}</td>
+          <td>
+            <form method="POST" class="decision-form">
+              {% csrf_token %}
+              <input type="hidden" name="freelancer_id" value="{{ freelancer.id }}">
+              <button type="submit" name="decision" value="Interested">Interested</button>
+              <button type="submit" name="decision" value="Rejected">Reject</button>
+            </form>
+          </td>
+          <td>
+            <input type="number" min="1" max="10" class="rating-input" data-job="{{ employer_job.id }}" data-freelancer="{{ freelancer.id }}" />
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
-        <button type="submit">Submit Decisions</button>
-    </form>
 {% endblock %}
+
+
+
+// Handling the decision button clicks
+document.querySelectorAll('.decision-btn').forEach(button => {
+  button.addEventListener('click', function() {
+    const jobId = this.dataset.job;
+    const freelancerId = this.dataset.freelancer;
+    const decision = this.dataset.decision;
+
+    // Send AJAX POST request to update the decision
+    fetch(`/employer/search/update-decision/${jobId}/${freelancerId}/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: `decision=${decision}`
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        alert('Decision updated successfully');
+      }
+    });
+  });
+});
+
+// Handling the rating input change
+document.querySelectorAll('.rating-input').forEach(input => {
+  input.addEventListener('change', function() {
+    const jobId = this.dataset.job;
+    const freelancerId = this.dataset.freelancer;
+    const rating = this.value;
+
+    // Send AJAX POST request to update the rating
+    fetch(`/employer/search/update-decision/${jobId}/${freelancerId}/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: `rating=${rating}`
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        alert('Rating updated successfully');
+      }
+    });
+  });
+});
