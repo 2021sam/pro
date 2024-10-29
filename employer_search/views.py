@@ -133,36 +133,57 @@ class SearchFreelancersByJobView(View):
 
 
 
+
 # /Users/2021sam/apps/zyxe/pro/employer_search/views.py
 
-from django.http import JsonResponse
 from django.views import View
+from django.http import JsonResponse
 from .models import EmployerDecision
-from employer_job.models import EmployerJob
 from freelancer_profile.models import FreelancerProfile
 
-class UpdateEmployerDecisionView(View):
-    """View to handle updates for employer decisions (Interested, Rejected, or Rating)."""
-
-    def post(self, request, job_id, freelancer_id):
-        employer_job = EmployerJob.objects.get(id=job_id)
+class EmployerDecisionView(View):
+    def post(self, request, freelancer_id, job_id):
+        action = request.POST.get('action')
         freelancer = FreelancerProfile.objects.get(id=freelancer_id)
-        decision = request.POST.get('decision')
-        rating = request.POST.get('rating', None)
 
-        # Get or create an EmployerDecision entry
-        employer_decision, created = EmployerDecision.objects.get_or_create(
-            employer_job=employer_job,
-            freelancer=freelancer
-        )
+        # Create or update the decision record
+        decision, created = EmployerDecision.objects.get_or_create(freelancer=freelancer, job_id=job_id)
 
-        # Update decision and rating
-        if decision:
-            employer_decision.decision = decision
-        if rating:
-            employer_decision.rating = rating
+        if action == 'interested':
+            decision.interested = True
+            decision.rejected = False
+        elif action == 'rejected':
+            decision.rejected = True
+            decision.interested = False
 
-        employer_decision.save()
+        decision.save()
+        return JsonResponse({'success': True})
 
-        # Return a success response (can be JSON if using AJAX)
-        return JsonResponse({'status': 'success', 'message': 'Decision updated successfully'})
+
+# /Users/2021sam/apps/zyxe/pro/employer_search/views.py
+
+from django.views import View
+from django.http import JsonResponse
+from freelancer_profile.models import FreelancerProfile
+from .models import EmployerDecision
+
+
+class UpdateEmployerDecisionView(View):
+    def post(self, request, freelancer_id, job_id):
+        action = request.POST.get('action')
+
+        # Get or create the decision record
+        freelancer = FreelancerProfile.objects.get(id=freelancer_id)
+        decision, created = EmployerDecision.objects.get_or_create(freelancer=freelancer, job_id=job_id)
+
+        if action == 'interested':
+            decision.interested = True
+            decision.rejected = False
+        elif action == 'rejected':
+            decision.rejected = True
+            decision.interested = False
+        else:
+            return JsonResponse({'success': False, 'error': 'Invalid action'})
+
+        decision.save()
+        return JsonResponse({'success': True})
