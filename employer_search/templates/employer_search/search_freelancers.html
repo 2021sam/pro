@@ -25,12 +25,13 @@
           <td>{{ freelancer.first_name }} {{ freelancer.last_name }}</td>
           <td>{{ freelancer.matched_skills }}</td>
           <td>
-            <form method="POST" class="decision-form">
-              {% csrf_token %}
-              <input type="hidden" name="freelancer_id" value="{{ freelancer.id }}">
-              <button type="submit" name="decision" value="Interested">Interested</button>
-              <button type="submit" name="decision" value="Rejected">Reject</button>
-            </form>
+                <form method="POST" class="decision-form">
+                  {% csrf_token %}
+                  <input type="hidden" name="freelancer_id" value="{{ freelancer.id }}">
+                  <input type="hidden" name="job_id" value="{{ employer_job.id }}">  <!-- Hidden input for job_id -->
+                  <button type="submit" name="decision" value="Interested">Interested</button>
+                  <button type="submit" name="decision" value="Rejected">Reject</button>
+                </form>
           </td>
           <td>
             <input type="number" min="1" max="10" class="rating-input" data-job="{{ employer_job.id }}" data-freelancer="{{ freelancer.id }}" />
