@@ -22,7 +22,11 @@
     <tbody>
       {% for freelancer in freelancers %}
         <tr>
-          <td>{{ freelancer.first_name }} {{ freelancer.last_name }}</td>
+          <td>
+            <a href="{% url 'freelancer_profile:freelancer_detail' freelancer.id %}">
+            {{ freelancer.first_name }} {{ freelancer.last_name }}
+          </a>
+          </td>
           <td>{{ freelancer.matched_skills }}</td>
           <td>
                 <form method="POST" class="decision-form">
