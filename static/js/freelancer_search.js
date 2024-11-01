@@ -23,12 +23,26 @@ document.querySelectorAll('.decision-form').forEach(form => {
             if (data.status === 'success') {
                 alert('Decision updated successfully');
 
-                // Toggle button color
-                const button = this.querySelector(`button[value="${decision}"]`);
-                if (button.style.backgroundColor === 'green') {
-                    button.style.backgroundColor = ''; // Reset to default color
-                } else {
-                    button.style.backgroundColor = 'green'; // Set to green
+                // Toggle button colors based on the decision
+                const interestedButton = this.querySelector('button[value="Interested"]');
+                const rejectButton = this.querySelector('button[value="Rejected"]');
+
+                if (decision === 'Interested') {
+                    // Toggle Interested button (green/gray)
+                    if (interestedButton.style.backgroundColor === 'green') {
+                        interestedButton.style.backgroundColor = ''; // Reset to default color
+                    } else {
+                        interestedButton.style.backgroundColor = 'green'; // Set to green
+                        rejectButton.style.backgroundColor = ''; // Reset Reject button if previously selected
+                    }
+                } else if (decision === 'Rejected') {
+                    // Toggle Reject button (red/gray)
+                    if (rejectButton.style.backgroundColor === 'red') {
+                        rejectButton.style.backgroundColor = ''; // Reset to default color
+                    } else {
+                        rejectButton.style.backgroundColor = 'red'; // Set to red
+                        interestedButton.style.backgroundColor = ''; // Reset Interested button if previously selected
+                    }
                 }
             } else {
                 alert(`Error: ${data.message}`);
