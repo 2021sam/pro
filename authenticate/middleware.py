@@ -1,7 +1,6 @@
-# /Users/2021sam/apps/zyxe/pro/authenticate/middleware.py
-
 import logging
 from django.shortcuts import redirect
+from django.urls import reverse
 
 logger = logging.getLogger(__name__)
 
@@ -16,36 +15,39 @@ class EmailVerificationMiddleware:
                 logger.debug(f"Inactive user: {request.user.email}, redirecting to verification.")
                 return redirect('resend_verification')
         return self.get_response(request)
-    
 
-import logging
-from django.shortcuts import redirect
-from django.urls import reverse
-
-logger = logging.getLogger(__name__)
 
 class CheckUserSettingsMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        # Exclude admin URLs from the middleware logic
-        if request.path.startswith(reverse('admin:index')):
+        if request.path.startswith('/admin/'):  # Exclude admin paths
             return self.get_response(request)
 
-        # Check if the user is authenticated
         if request.user.is_authenticated:
-            # Check if the user has initialized their settings (e.g., role is None)
             if not hasattr(request.user, 'settings') or not request.user.settings.role:
-                # Prevent redirect loop by checking if the user is already on the initialize-settings page
                 if request.path != reverse('initialize_settings'):
-                    logger.debug("User has no role, redirecting to initialize settings.")
+                    logger.debug(f"User {request.user.username} missing settings, redirecting.")
                     return redirect('initialize_settings')
-                else:
-                    logger.debug("Already on the settings page.")
-            else:
-                logger.debug(f"User {request.user.username} has initialized settings.")
+        return self.get_response(request)
+
+
+class CustomMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+        self.public_paths = [
+            reverse('public:index'),
+            reverse('public:category_list'),
+            reverse('public:item_detail'),
+        ]
+
+    def __call__(self, request):
+        if any(request.path.startswith(path) for path in self.public_paths):
+            return self.get_response(request)
+
+        if request.user.is_authenticated and not request.user.is_active:
+            logger.debug("Redirecting inactive user to verification.")
+            return redirect('resend_verification')
         
-        # Proceed with the normal response
-        response = self.get_response(request)
-        return response
+        return self.get_response(request)

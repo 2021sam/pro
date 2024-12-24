@@ -79,4 +79,35 @@ from .models import UserSetting
 class UserSettingsForm(forms.ModelForm):
     class Meta:
         model = UserSetting
-        fields = ['role', 'receive_reminders', 'receive_alerts', 'color_theme']  # Add any fields you want the user to set
+        fields = [
+            'role', 'receive_reminders', 'receive_alerts',
+            'color_theme', 'display_density', 'font_size'
+        ]  # Add all fields relevant to user settings
+        widgets = {
+            'color_theme': forms.Select(choices=[('light', 'Light'), ('dark', 'Dark')]),
+            'display_density': forms.RadioSelect(),
+            'font_size': forms.NumberInput(attrs={'min': 10, 'max': 20}),
+        }
+
+
+
+# December 24, 2024
+def clean_role(self):
+    role = self.cleaned_data.get('role')
+    if not role:
+        raise forms.ValidationError("Role selection is required.")
+    return role
+
+
+
+
+from .models import Favorite
+
+class FavoriteForm(forms.ModelForm):
+    class Meta:
+        model = Favorite
+        fields = ['listing']  # Assuming listing is a foreign key to a Listing model
+
+
+def as_json(self):
+    return {field.name: field.value() for field in self}

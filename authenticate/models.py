@@ -71,7 +71,13 @@ class UserSetting(models.Model):
     role = models.CharField(max_length=20, choices=[('freelancer', 'Freelancer'), ('recruiter', 'Recruiter')])
     receive_reminders = models.BooleanField(default=True)
     receive_alerts = models.BooleanField(default=True)
-    # Add other settings as needed
+
+    # New user preferences
+    font_size = models.CharField(max_length=10, choices=[('small', 'Small'), ('medium', 'Medium'), ('large', 'Large')], default='medium')
+    display_density = models.CharField(max_length=11, choices=[('compact', 'Compact'), ('comfortable', 'Comfortable')], default='comfortable')
+    custom_layout = models.BooleanField(default=False)
+    favorites_visibility = models.BooleanField(default=True)
+    high_contrast_mode = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username}'s Settings"
