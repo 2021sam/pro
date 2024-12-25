@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For Sale Categories</title>
+</head>
+<body>
+  <h1>Categories for Sale</h1>
+  <ul>
+    {% for category in categories %}
+      <li><a href="/for-sale/{{ category.id }}">{{ category.name }}</a> - {{ category.description }}</li>
+    {% endfor %}
+  </ul>
+</body>
+</html>
