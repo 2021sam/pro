@@ -36,11 +36,19 @@ class CheckUserSettingsMiddleware:
 class CustomMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
+        # self.public_paths = [
+        #     reverse('public:index'),
+        #     reverse('public:category_list'),
+        #     reverse('public:item_detail'),
+        # ]
         self.public_paths = [
             reverse('public:index'),
             reverse('public:category_list'),
-            reverse('public:item_detail'),
+            reverse('public:item_detail', kwargs={'item_id': 1}),  # Include item_id
         ]
+
+
+
 
     def __call__(self, request):
         if any(request.path.startswith(path) for path in self.public_paths):

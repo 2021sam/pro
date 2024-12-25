@@ -101,13 +101,10 @@ def clean_role(self):
 
 
 
+from django import forms
 from .models import Favorite
 
 class FavoriteForm(forms.ModelForm):
     class Meta:
         model = Favorite
-        fields = ['listing']  # Assuming listing is a foreign key to a Listing model
-
-
-def as_json(self):
-    return {field.name: field.value() for field in self}
+        fields = ['user', 'listing']

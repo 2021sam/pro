@@ -71,7 +71,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'authenticate.middleware.EmailVerificationMiddleware',
-    'authenticate.middleware.CheckUserSettingsMiddleware'
+    'authenticate.middleware.CheckUserSettingsMiddleware',
+    'authenticate.middleware.CustomMiddleware',
 ]
 
 ROOT_URLCONF = 'pro.urls'
