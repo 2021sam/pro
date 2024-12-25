@@ -20,5 +20,5 @@ urlpatterns = [
     path('freelancer/freelancer_experience/', include('freelancer_experience.urls')),
     path('freelancer/freelancer_profile/', include('freelancer_profile.urls', namespace='freelancer_profile')),
     path('employer/search/', include('employer_search.urls', namespace='employer_search')),
-    path('public_market/', include('public_market.urls', namespace='public'))
+    path('public/', include('public_market.urls', namespace='public'))
 ]
