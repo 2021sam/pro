@@ -87,16 +87,81 @@ from django.shortcuts import render
 import json
 from pathlib import Path
 
+# def index(request):
+#     # Load data from the JSON file
+#     data_path = Path(__file__).resolve().parent / "data" / "for_sale.json"
+#     with open(data_path, "r") as file:
+#         categories_data = json.load(file)
+    
+#     # Prepare categories with id and name
+#     categories = [
+#         {"id": category["id"], "name": category["name"], "description": category.get("description", "")}
+#         for category in categories_data
+#     ]
+    
+#     return render(request, "public_market/index.html", {"categories": categories})
+
+# from django.shortcuts import render
+# import os
+# import json
+
+# def index(request):
+#     # Load categories from the JSON file
+#     data_file = os.path.join(os.path.dirname(__file__), 'data', 'for_sale.json')
+#     with open(data_file, 'r') as file:
+#         data = json.load(file)
+
+#     # Pass the categories to the template
+#     return render(request, 'public_market/index.html', {"categories": data.get("categories", [])})
+
+from django.shortcuts import render
+import os
+import json
+
 def index(request):
-    # Load data from the JSON file
-    data_path = Path(__file__).resolve().parent / "data" / "for_sale.json"
-    with open(data_path, "r") as file:
-        categories_data = json.load(file)
-    
-    # Prepare categories with id and name
-    categories = [
-        {"id": category["id"], "name": category["name"], "description": category.get("description", "")}
-        for category in categories_data
-    ]
-    
-    return render(request, "public_market/index.html", {"categories": categories})
+    # Load categories from the JSON file
+    data_file = os.path.join(os.path.dirname(__file__), 'data', 'for_sale.json')
+    with open(data_file, 'r') as file:
+        data = json.load(file)  # Assuming data is a list of categories
+
+    # Pass the categories to the template
+    return render(request, 'public_market/index.html', {"categories": data})
+
+
+
+from django.shortcuts import render
+import os
+import json
+
+def category_detail(request, category):
+    # Load categories from the JSON file
+    data_file = os.path.join(os.path.dirname(__file__), 'data', 'for_sale.json')
+    with open(data_file, 'r') as file:
+        data = json.load(file)
+
+    # Check if the category exists
+    categories = data.get("categories", [])
+    if category not in categories:
+        return render(request, 'public_market/404.html', {"message": "Category not found"}, status=404)
+
+    # Pass the category name to the template
+    return render(request, 'public_market/category_detail.html', {"category_name": category})
+
+
+from django.shortcuts import render
+import os
+import json
+
+def for_sale_category(request, category_id):
+    # Load the categories from JSON
+    data_file = os.path.join(os.path.dirname(__file__), 'data', 'for_sale.json')
+    with open(data_file, 'r') as file:
+        categories = json.load(file)
+
+    # Find the requested category
+    category = next((cat for cat in categories if cat['id'] == category_id), None)
+
+    if not category:
+        return render(request, '404.html', status=404)
+
+    return render(request, 'public_market/for_sale_category.html', {"category": category})
