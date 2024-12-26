@@ -1,12 +1,13 @@
 <!-- pro/public_market/templates/public_market/index.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Public Market</title>
-  <link rel="stylesheet" href="{% static 'public_market/styles.css' %}">
+  {% load static %}
+<link rel="stylesheet" href="{% static 'css/public_market.css' %}">
 
 </head>
 <body>
@@ -23,40 +24,16 @@
 
   <!-- Main Content -->
   <main class="main">
-    <!-- Categories Section -->
-    <section class="categories">
-      <h1>Browse Categories</h1>
-      <div class="category-list">
-        <a href="/category/home-repair" class="category-item">
-          <h2>Home Repair</h2>
-          <p>Find professionals for your home repair needs.</p>
-        </a>
-        <a href="/category/skilled-trades" class="category-item">
-          <h2>Skilled Trades</h2>
-          <p>Connect with skilled workers for your projects.</p>
-        </a>
-        <a href="/category/vehicles" class="category-item">
-          <h2>Vehicles</h2>
-          <p>Buy or sell cars, motorcycles, and more.</p>
-        </a>
-      </div>
-    </section>
-
-    <!-- Featured Listings Section -->
-    <section class="featured">
-      <h1>Featured Listings</h1>
-      <div class="featured-list">
-        <div class="listing-item">
-          <h2>HVAC Services</h2>
-          <p>Starting at $50. ZIP: 12345</p>
-          <button>Contact Info</button>
-        </div>
-        <div class="listing-item">
-          <h2>Plumbing Services</h2>
-          <p>Starting at $75. ZIP: 54321</p>
-          <button>Contact Info</button>
-        </div>
-      </div>
+    <!-- Categories for Sale Section -->
+    <section class="categories-for-sale">
+      <h1>Categories for Sale</h1>
+      <ul>
+        {% for category in for_sale_categories %}
+          <li>
+            <a href="/for-sale/{{ category.id }}">{{ category.name }}</a> - {{ category.description }}
+          </li>
+        {% endfor %}
+      </ul>
     </section>
   </main>
 

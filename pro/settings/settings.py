@@ -150,7 +150,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ###############################################################################
 #                               custom settings
-STATICFILES_DIRS = [BASE_DIR / 'static']  # This points to the global static folder
+# STATICFILES_DIRS = [BASE_DIR / 'static']  # This points to the global static folder
+STATICFILES_DIRS = [BASE_DIR / 'public_market' / 'static']  # This points to the global static folder
 AUTH_USER_MODEL = 'authenticate.CustomUser'
 
 AUTHENTICATION_BACKENDS = [
