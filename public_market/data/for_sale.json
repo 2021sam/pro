@@ -1,19 +1,77 @@
-{
-    "categories": [
-        "Vehicles",
-        "Real Estate",
-        "Electronics",
-        "Furniture",
-        "Clothing",
-        "Toys",
-        "Sports Equipment",
-        "Books",
-        "Collectibles",
-        "Appliances",
-        "Tools",
-        "Health and Beauty",
-        "Musical Instruments",
-        "Pet Supplies",
-        "Business Equipment"
-    ]
-}
+[
+    {
+        "id": "vehicles",
+        "name": "Vehicles",
+        "description": "Cars, motorcycles, and more."
+    },
+    {
+        "id": "real-estate",
+        "name": "Real Estate",
+        "description": "Homes, apartments, and commercial properties."
+    },
+    {
+        "id": "electronics",
+        "name": "Electronics",
+        "description": "Phones, computers, and gadgets."
+    },
+    {
+        "id": "furniture",
+        "name": "Furniture",
+        "description": "Beds, chairs, tables, and more."
+    },
+    {
+        "id": "clothing",
+        "name": "Clothing",
+        "description": "Men's, women's, and children's wear."
+    },
+    {
+        "id": "toys",
+        "name": "Toys",
+        "description": "Toys for all ages."
+    },
+    {
+        "id": "sports-equipment",
+        "name": "Sports Equipment",
+        "description": "Gear for your favorite sports."
+    },
+    {
+        "id": "books",
+        "name": "Books",
+        "description": "Fiction, non-fiction, and educational."
+    },
+    {
+        "id": "collectibles",
+        "name": "Collectibles",
+        "description": "Rare and unique items."
+    },
+    {
+        "id": "appliances",
+        "name": "Appliances",
+        "description": "Kitchen and home appliances."
+    },
+    {
+        "id": "tools",
+        "name": "Tools",
+        "description": "Hand tools, power tools, and more."
+    },
+    {
+        "id": "health-and-beauty",
+        "name": "Health and Beauty",
+        "description": "Personal care products."
+    },
+    {
+        "id": "musical-instruments",
+        "name": "Musical Instruments",
+        "description": "Guitars, pianos, and more."
+    },
+    {
+        "id": "pet-supplies",
+        "name": "Pet Supplies",
+        "description": "Everything for your pets."
+    },
+    {
+        "id": "business-equipment",
+        "name": "Business Equipment",
+        "description": "Office and industrial supplies."
+    }
+]

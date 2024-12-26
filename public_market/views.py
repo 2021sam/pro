@@ -45,9 +45,9 @@ from django.shortcuts import render
 
 
 
-def index(request):
-    # return HttpResponse("Welcome to Public Market!")
-    return render(request, 'public_market/index.html')
+# def index(request):
+#     # return HttpResponse("Welcome to Public Market!")
+#     return render(request, 'public_market/index.html')
 
 
 def category_list(request):
@@ -56,3 +56,47 @@ def category_list(request):
 
 def item_detail(request, item_id):
     return HttpResponse(f"Item Detail for item_id: {item_id}")
+
+
+
+
+
+# import json
+# from django.shortcuts import render
+# import os
+
+# def index(request):
+#     # Get the path to the data directory
+#     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#     json_file_path = os.path.join(base_dir, 'public_market', 'data', 'for_sale.json')
+    
+#     # Load categories from the JSON file
+#     with open(json_file_path, 'r') as file:
+#         data = json.load(file)
+    
+#     categories = data.get("categories", [])  # Fetch categories from JSON
+#     print(categories)
+
+
+#     return render(request, 'public_market/index.html', {'categories': categories})
+
+
+
+
+from django.shortcuts import render
+import json
+from pathlib import Path
+
+def index(request):
+    # Load data from the JSON file
+    data_path = Path(__file__).resolve().parent / "data" / "for_sale.json"
+    with open(data_path, "r") as file:
+        categories_data = json.load(file)
+    
+    # Prepare categories with id and name
+    categories = [
+        {"id": category["id"], "name": category["name"], "description": category.get("description", "")}
+        for category in categories_data
+    ]
+    
+    return render(request, "public_market/index.html", {"categories": categories})
