@@ -31,7 +31,7 @@
       <ul>
         {% for category in categories %}
           <li>
-            <a href="/for-sale/{{ category.id }}">{{ category.name }}</a> - {{ category.description }}
+            <a href="{% url 'public:for_sale_category' category.id %}">{{ category.name }}</a> - {{ category.description }}
           </li>
         {% endfor %}
       </ul>

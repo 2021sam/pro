@@ -153,13 +153,16 @@ import os
 import json
 
 def for_sale_category(request, category_id):
-    # Load the categories from JSON
+    print('............................................')
+    # Load categories from JSON
     data_file = os.path.join(os.path.dirname(__file__), 'data', 'for_sale.json')
     with open(data_file, 'r') as file:
         categories = json.load(file)
 
-    # Find the requested category
+    # Match the requested category ID
     category = next((cat for cat in categories if cat['id'] == category_id), None)
+    print('*******************************')
+    print(category)
 
     if not category:
         return render(request, '404.html', status=404)
