@@ -6,8 +6,30 @@
     <title>{{ category.name }}</title>
 </head>
 <body>
+    <a href="{% url 'public:post_vehicle' %}">Post a Vehicle</a>
+
     <h1>{{ category.name }}</h1>
     <p>{{ category.description }}</p>
+
+
+
+    <h1>{{ category.name }}</h1>
+    <ul>
+        {% for vehicle in category.items %}
+            <li>
+                <strong>{{ vehicle.title }}</strong><br>
+                Price: {{ vehicle.price }}<br>
+                Description: {{ vehicle.description }}
+            </li>
+        {% empty %}
+            <li>No vehicles available.</li>
+        {% endfor %}
+    </ul>
+    
+
+
+
+
     <a href="/public/">Back to Home</a>
 </body>
 </html>

@@ -167,4 +167,38 @@ def for_sale_category(request, category_id):
     if not category:
         return render(request, '404.html', status=404)
 
+    print('for_sale_category')
     return render(request, 'public_market/for_sale_category.html', {"category": category})
+
+
+
+
+# pro/public_market/views.py
+
+from django.shortcuts import render, redirect
+from .forms import VehicleListingForm
+
+def post_vehicle(request):
+    if request.method == 'POST':
+        form = VehicleListingForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('public:index')  # Redirect to homepage or another success page
+    else:
+        form = VehicleListingForm()
+
+    return render(request, 'public_market/post_vehicle.html', {'form': form})
+
+
+
+
+from django.shortcuts import render
+from public_market.models import VehicleListing
+
+def vehicles(request):
+    vehicle_listings = VehicleListing.objects.all()  # Fetch all vehicle listings
+    return render(
+        request, 
+        'public_market/for_sale_category.html', 
+        {"category": {"name": "Vehicles", "items": vehicle_listings}}
+    )
