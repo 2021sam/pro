@@ -148,27 +148,47 @@ def category_detail(request, category):
     return render(request, 'public_market/category_detail.html', {"category_name": category})
 
 
-from django.shortcuts import render
-import os
-import json
+# from django.shortcuts import render
+# import os
+# import json
+
+# def for_sale_category(request, category_id):
+#     print('............................................')
+#     # Load categories from JSON
+#     data_file = os.path.join(os.path.dirname(__file__), 'data', 'for_sale.json')
+#     with open(data_file, 'r') as file:
+#         categories = json.load(file)
+
+#     # Match the requested category ID
+#     category = next((cat for cat in categories if cat['id'] == category_id), None)
+#     print('*******************************')
+#     print(category)
+
+#     if not category:
+#         return render(request, '404.html', status=404)
+
+#     print('for_sale_category')
+#     return render(request, 'public_market/for_sale_category.html', {"category": category})
+
+
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import VehicleListing  # Add other category-specific models as needed
 
 def for_sale_category(request, category_id):
-    print('............................................')
-    # Load categories from JSON
-    data_file = os.path.join(os.path.dirname(__file__), 'data', 'for_sale.json')
-    with open(data_file, 'r') as file:
-        categories = json.load(file)
+    if category_id == "vehicles":
+        items = VehicleListing.objects.all()
+        category_name = "Vehicles"
+    else:
+        items = []  # Add logic for other categories here
+        category_name = category_id.capitalize()  # Placeholder, adjust as needed
 
-    # Match the requested category ID
-    category = next((cat for cat in categories if cat['id'] == category_id), None)
-    print('*******************************')
-    print(category)
-
-    if not category:
-        return render(request, '404.html', status=404)
-
-    print('for_sale_category')
-    return render(request, 'public_market/for_sale_category.html', {"category": category})
+    return render(
+        request, 
+        'public_market/for_sale_category.html', 
+        {"category": {"name": category_name, "items": items}}
+    )
 
 
 
@@ -192,11 +212,28 @@ def post_vehicle(request):
 
 
 
+# from django.shortcuts import render
+# from public_market.models import VehicleListing
+
+# def vehicles(request):
+#     vehicle_listings = VehicleListing.objects.all()  # Fetch all vehicle listings
+#     return render(
+#         request, 
+#         'public_market/for_sale_category.html', 
+#         {"category": {"name": "Vehicles", "items": vehicle_listings}}
+#     )
+
+
+
+
 from django.shortcuts import render
 from public_market.models import VehicleListing
 
 def vehicles(request):
-    vehicle_listings = VehicleListing.objects.all()  # Fetch all vehicle listings
+    vehicle_listings = VehicleListing.objects.all()  # Fetch all vehicle ads
+    print(vehicle_listings)  # Debug: Print the queryset to verify
+    for vehicle in vehicle_listings:
+        print(vehicle.title, vehicle.price, vehicle.description)  # Ensure all data is present
     return render(
         request, 
         'public_market/for_sale_category.html', 

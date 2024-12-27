@@ -9,11 +9,6 @@
     <a href="{% url 'public:post_vehicle' %}">Post a Vehicle</a>
 
     <h1>{{ category.name }}</h1>
-    <p>{{ category.description }}</p>
-
-
-
-    <h1>{{ category.name }}</h1>
     <ul>
         {% for vehicle in category.items %}
             <li>
