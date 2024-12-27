@@ -196,6 +196,21 @@ def for_sale_category(request, category_id):
 
 # pro/public_market/views.py
 
+# from django.shortcuts import render, redirect
+# from .forms import VehicleListingForm
+
+# @login_required
+# def post_vehicle(request):
+#     if request.method == 'POST':
+#         form = VehicleListingForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('public:index')  # Redirect to homepage or another success page
+#     else:
+#         form = VehicleListingForm()
+
+#     return render(request, 'public_market/post_vehicle.html', {'form': form})
+
 from django.shortcuts import render, redirect
 from .forms import VehicleListingForm
 
@@ -204,13 +219,15 @@ def post_vehicle(request):
     if request.method == 'POST':
         form = VehicleListingForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('public:index')  # Redirect to homepage or another success page
+            vehicle = form.save(commit=False)
+            vehicle.user = request.user
+            vehicle.save()
+            # return redirect('public:vehicles')  # Redirect to the list of vehicles
+            return redirect('/public/for-sale/vehicles/')  # Use the absolute path here
     else:
         form = VehicleListingForm()
 
     return render(request, 'public_market/post_vehicle.html', {'form': form})
-
 
 
 
