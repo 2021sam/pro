@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -198,6 +199,7 @@ def for_sale_category(request, category_id):
 from django.shortcuts import render, redirect
 from .forms import VehicleListingForm
 
+@login_required
 def post_vehicle(request):
     if request.method == 'POST':
         form = VehicleListingForm(request.POST)
