@@ -54,3 +54,22 @@ class VehicleListing(models.Model):
 
     def __str__(self):
         return f"{self.year} {self.make} {self.model} ({self.condition})"
+
+
+
+# # pro/public_market/models.py
+# import os
+# from django.utils.timezone import now
+# from django.conf import settings
+# from django.db import models
+
+# # Function to determine upload path
+# def user_post_directory_path(instance, filename):
+#     return f'{instance.listing.user.id}/{instance.listing.id}/{now().strftime("%Y%m%d%H%M%S")}_{filename}'
+
+# class VehiclePhoto(models.Model):
+#     listing = models.ForeignKey(VehicleListing, related_name='photos', on_delete=models.CASCADE)
+#     photo = models.ImageField(upload_to=user_post_directory_path)
+
+#     def __str__(self):
+#         return f"Photo for {self.listing.title}"

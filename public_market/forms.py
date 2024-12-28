@@ -67,3 +67,19 @@ class VehicleListingForm(forms.ModelForm):
         if not zip_code.isdigit() or len(zip_code) not in [5, 10]:
             raise forms.ValidationError('Enter a valid ZIP code.')
         return zip_code
+
+
+# pro/public_market/forms.py
+# from django import forms
+# from .models import VehicleListing, VehiclePhoto
+
+# class VehiclePhotoForm(forms.ModelForm):
+#     class Meta:
+#         model = VehiclePhoto
+#         fields = ['photo']
+
+# VehiclePhotoFormSet = forms.modelformset_factory(
+#     VehiclePhoto,
+#     form=VehiclePhotoForm,
+#     extra=3,  # Default number of extra image forms
+# )

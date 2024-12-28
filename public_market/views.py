@@ -11,6 +11,9 @@ def load_json_data(filename):
     with open(file_path, "r") as file:
         return json.load(file)
 
+
+
+
 def for_sale_view(request):
     """View to return categories for items for sale."""
     for_sale = load_json_data("for_sale.json")
@@ -21,6 +24,8 @@ def services_view(request):
     services = load_json_data("services.json")
     return JsonResponse(services)
 
+# Load CATEGORY_CONFIG from config.json
+CATEGORY_CONFIG = load_json_data("config.json")
 
 
 
@@ -29,28 +34,6 @@ def services_view(request):
 from django.http import HttpResponse
 from django.shortcuts import render
 
-
-
-# import json
-# from pathlib import Path
-
-# BASE_DIR = Path(__file__).resolve().parent.parent
-
-# def load_json_data(filename):
-#     file_path = BASE_DIR / "public_market" / "data" / filename
-#     with open(file_path, "r") as file:
-#         return json.load(file)
-
-# items_for_sale = load_json_data("items_for_sale.json")
-# services = load_json_data("services.json")
-
-
-
-# def index(request):
-#     # return HttpResponse("Welcome to Public Market!")
-#     return render(request, 'public_market/index.html')
-
-
 def category_list(request):
     return HttpResponse("Category List")
 
@@ -58,62 +41,6 @@ def category_list(request):
 def item_detail(request, item_id):
     return HttpResponse(f"Item Detail for item_id: {item_id}")
 
-
-
-
-
-# import json
-# from django.shortcuts import render
-# import os
-
-# def index(request):
-#     # Get the path to the data directory
-#     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-#     json_file_path = os.path.join(base_dir, 'public_market', 'data', 'for_sale.json')
-    
-#     # Load categories from the JSON file
-#     with open(json_file_path, 'r') as file:
-#         data = json.load(file)
-    
-#     categories = data.get("categories", [])  # Fetch categories from JSON
-#     print(categories)
-
-
-#     return render(request, 'public_market/index.html', {'categories': categories})
-
-
-
-
-from django.shortcuts import render
-import json
-from pathlib import Path
-
-# def index(request):
-#     # Load data from the JSON file
-#     data_path = Path(__file__).resolve().parent / "data" / "for_sale.json"
-#     with open(data_path, "r") as file:
-#         categories_data = json.load(file)
-    
-#     # Prepare categories with id and name
-#     categories = [
-#         {"id": category["id"], "name": category["name"], "description": category.get("description", "")}
-#         for category in categories_data
-#     ]
-    
-#     return render(request, "public_market/index.html", {"categories": categories})
-
-# from django.shortcuts import render
-# import os
-# import json
-
-# def index(request):
-#     # Load categories from the JSON file
-#     data_file = os.path.join(os.path.dirname(__file__), 'data', 'for_sale.json')
-#     with open(data_file, 'r') as file:
-#         data = json.load(file)
-
-#     # Pass the categories to the template
-#     return render(request, 'public_market/index.html', {"categories": data.get("categories", [])})
 
 from django.shortcuts import render
 import os
@@ -127,7 +54,6 @@ def index(request):
 
     # Pass the categories to the template
     return render(request, 'public_market/index.html', {"categories": data})
-
 
 
 from django.shortcuts import render
@@ -149,31 +75,6 @@ def category_detail(request, category):
     return render(request, 'public_market/category_detail.html', {"category_name": category})
 
 
-# from django.shortcuts import render
-# import os
-# import json
-
-# def for_sale_category(request, category_id):
-#     print('............................................')
-#     # Load categories from JSON
-#     data_file = os.path.join(os.path.dirname(__file__), 'data', 'for_sale.json')
-#     with open(data_file, 'r') as file:
-#         categories = json.load(file)
-
-#     # Match the requested category ID
-#     category = next((cat for cat in categories if cat['id'] == category_id), None)
-#     print('*******************************')
-#     print(category)
-
-#     if not category:
-#         return render(request, '404.html', status=404)
-
-#     print('for_sale_category')
-#     return render(request, 'public_market/for_sale_category.html', {"category": category})
-
-
-
-
 from django.shortcuts import render, get_object_or_404
 from .models import VehicleListing  # Add other category-specific models as needed
 
@@ -192,24 +93,6 @@ def for_sale_category(request, category_id):
     )
 
 
-
-
-# pro/public_market/views.py
-
-# from django.shortcuts import render, redirect
-# from .forms import VehicleListingForm
-
-# @login_required
-# def post_vehicle(request):
-#     if request.method == 'POST':
-#         form = VehicleListingForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('public:index')  # Redirect to homepage or another success page
-#     else:
-#         form = VehicleListingForm()
-
-#     return render(request, 'public_market/post_vehicle.html', {'form': form})
 
 from django.shortcuts import render, redirect
 from .forms import VehicleListingForm
@@ -230,21 +113,6 @@ def post_vehicle(request):
     return render(request, 'public_market/post_vehicle.html', {'form': form})
 
 
-
-# from django.shortcuts import render
-# from public_market.models import VehicleListing
-
-# def vehicles(request):
-#     vehicle_listings = VehicleListing.objects.all()  # Fetch all vehicle listings
-#     return render(
-#         request, 
-#         'public_market/for_sale_category.html', 
-#         {"category": {"name": "Vehicles", "items": vehicle_listings}}
-#     )
-
-
-
-
 from django.shortcuts import render
 from public_market.models import VehicleListing
 
@@ -258,3 +126,90 @@ def vehicles(request):
         'public_market/for_sale_category.html', 
         {"category": {"name": "Vehicles", "items": vehicle_listings}}
     )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views import View
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.urls import reverse
+# from .config import CATEGORY_CONFIG
+# CATEGORY_CONFIG = load_json_data("config.json")
+
+
+@method_decorator(login_required, name='dispatch')
+class MultiStepFormView(View):
+    # def get_category_config(self, category):
+    #     """Retrieve category-specific config or default config."""
+    #     return CATEGORY_CONFIG.get(category, CATEGORY_CONFIG['default'])
+
+    def get(self, request, category, step=0, item_id=None):
+        category_key = category
+        print('MultiStepFormView - get')
+        """Handle GET requests to display forms."""
+        category_config = load_json_data("config.json")
+        category  = category_config[category]
+        print(category)
+
+        # category_config = self.get_category_config(category)
+        form_class = category['forms'][step]
+        template = category['templates'][step]
+        model = category['model']
+        print(f'form_class: {form_class}')
+        print(f'template: {template}')
+        print(f'model: {model}')
+        # If editing, fetch the item; else, initialize a blank form
+        item = get_object_or_404(category['model'], pk=item_id) if item_id else None
+        form = form_class(instance=item)
+
+        return render(request, template, {
+            'form': form,
+            'step': step,
+            'total_steps': len(category['forms']),
+            'item_id': item_id,
+            'category': category_key,
+        })
+
+    def post(self, request, category, step=0, item_id=None):
+        """Handle POST requests to save forms."""
+        category_config = self.get_category_config(category)
+        form_class = category_config['forms'][step]
+
+        # If editing, fetch the item; else, initialize a blank form
+        item = get_object_or_404(category_config['model'], pk=item_id) if item_id else None
+        form = form_class(request.POST, instance=item)
+
+        if form.is_valid():
+            item = form.save(commit=False)
+            item.user = request.user  # Set the user if necessary
+            item.save()
+
+            # Proceed to the next step or finish
+            next_step = step + 1
+            if next_step < len(category_config['forms']):
+                return redirect('post-item', category=category, step=next_step, item_id=item.id)
+            return redirect('item-list')  # Adjust to your final redirection
+
+        # Re-render the current step with errors
+        return render(request, category_config['templates'][step], {
+            'form': form,
+            'step': step,
+            'total_steps': len(category_config['forms']),
+            'item_id': item_id,
+            'category': category,
+        })
+

@@ -1,0 +1,17 @@
+{
+    "vehicles": {
+        "forms": ["VehicleListingForm"],
+        "templates": ["vehicles/vehicle_form.html"],
+        "model": "VehicleListing"
+    },
+    "electronics": {
+        "forms": ["ElectronicsForm"],
+        "templates": ["electronics/electronics_form.html"],
+        "model": "ElectronicsListing"
+    },
+    "default": {
+        "forms": ["GenericForm"],
+        "templates": ["generic_form.html"],
+        "model": "Listing"
+    }
+}
