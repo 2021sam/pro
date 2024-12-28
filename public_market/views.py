@@ -149,48 +149,118 @@ from django.utils.decorators import method_decorator
 from django.urls import reverse
 # from .config import CATEGORY_CONFIG
 # CATEGORY_CONFIG = load_json_data("config.json")
+from .forms import VehicleListingForm
 
+
+
+from .models import VehicleListing
+# , ElectronicsListing, Listing
+from .forms import VehicleListingForm
+# , ElectronicsForm, GenericForm
+
+FORM_CLASSES = {
+    "VehicleListingForm": VehicleListingForm,
+    # "ElectronicsForm": ElectronicsForm,
+    # "GenericForm": GenericForm,
+}
+
+MODEL_CLASSES = {
+    "VehicleListing": VehicleListing,
+    # "ElectronicsListing": ElectronicsListing,
+    # "Listing": Listing,
+}
+
+
+
+
+
+
+
+
+# @method_decorator(login_required, name='dispatch')
+# class MultiStepFormView(View):
+#     # def get_category_config(self, category):
+#     #     """Retrieve category-specific config or default config."""
+#     #     return CATEGORY_CONFIG.get(category, CATEGORY_CONFIG['default'])
+
+#     def get(self, request, category, step=0, item_id=None):
+#         category_key = category
+#         print('MultiStepFormView - get')
+#         """Handle GET requests to display forms."""
+#         category_config = load_json_data("config.json")
+#         category  = category_config[category]
+#         print(category)
+
+#         # category_config = self.get_category_config(category)
+#         form_class = category['forms'][step]
+#         template = category['templates'][step]
+#         model = category['model']
+#         print(f'form_class: {form_class}')
+#         print(f'template: {template}')
+#         print(f'model: {model}')
+#         # If editing, fetch the item; else, initialize a blank form
+#         item = get_object_or_404(category['model'], pk=item_id) if item_id else None
+#         form = form_class(instance=item)
+
+#         return render(request, template, {
+#             'form': form,
+#             'step': step,
+#             'total_steps': len(category['forms']),
+#             'item_id': item_id,
+#             'category': category_key,
+#         })
 
 @method_decorator(login_required, name='dispatch')
 class MultiStepFormView(View):
-    # def get_category_config(self, category):
-    #     """Retrieve category-specific config or default config."""
-    #     return CATEGORY_CONFIG.get(category, CATEGORY_CONFIG['default'])
-
     def get(self, request, category, step=0, item_id=None):
-        category_key = category
-        print('MultiStepFormView - get')
-        """Handle GET requests to display forms."""
         category_config = load_json_data("config.json")
-        category  = category_config[category]
-        print(category)
+        category_data = category_config[category]
 
-        # category_config = self.get_category_config(category)
-        form_class = category['forms'][step]
-        template = category['templates'][step]
-        model = category['model']
-        print(f'form_class: {form_class}')
-        print(f'template: {template}')
-        print(f'model: {model}')
-        # If editing, fetch the item; else, initialize a blank form
-        item = get_object_or_404(category['model'], pk=item_id) if item_id else None
+        form_class_name = category_data["forms"][step]
+        template = category_data["templates"][step]
+        model_class_name = category_data["model"]
+
+        # Resolve the form and model classes
+        form_class = FORM_CLASSES[form_class_name]
+        model_class = MODEL_CLASSES[model_class_name]
+
+        # Fetch the item if editing, or create a blank form
+        item = get_object_or_404(model_class, pk=item_id) if item_id else None
         form = form_class(instance=item)
 
-        return render(request, template, {
-            'form': form,
-            'step': step,
-            'total_steps': len(category['forms']),
-            'item_id': item_id,
-            'category': category_key,
-        })
+        next_step = step + 1
+        
+        return render(
+            request,
+            template,
+            {
+                "form": form,
+                "step": step,
+                "next_step": next_step,
+                "total_steps": len(category_data["forms"]),
+                "item_id": item_id,
+                "category": category,
+            },
+        )
+
+
 
     def post(self, request, category, step=0, item_id=None):
         """Handle POST requests to save forms."""
-        category_config = self.get_category_config(category)
-        form_class = category_config['forms'][step]
+        # Load the configuration from the JSON file
+        category_config = load_json_data("config.json")
+        category_data = category_config[category]
 
-        # If editing, fetch the item; else, initialize a blank form
-        item = get_object_or_404(category_config['model'], pk=item_id) if item_id else None
+        form_class_name = category_data["forms"][step]
+        template = category_data["templates"][step]
+        model_class_name = category_data["model"]
+
+        # Resolve the form and model classes
+        form_class = FORM_CLASSES[form_class_name]
+        model_class = MODEL_CLASSES[model_class_name]
+
+        # Fetch the item if editing, or initialize a blank form
+        item = get_object_or_404(model_class, pk=item_id) if item_id else None
         form = form_class(request.POST, instance=item)
 
         if form.is_valid():
@@ -200,16 +270,19 @@ class MultiStepFormView(View):
 
             # Proceed to the next step or finish
             next_step = step + 1
-            if next_step < len(category_config['forms']):
-                return redirect('post-item', category=category, step=next_step, item_id=item.id)
-            return redirect('item-list')  # Adjust to your final redirection
+            if next_step < len(category_data["forms"]):
+                return redirect("public:post-item", category=category, step=next_step, item_id=item.id)
+            return redirect("public:index")  # Adjust to your final redirection URL
 
         # Re-render the current step with errors
-        return render(request, category_config['templates'][step], {
-            'form': form,
-            'step': step,
-            'total_steps': len(category_config['forms']),
-            'item_id': item_id,
-            'category': category,
-        })
-
+        return render(
+            request,
+            template,
+            {
+                "form": form,
+                "step": step,
+                "total_steps": len(category_data["forms"]),
+                "item_id": item_id,
+                "category": category,
+            },
+        )
